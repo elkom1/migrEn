@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>migrEn Home</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h2>Welcome to Ionic!</h2>
+  <p>
+    This starter project comes with simple tabs-based layout for apps
+    that are going to primarily use a Tabbed UI.
+  </p>
+
+  <ion-list>
+    <ion-list-header>
+      Adjust Text
+    </ion-list-header>
+    <ion-item>
+      <ion-range min="-100" step="10" snaps="true" [(ngModel)]="text">
+        <ion-label range-left class="small-text">0Liter</ion-label>
+        <ion-label range-right>5Liter</ion-label>
+      </ion-range>
+    </ion-item>
+  </ion-list>
+
+  <img src="assets/imgs/test1.jpg" alt="test1">
+</ion-content>
