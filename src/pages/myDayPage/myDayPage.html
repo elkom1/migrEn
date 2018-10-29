@@ -1,18 +1,16 @@
 <ion-header>
-
-  <ion-toolbar>
-    <button ion-button menuToggle left>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-buttons end>
-    </ion-buttons>
-    <ion-title>heMIgrania</ion-title>
-  </ion-toolbar>
-
+    <ion-toolbar>
+        <button ion-button menuToggle left (click)="openMenu()">
+          <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-buttons end>
+        </ion-buttons>
+        <ion-title>heMIgrania</ion-title>
+      </ion-toolbar>    
 </ion-header>
 
 <ion-content padding>
-  
+
   <ion-menu [content]="content">
     <ion-list>
       <button ion-item (click)="openHomePage()">
@@ -40,21 +38,9 @@
         Hilfe
       </button>
     </ion-list>
-  </ion-menu>
-
-
-  <h2>Hallo BFH-Student</h2>
-  <p>
-    Danke, dass du heMIgrania nutzst. Vergiss nicht, je besser du deine Einträge erfasst, desto besser kannst du deine
-    Migräne verstehen.
-  </p>
-
-  <ion-grid>
-    <ion-row justify-content-center align-items-center>
-      Hello world!
-    </ion-row>
-  </ion-grid>
+  </ion-menu>   
 
 
 </ion-content>
 <ion-nav id="nav" #content [root]="rootPage"></ion-nav>
+
