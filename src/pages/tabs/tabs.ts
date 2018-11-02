@@ -3,6 +3,12 @@ import {
 } from '@angular/core';
 
 import {
+  IonicPage,
+  NavController,
+  NavParams
+} from 'ionic-angular';
+
+import {
   MyDayPage
 } from '../myDayPage/myDayPage';
 import {
@@ -16,8 +22,11 @@ import {
   NativePageTransitions,
   NativeTransitionOptions
 } from '@ionic-native/native-page-transitions';
+
+
 @Component({
-  templateUrl: 'tabs.html'
+  selector: 'page-tabs',
+  templateUrl: 'tabs.html',
 })
 export class TabsPage {
 
@@ -28,7 +37,9 @@ export class TabsPage {
   loaded: boolean = false;
   tabIndex: number = 0;
 
-  constructor(private nativePageTransitions: NativePageTransitions) {}
+  constructor(private nativePageTransitions: NativePageTransitions, navParams: NavParams) {
+    this.tabIndex = navParams.data.tabIndex || 0;
+  }
   // Create the function for getting animation direction by tab index
   private getAnimationDirection(index): string {
     var currentIndex = this.tabIndex;

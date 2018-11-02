@@ -2,16 +2,14 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 @Component({
-  selector: 'page-myDay',
-  templateUrl: 'myDayPage.html'
+  selector: 'page-menu_impressum',
+  templateUrl: 'menu_impressum.html'
 })
-export class MyDayPage {
+export class Impressum {
 
   constructor(public navCtrl: NavController) {
   }
 
-  openHomePage() {
-    this.navCtrl.setRoot(MyDayPage); 
-  }
+  
 
 }

@@ -1,37 +1,90 @@
 <ion-header>
   <ion-toolbar>
+    <button ion-button menuToggle left>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-buttons end>
+    </ion-buttons>
     <ion-title>heMIgrania</ion-title>
   </ion-toolbar>
+
 </ion-header>
 
-<ion-content>
-
+<ion-content padding>
   <ion-item>
-    <ion-label>Ausloeser</ion-label>
-    <ion-select multiple="true">
-      <ion-option>Aufregung / Stress</ion-option>
-      <ion-option>Erholungsphase</ion-option>
-      <ion-option>Menstruation</ion-option>
+    <ion-label>Symptome</ion-label>
+    <ion-select okText="Ok" cancelText="Abbrechen" multiple="true">
+      <ion-option>Flimmersehen</ion-option>
+      <ion-option>fotophopie</ion-option>
+      <ion-option>Sonophobie</ion-option>
+      <ion-option>Kopfschmerzen</ion-option>
+      <ion-option>Gefühlsstörung</ion-option>
       <ion-option>Andere</ion-option>
     </ion-select>
   </ion-item>
 
   <ion-item>
-    <ion-label>Schmerzart</ion-label>
-    <ion-select multiple="true">
-      <ion-option>pulsierend / stechend</ion-option>
-      <ion-option>dumpf / drückend</ion-option>
+    <ion-label>Schmerzareal</ion-label>
+    <ion-select okText="Ok" cancelText="Abbrechen" multiple="true">
       <ion-option>einseitig</ion-option>
       <ion-option>beidseitig</ion-option>
+      <ion-option>hinen</ion-option>
+      <ion-option>vorne</ion-option>
+      <ion-option>mitte</ion-option>
+      <ion-option>Andere</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Auslöser</ion-label>
+    <ion-select okText="Ok" cancelText="Abbrechen" multiple="true">
+      <ion-option>Schalf</ion-option>
+      <ion-option>Essen</ion-option>
+      <ion-option>Schokolade</ion-option>
+      <ion-option>Ruhe</ion-option>
+      <ion-option>Relax</ion-option>
       <ion-option>Andere</ion-option>
     </ion-select>
   </ion-item>
 
   <p>Dauer des Schmerzes</p>
   <ion-item>
-    <ion-label>Date</ion-label>
-    <ion-datetime displayFormat="MM/DD/YYYY"></ion-datetime>
+    <ion-label>Von</ion-label>
+    <ion-datetime displayFormat="MMM DD, YYYY HH:mm"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label>Bis</ion-label>
+    <ion-datetime displayFormat="MMM DD, YYYY HH:mm"></ion-datetime>
+  </ion-item>
+
+  <p>Stärke des Schmerzes</p>
+  <ion-item>
+    <ion-range min="20" max="80" step="15" snaps="true" color="secondary">
+      <ion-icon small range-left name="md-sad"></ion-icon>
+      <ion-icon range-right name="md-happy"></ion-icon>
+    </ion-range>
+  </ion-item>
+
+  <ion-searchbar [showCancelButton]="shouldShowCancel" (ionInput)="getItems($event)" (ionCancel)="onCancel($event)">
+  </ion-searchbar>
+  <ion-list>
+    <ion-item *ngFor="let item of items">
+      {{ item }}
+    </ion-item>
+  </ion-list>
+
+  <ion-item>
+    <ion-input type="number" placeholder="Menge" min="0"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-input type="text" placeholder="Hat es gewirkt?"></ion-input>
   </ion-item>
 
 
+  <button ion-button round large color="secondary">
+    <ion-icon name="checkmark"></ion-icon>
+  </button>
+
 </ion-content>
+<ion-nav id="nav" #content [root]="rootPage"></ion-nav>

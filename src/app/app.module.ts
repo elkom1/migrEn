@@ -12,14 +12,26 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { NativePageTransitions } from '@ionic-native/native-page-transitions';
+import { Impressum } from '../pages/menu_impressum/menu_impressum';
+import { Startseite } from '../pages/menu_startseite/menu_startseite';
+import { EntspannungsUebungen } from '../pages/menu_entspannungsUebungen/menu_entspannungsUebungen';
+import { Diagnosen } from '../pages/menu_Diagnosen/menu_Diagnosen';
+import { Datenschutz } from '../pages/menu_Datenschutz/menu_Datenschutz';
+import { MenuPage } from '../pages/menu/menu';
 
 @NgModule({
   declarations: [
     MyApp,
     MyDayPage,
     NewAttackPage,
+    Impressum,
     HomePage,
-    TabsPage
+    TabsPage,
+    MenuPage,
+    Startseite,
+    EntspannungsUebungen, 
+    Diagnosen, 
+    Datenschutz, 
   ],
   imports: [
     BrowserModule,
@@ -31,7 +43,13 @@ import { NativePageTransitions } from '@ionic-native/native-page-transitions';
     MyDayPage,
     NewAttackPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    Impressum,
+    MenuPage, 
+    Startseite,
+    EntspannungsUebungen,
+    Diagnosen, 
+    Datenschutz,
   ],
   providers: [
     StatusBar,

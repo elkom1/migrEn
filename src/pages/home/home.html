@@ -1,5 +1,4 @@
 <ion-header>
-
   <ion-toolbar>
     <button ion-button menuToggle left>
       <ion-icon name="menu"></ion-icon>
@@ -12,8 +11,8 @@
 </ion-header>
 
 <ion-content padding>
-  
-  <ion-menu [content]="content">
+
+  <!-- <ion-menu [content]="content">
     <ion-list>
       <button ion-item (click)="openHomePage()">
         MIDATA Account
@@ -40,7 +39,7 @@
         Hilfe
       </button>
     </ion-list>
-  </ion-menu>
+  </ion-menu> -->
 
 
   <h2>Hallo BFH-Student</h2>
@@ -55,6 +54,8 @@
     </ion-row>
   </ion-grid>
 
+  <div text-center>
+    <img src="assets/imgs/icon.png" alt="heMIgrania logo" style="margin-top: 200px;">
+  </div>
 
 </ion-content>
-<ion-nav id="nav" #content [root]="rootPage"></ion-nav>

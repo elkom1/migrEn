@@ -1,46 +1,58 @@
 <ion-header>
-    <ion-toolbar>
-        <button ion-button menuToggle left (click)="openMenu()">
-          <ion-icon name="menu"></ion-icon>
-        </button>
-        <ion-buttons end>
-        </ion-buttons>
-        <ion-title>heMIgrania</ion-title>
-      </ion-toolbar>    
+  <ion-toolbar>
+    <button ion-button menuToggle left>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-buttons end>
+    </ion-buttons>
+    <ion-title>heMIgrania</ion-title>
+  </ion-toolbar>
+
 </ion-header>
 
 <ion-content padding>
 
-  <ion-menu [content]="content">
-    <ion-list>
-      <button ion-item (click)="openHomePage()">
-        MIDATA Account
-      </button>
-      <button ion-item (click)="openHomePage()">
-        Startseite
-      </button>
-      <button ion-item (click)="openHomePage()">
-        Schlafanalyse
-      </button>
-      <button ion-item (click)="openHomePage()">
-        Entspannungsübungen
-      </button>
-      <button ion-item (click)="openHomePage()">
-        Meine Diagnosen
-      </button>
-      <button ion-item (click)="openHomePage()">
-        Datenschutzerklärung
-      </button>
-      <button ion-item (click)="openHomePage()">
-        Impressum
-      </button>
-      <button ion-item (click)="openHomePage()">
-        Hilfe
-      </button>
-    </ion-list>
-  </ion-menu>   
+  <p>Schlafanalyse</p>
+  <ion-item>
+    <ion-label>Einschlafzeit</ion-label>
+    <ion-datetime displayFormat="MMM DD, YYYY HH:mm"></ion-datetime>
+  </ion-item>
+  <ion-item>
+    <ion-label>Aufwachzeit</ion-label>
+    <ion-datetime displayFormat="MMM DD, YYYY HH:mm"></ion-datetime>
+  </ion-item>
 
+  <ion-item>
+    <ion-label>Essverhalten</ion-label>
+    <ion-select okText="Ok" cancelText="Abbrechen" popover>
+      <ion-option>Regelmässig gegessen</ion-option>
+      <ion-option>Unregelmässig gegessen</ion-option>
+      <ion-option>Unbestimmtes Essverhalten</ion-option>
+    </ion-select>
+  </ion-item>
+
+  <p>Schlafqualität</p>
+  <ion-item>
+    <ion-range min="20" max="80" step="15" snaps="true" color="secondary">
+      <ion-icon small range-left name="md-sad"></ion-icon>
+      <ion-icon range-right name="md-happy"></ion-icon>
+    </ion-range>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Gemachte Übungen</ion-label>
+    <ion-select okText="Ok" cancelText="Abbrechen" multiple="true">
+      <ion-option>übung 1</ion-option>
+      <ion-option>übung 2</ion-option>
+      <ion-option>übung 3</ion-option>
+    </ion-select>
+  </ion-item>
+
+
+  <p>Sie können nur einmal pro 24h einen Tageseintrag erfassen</p>
+  <button ion-button round large color="secondary">
+    <ion-icon name="checkmark"></ion-icon>
+  </button>
 
 </ion-content>
 <ion-nav id="nav" #content [root]="rootPage"></ion-nav>
-
