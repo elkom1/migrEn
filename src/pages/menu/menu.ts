@@ -5,7 +5,7 @@ import { Diagnosen } from './../menu_Diagnosen/menu_Diagnosen';
 import { Datenschutz } from './../menu_Datenschutz/menu_Datenschutz';
 import { TabsPage } from './../tabs/tabs';
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Nav } from 'ionic-angular';
+import { IonicPage, NavController, Nav } from 'ionic-angular';
  
 export interface PageInterface {
   title: string;
@@ -27,15 +27,14 @@ export class MenuPage {
   @ViewChild(Nav) nav: Nav;
  
   pages: PageInterface[] = [
-    { title: 'Startseite', pageName: 'Startseite', tabComponent: Startseite, index: 0, icon: 'home' },
-    { title: 'Entspannungsübungen', pageName: 'EntspannungsUebungen', icon: 'rose' },
-    { title: 'Impressum', pageName: 'Impressum', icon: 'contacts' },
-    { title: 'Meine Diagnosen', pageName: 'Diagnosen', icon: 'medkit' },
-    { title: 'Datenschutzerklärung', pageName: 'Datenschutz', icon: 'lock' },
-    
+    { title: 'Startseite', pageName: 'Startseite', tabComponent: TabsPage, icon: 'home' },
+    { title: 'Entspannungsübungen', pageName: 'EntspannungsUebungen', tabComponent: EntspannungsUebungen, icon: 'rose' },
+    { title: 'Meine Diagnosen', pageName: 'Diagnosen', tabComponent: Diagnosen, icon: 'medkit' },
+    { title: 'Datenschutzerklärung', pageName: 'Datenschutz', tabComponent: Datenschutz, icon: 'lock' },
+    { title: 'Impressum', pageName: 'Impressum', tabComponent: Impressum, icon: 'contacts' },
   ];
  
-  constructor(public navCtrl: NavController, public navParams: NavParams) { }
+  constructor(public navCtrl: NavController) { }
  
   openPage(page: PageInterface) {
     let params = {};
@@ -51,8 +50,7 @@ export class MenuPage {
     } else {
       // Tabs are not active, so reset the root page 
       // In this case: moving to or from SpecialPage
-      console.log("musab");
-     this.nav.setRoot(page.pageName, params);
+     this.nav.setRoot(page.tabComponent, params);
     }
   }
  

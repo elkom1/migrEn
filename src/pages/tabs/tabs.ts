@@ -22,6 +22,7 @@ import {
   NativePageTransitions,
   NativeTransitionOptions
 } from '@ionic-native/native-page-transitions';
+import { EntspannungsUebungen } from '../menu_entspannungsUebungen/menu_entspannungsUebungen';
 
 
 @Component({

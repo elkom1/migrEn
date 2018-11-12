@@ -11,6 +11,18 @@
 </ion-header>
 
 <ion-content padding>
+  <p>Erfasst du gerade einen Migräneanfall oder allgemeines Unwohlsein?</p>
+  <ion-list radio-group>
+      <ion-item>
+          <ion-label>Migräneanfall</ion-label>
+          <ion-radio value="migräneanfall" checked></ion-radio>
+      </ion-item>
+      <ion-item>
+          <ion-label>Unwohlsein</ion-label>
+          <ion-radio value="unwohlsein"></ion-radio>
+      </ion-item>
+  </ion-list>
+
   <ion-item>
     <ion-label>Symptome</ion-label>
     <ion-select okText="Ok" cancelText="Abbrechen" multiple="true">
@@ -25,15 +37,21 @@
 
   <ion-item>
     <ion-label>Schmerzareal</ion-label>
-    <ion-select okText="Ok" cancelText="Abbrechen" multiple="true">
+    <ion-select okText="Ok" cancelText="Abbrechen" multiple="false">
       <ion-option>einseitig</ion-option>
       <ion-option>beidseitig</ion-option>
-      <ion-option>hinen</ion-option>
-      <ion-option>vorne</ion-option>
-      <ion-option>mitte</ion-option>
       <ion-option>Andere</ion-option>
     </ion-select>
   </ion-item>
+
+  <ion-item>
+      <ion-label>Schmerzar</ion-label>
+      <ion-select okText="Ok" cancelText="Abbrechen" popover>
+        <ion-option>Stechend</ion-option>
+        <ion-option>Dumpf</ion-option>
+        <ion-option>Andere</ion-option>
+      </ion-select> 
+    </ion-item>
 
   <ion-item>
     <ion-label>Auslöser</ion-label>
@@ -59,9 +77,9 @@
 
   <p>Stärke des Schmerzes</p>
   <ion-item>
-    <ion-range min="20" max="80" step="15" snaps="true" color="secondary">
-      <ion-icon small range-left name="md-sad"></ion-icon>
-      <ion-icon range-right name="md-happy"></ion-icon>
+    <ion-range min="0" max="100" step="10" snaps="true" color="secondary">
+      <ion-icon small range-left name="md-happy"></ion-icon>
+      <ion-icon range-right name="md-sad"></ion-icon>
     </ion-range>
   </ion-item>
 
@@ -74,13 +92,17 @@
   </ion-list>
 
   <ion-item>
-    <ion-input type="number" placeholder="Menge" min="0"></ion-input>
+    <ion-input type="number" placeholder="Menge" min="0" max="15"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-input type="text" placeholder="Hat es gewirkt?"></ion-input>
+    <ion-label>Hat es gewirk?</ion-label>
+    <ion-select okText="Ok" cancelText="Abbrechen" popover>
+      <ion-option>Ja</ion-option>
+      <ion-option>Nein</ion-option>
+      <ion-option>Hat sich verschlimmert</ion-option>
+    </ion-select> 
   </ion-item>
-
 
   <button ion-button round large color="secondary">
     <ion-icon name="checkmark"></ion-icon>
