@@ -11,6 +11,8 @@
 </ion-header>
 
 <ion-content padding>
+
+
   <p>Erfasst du gerade einen Migräneanfall oder allgemeines Unwohlsein?</p>
   <ion-list radio-group>
       <ion-item>
@@ -26,26 +28,42 @@
   <ion-item>
     <ion-label>Symptome</ion-label>
     <ion-select okText="Ok" cancelText="Abbrechen" multiple="true">
+      <ion-option>Tränende Augen</ion-option>
+      <ion-option>Rötliche Augen</ion-option>
+      <ion-option>Nasenlaufen</ion-option>
+      <ion-option>Nasenverstopfung</ion-option>
       <ion-option>Flimmersehen</ion-option>
-      <ion-option>fotophopie</ion-option>
-      <ion-option>Sonophobie</ion-option>
-      <ion-option>Kopfschmerzen</ion-option>
+      <ion-option>Lichtempfindlichkeit</ion-option>
+      <ion-option>Geruchsempfindlichkeit</ion-option>
       <ion-option>Gefühlsstörung</ion-option>
+      <ion-option>Sprachstörung</ion-option>
+      <ion-option>Kopfschmerzen</ion-option>
       <ion-option>Andere</ion-option>
     </ion-select>
-  </ion-item>
+    <ion-input placeholder="Andere" min="0" max="15"></ion-input>
+      </ion-item>
+    <!-- <button ion-button (click)="showStuff()">Symptome angeben</button>
+    <ion-list *ngIf="_symptomsActive">
+      <ion-item (click)="setSymptom('Kopfschmerzen')" *ngIf="_activeSymptoms.kopfschmerz">
+      <ion-icon name="checkbox"></ion-icon>
+      blubbediblubb</ion-item>
+      <ion-item (click)="setSymptom('Kopfschmerzen')" *ngIf="!_activeSymptoms.kopfschmerz">
+      <ion-icon name="square"></ion-icon>
+      Kopfschmerzen</ion-item>
+      <ion-item>Andere</ion-item>
+    </ion-list> -->
 
   <ion-item>
     <ion-label>Schmerzareal</ion-label>
     <ion-select okText="Ok" cancelText="Abbrechen" multiple="false">
-      <ion-option>einseitig</ion-option>
-      <ion-option>beidseitig</ion-option>
+      <ion-option>Kopf, einseitig</ion-option>
+      <ion-option>Kopf, beidseitig</ion-option>
       <ion-option>Andere</ion-option>
     </ion-select>
   </ion-item>
 
   <ion-item>
-      <ion-label>Schmerzar</ion-label>
+      <ion-label>Schmerzart</ion-label>
       <ion-select okText="Ok" cancelText="Abbrechen" popover>
         <ion-option>Stechend</ion-option>
         <ion-option>Dumpf</ion-option>
@@ -56,11 +74,9 @@
   <ion-item>
     <ion-label>Auslöser</ion-label>
     <ion-select okText="Ok" cancelText="Abbrechen" multiple="true">
-      <ion-option>Schalf</ion-option>
-      <ion-option>Essen</ion-option>
-      <ion-option>Schokolade</ion-option>
-      <ion-option>Ruhe</ion-option>
-      <ion-option>Relax</ion-option>
+      <ion-option>Menstruation</ion-option>
+      <ion-option>Stress</ion-option>
+      <ion-option>Erholung</ion-option>
       <ion-option>Andere</ion-option>
     </ion-select>
   </ion-item>
@@ -83,8 +99,12 @@
     </ion-range>
   </ion-item>
 
+<div> 
   <ion-searchbar [showCancelButton]="shouldShowCancel" (ionInput)="getItems($event)" (ionCancel)="onCancel($event)">
-  </ion-searchbar>
+  </ion-searchbar> 
+    <ion-icon name="add-circle"></ion-icon>
+</div>
+  <ion-icon name="barcode"></ion-icon>
   <ion-list>
     <ion-item *ngFor="let item of items">
       {{ item }}
@@ -96,7 +116,7 @@
   </ion-item>
 
   <ion-item>
-    <ion-label>Hat es gewirk?</ion-label>
+    <ion-label>Hat es gewirkt?</ion-label>
     <ion-select okText="Ok" cancelText="Abbrechen" popover>
       <ion-option>Ja</ion-option>
       <ion-option>Nein</ion-option>
@@ -104,7 +124,7 @@
     </ion-select> 
   </ion-item>
 
-  <button ion-button round large color="secondary">
+  <button ion-button round large color="secondary" (click)="presentAlert()">
     <ion-icon name="checkmark"></ion-icon>
   </button>
 

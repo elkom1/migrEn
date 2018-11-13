@@ -5,6 +5,9 @@ import {
   NavController
 } from 'ionic-angular';
 
+import { AlertController } from 'ionic-angular';
+
+
 @Component({
   selector: 'page-newAttack',
   templateUrl: 'newAttackPage.html'
@@ -13,9 +16,15 @@ export class NewAttackPage {
 
   searchQuery: string = '';
   items: string[];
+  _symptomsActive = false;
+  _activeSymptoms = {
+    kopfschmerz: false,
+    xyz: false
+  };
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, private alertCtrl: AlertController) {
     this.initializeItems();
+
   }
 
   initializeItems() {
@@ -40,4 +49,28 @@ export class NewAttackPage {
       })
     }
   }
+
+  presentAlert() {
+  let alert = this.alertCtrl.create({
+    message: 'Deine Daten wurden erfasst',
+    buttons: ['OK']
+  });
+  alert.present();
 }
+
+  // showStuff() {
+  //   this._symptomsActive = !this._symptomsActive;
+  // }
+
+  // setSymptom(sType: Symptoms) {
+  //   switch (sType) {
+  //     case 'Kopfschmerzen':
+  //       this._activeSymptoms.kopfschmerz = !this._activeSymptoms.kopfschmerz
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // } 
+}
+
+// export type Symptoms = "Kopfschmerzen" | "XYZ";

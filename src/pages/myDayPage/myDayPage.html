@@ -39,7 +39,6 @@
     </ion-select>
   </ion-item>
 
-
   <ion-item>
     <ion-label>Gemachte Übungen</ion-label>
     <ion-select okText="Ok" cancelText="Abbrechen" multiple="true">
@@ -49,14 +48,13 @@
     </ion-select>
   </ion-item>
 
-
   <p>Meine Angaben habe ich für folgenden Tag eingegeben:</p>
   <ion-item>
     <ion-label>Datum</ion-label>
     <ion-datetime displayFormat="MMM DD, YYYY"></ion-datetime>
   </ion-item>
 
-  <button ion-button round large color="secondary">
+  <button ion-button round large color="secondary" (click)="showCheckbox()">
     <ion-icon name="checkmark"></ion-icon>
   </button>
 
