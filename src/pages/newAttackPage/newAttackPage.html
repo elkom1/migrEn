@@ -40,7 +40,7 @@
       <ion-option>Kopfschmerzen</ion-option>
       <ion-option>Andere</ion-option>
     </ion-select>
-    <ion-input placeholder="Andere" min="0" max="15"></ion-input>
+    <ion-input placeholder="Andere"></ion-input>
       </ion-item>
     <!-- <button ion-button (click)="showStuff()">Symptome angeben</button>
     <ion-list *ngIf="_symptomsActive">
@@ -99,17 +99,26 @@
     </ion-range>
   </ion-item>
 
-<div> 
-  <ion-searchbar [showCancelButton]="shouldShowCancel" (ionInput)="getItems($event)" (ionCancel)="onCancel($event)">
-  </ion-searchbar> 
-    <ion-icon name="add-circle"></ion-icon>
-</div>
-  <ion-icon name="barcode"></ion-icon>
-  <ion-list>
+  
+  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+  <ion-list *ngIf="showList">
     <ion-item *ngFor="let item of items">
       {{ item }}
     </ion-item>
   </ion-list>
+
+  <ion-item>
+    <ion-label>Port</ion-label>
+    <select-searchable
+        item-content
+        [(ngModel)]="port"
+        [items]="ports"
+        itemValueField="id"
+        itemTextField="name"
+        [canSearch]="true"
+        (onChange)="portChange($event)">
+    </select-searchable>
+</ion-item>
 
   <ion-item>
     <ion-input type="number" placeholder="Menge" min="0" max="15"></ion-input>

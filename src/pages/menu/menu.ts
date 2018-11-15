@@ -3,6 +3,7 @@ import { Startseite } from './../menu_startseite/menu_startseite';
 import { EntspannungsUebungen } from './../menu_entspannungsUebungen/menu_entspannungsUebungen';
 import { Diagnosen } from './../menu_Diagnosen/menu_Diagnosen';
 import { Datenschutz } from './../menu_Datenschutz/menu_Datenschutz';
+import { Reminder } from './../menu_reminder/menu_reminder'
 import { TabsPage } from './../tabs/tabs';
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, Nav } from 'ionic-angular';
@@ -30,6 +31,7 @@ export class MenuPage {
     { title: 'Startseite', pageName: 'Startseite', tabComponent: TabsPage, icon: 'home' },
     { title: 'Entspannungsübungen', pageName: 'EntspannungsUebungen', tabComponent: EntspannungsUebungen, icon: 'rose' },
     { title: 'Meine Diagnosen', pageName: 'Diagnosen', tabComponent: Diagnosen, icon: 'medkit' },
+    { title: 'Reminder', pageName: 'Reminder', tabComponent: Reminder, icon: 'alarm' },
     { title: 'Datenschutzerklärung', pageName: 'Datenschutz', tabComponent: Datenschutz, icon: 'lock' },
     { title: 'Impressum', pageName: 'Impressum', tabComponent: Impressum, icon: 'contacts' },
   ];

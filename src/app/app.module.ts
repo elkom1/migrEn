@@ -14,10 +14,13 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { NativePageTransitions } from '@ionic-native/native-page-transitions';
 import { Impressum } from '../pages/menu_impressum/menu_impressum';
 import { Startseite } from '../pages/menu_startseite/menu_startseite';
+import { Reminder } from '../pages/menu_reminder/menu_reminder';
 import { EntspannungsUebungen } from '../pages/menu_entspannungsUebungen/menu_entspannungsUebungen';
 import { Diagnosen } from '../pages/menu_Diagnosen/menu_Diagnosen';
 import { Datenschutz } from '../pages/menu_Datenschutz/menu_Datenschutz';
 import { MenuPage } from '../pages/menu/menu';
+
+import { SelectSearchableModule } from 'ionic-select-searchable';
 
 @NgModule({
   declarations: [
@@ -31,11 +34,13 @@ import { MenuPage } from '../pages/menu/menu';
     Startseite,
     EntspannungsUebungen, 
     Diagnosen, 
-    Datenschutz, 
+    Datenschutz,
+    Reminder, 
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    SelectSearchableModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -50,6 +55,7 @@ import { MenuPage } from '../pages/menu/menu';
     EntspannungsUebungen,
     Diagnosen, 
     Datenschutz,
+    Reminder, 
   ],
   providers: [
     StatusBar,
