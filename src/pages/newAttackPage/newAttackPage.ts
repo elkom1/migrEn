@@ -99,10 +99,10 @@ export class NewAttackPage {
 }
 
 
-portChange(event: {
-        component: SelectSearchableComponent,
-        value: any 
-    }); 
+// portChange(event: {
+//         component: SelectSearchableComponent,
+//         value: any 
+//     }); 
 
 }
 

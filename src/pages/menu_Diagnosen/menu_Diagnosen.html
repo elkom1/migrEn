@@ -11,5 +11,35 @@
 </ion-header>
 
 <ion-content padding>
+
+<ion-list>
+
+ <p>Datum der Diagnose</p>
+  <ion-item>
+    <ion-label>Datum der Diagnose</ion-label>
+    <ion-datetime displayFormat="MMM DD, YYYY"></ion-datetime>
+  </ion-item>
+
+  <ion-item>
+  <ion-label>Definition</ion-label>
+  <ion-select>
+    <ion-option>Migräne</ion-option>
+    <ion-option>Migräne mit Aura</ion-option>
+    <ion-option>Migräne ohne Aura</ion-option>
+    <ion-option>Typische Aura mit Migränekopfschmerz</ion-option>
+    <ion-option>Typische Aura mit Kopfschmerzen, die nicht einer Migräne entsprechen</ion-option>
+    <ion-option>Typische Aura ohne Kopfschmerz</ion-option>
+    <ion-option>Familiäre hemiplegische Migräne (FHM)</ion-option>
+    <ion-option>Sporadische hemiplegische Migräne</ion-option>
+    <ion-option>Andere</ion-option>
+  </ion-select>
+</ion-item>
+
+
+  <button ion-button round large color="secondary" (click)="presentAlert()">
+    Hinzufügen
+  </button>
+
+</ion-list>
 </ion-content>
 

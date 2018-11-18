@@ -8,6 +8,7 @@ import { AlertController } from 'ionic-angular';
   templateUrl: 'myDayPage.html'
 })
 export class MyDayPage {
+  testCheckboxOpen = false; 
 
   constructor(public navCtrl: NavController, private alertCtrl: AlertController) {
   }
@@ -40,7 +41,7 @@ showCheckbox() {
       handler: data => {
         console.log('Checkbox data:', data);
         this.testCheckboxOpen = false;
-        this.testCheckboxResult = data;
+       // this.testCheckboxResult = data;
       }
     });
     alert.present();

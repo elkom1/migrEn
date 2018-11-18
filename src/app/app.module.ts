@@ -2,6 +2,11 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
+import {NativeStorage} from '@ionic-native/native-storage';
+import { InAppBrowser } from "@ionic-native/in-app-browser";
+import { Network } from '@ionic-native/network';
+import { SecureStorage, SecureStorageObject } from '@ionic-native/secure-storage';
+
 
 import { MyDayPage } from '../pages/myDayPage/myDayPage';
 import { NewAttackPage } from '../pages/newAttackPage/newAttackPage';
@@ -13,6 +18,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { NativePageTransitions } from '@ionic-native/native-page-transitions';
 import { Impressum } from '../pages/menu_impressum/menu_impressum';
+import { Tutorial } from '../pages/menu_tutorial/menu_tutorial';
 import { Startseite } from '../pages/menu_startseite/menu_startseite';
 import { Reminder } from '../pages/menu_reminder/menu_reminder';
 import { EntspannungsUebungen } from '../pages/menu_entspannungsUebungen/menu_entspannungsUebungen';
@@ -21,6 +27,9 @@ import { Datenschutz } from '../pages/menu_Datenschutz/menu_Datenschutz';
 import { MenuPage } from '../pages/menu/menu';
 
 import { SelectSearchableModule } from 'ionic-select-searchable';
+
+
+
 
 @NgModule({
   declarations: [
@@ -36,6 +45,7 @@ import { SelectSearchableModule } from 'ionic-select-searchable';
     Diagnosen, 
     Datenschutz,
     Reminder, 
+    Tutorial, 
   ],
   imports: [
     BrowserModule,
@@ -56,11 +66,16 @@ import { SelectSearchableModule } from 'ionic-select-searchable';
     Diagnosen, 
     Datenschutz,
     Reminder, 
+    Tutorial, 
   ],
   providers: [
     StatusBar,
     SplashScreen,
     NativePageTransitions,
+    InAppBrowser,
+    NativeStorage,
+    SecureStorage,
+   Network,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
