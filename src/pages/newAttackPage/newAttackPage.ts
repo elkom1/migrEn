@@ -23,7 +23,7 @@ import {
 export class NewAttackPage {
 
   menge: number = 0;
-  symtome: any;
+  symptome: any;
   selectedOther = false;
 
   group: FormGroup;
@@ -41,14 +41,14 @@ export class NewAttackPage {
     //Here we can intialize all of the attributes which are selected and altered
     this.group = new FormGroup({
       menge: new FormControl(''),
-      symtome: new FormControl('')
+      symptome: new FormControl('')
     })
     this.initializeItems();
   }
 
   onChangeSymptoms() {
     console.log("in Change method");
-    this.selectedOther = this.symtome.includes("Andere");
+    this.selectedOther = this.symptome.includes("Andere");
   }
 
   initializeItems() {
@@ -102,7 +102,7 @@ export class NewAttackPage {
     console.log("Menge:");
     console.log(this.menge);
     console.log("Symptome:");
-    console.log(this.symtome);
+    console.log(this.symptome);
     console.log()
     let alert = this.alertCtrl.create({
       message: 'Deine Daten wurden erfasst',
