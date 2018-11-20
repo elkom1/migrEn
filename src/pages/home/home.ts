@@ -4,6 +4,7 @@ import {
 import {
   NavController
 } from 'ionic-angular';
+import { Tutorial } from './../menu_tutorial/menu_tutorial';
 
 
 @Component({
@@ -18,5 +19,9 @@ export class HomePage {
     this.navCtrl.setRoot(HomePage); 
   }
 
+goTutorial(){
+    this.navCtrl.push(Tutorial);
+        this.navCtrl.setRoot(Tutorial); 
 
+  }
 }

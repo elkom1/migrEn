@@ -28,6 +28,8 @@ import { MenuPage } from '../pages/menu/menu';
 
 import { SelectSearchableModule } from 'ionic-select-searchable';
 
+import { LoginPage } from "../pages/login/login";
+import { MidataService} from "../services/midataService";
 
 
 
@@ -46,6 +48,7 @@ import { SelectSearchableModule } from 'ionic-select-searchable';
     Datenschutz,
     Reminder, 
     Tutorial, 
+    LoginPage, 
   ],
   imports: [
     BrowserModule,
@@ -67,6 +70,7 @@ import { SelectSearchableModule } from 'ionic-select-searchable';
     Datenschutz,
     Reminder, 
     Tutorial, 
+    LoginPage, 
   ],
   providers: [
     StatusBar,
@@ -75,7 +79,9 @@ import { SelectSearchableModule } from 'ionic-select-searchable';
     InAppBrowser,
     NativeStorage,
     SecureStorage,
-   Network,
+    Network,
+    MidataService,
+
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

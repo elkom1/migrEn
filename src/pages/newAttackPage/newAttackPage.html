@@ -12,22 +12,24 @@
 
 <ion-content padding>
 
+<!-- This method will save all of the content form -->
+<form (ngSubmit)="presentAlert()" [formGroup]="group">
 
   <p>Erfasst du gerade einen Migräneanfall oder allgemeines Unwohlsein?</p>
   <ion-list radio-group>
-      <ion-item>
-          <ion-label>Migräneanfall</ion-label>
-          <ion-radio value="migräneanfall" checked></ion-radio>
-      </ion-item>
-      <ion-item>
-          <ion-label>Unwohlsein</ion-label>
-          <ion-radio value="unwohlsein"></ion-radio>
-      </ion-item>
+    <ion-item>
+      <ion-label>Migräneanfall</ion-label>
+      <ion-radio value="migräneanfall" checked></ion-radio>
+    </ion-item>
+    <ion-item>
+      <ion-label>Unwohlsein</ion-label>
+      <ion-radio value="unwohlsein"></ion-radio>
+    </ion-item>
   </ion-list>
 
   <ion-item>
     <ion-label>Symptome</ion-label>
-    <ion-select okText="Ok" cancelText="Abbrechen" multiple="true">
+    <ion-select okText="Ok" cancelText="Abbrechen" (ionChange)="onChangeSymptoms()" multiple="true" [(ngModel)]="symtome" name="symtome" formControlName="symtome">
       <ion-option>Tränende Augen</ion-option>
       <ion-option>Rötliche Augen</ion-option>
       <ion-option>Nasenlaufen</ion-option>
@@ -38,11 +40,13 @@
       <ion-option>Gefühlsstörung</ion-option>
       <ion-option>Sprachstörung</ion-option>
       <ion-option>Kopfschmerzen</ion-option>
-      <ion-option>Andere</ion-option>
+      <ion-option >Andere</ion-option>
     </ion-select>
-    <ion-input placeholder="Andere"></ion-input>
-      </ion-item>
-    <!-- <button ion-button (click)="showStuff()">Symptome angeben</button>
+  </ion-item>
+  <ion-item *ngIf="selectedOther">
+    <ion-input placeholder="Andere Symptome"></ion-input>
+  </ion-item>
+  <!-- <button ion-button (click)="showStuff()">Symptome angeben</button>
     <ion-list *ngIf="_symptomsActive">
       <ion-item (click)="setSymptom('Kopfschmerzen')" *ngIf="_activeSymptoms.kopfschmerz">
       <ion-icon name="checkbox"></ion-icon>
@@ -63,13 +67,13 @@
   </ion-item>
 
   <ion-item>
-      <ion-label>Schmerzart</ion-label>
-      <ion-select okText="Ok" cancelText="Abbrechen" popover>
-        <ion-option>Stechend</ion-option>
-        <ion-option>Dumpf</ion-option>
-        <ion-option>Andere</ion-option>
-      </ion-select> 
-    </ion-item>
+    <ion-label>Schmerzart</ion-label>
+    <ion-select okText="Ok" cancelText="Abbrechen" popover>
+      <ion-option>Stechend</ion-option>
+      <ion-option>Dumpf</ion-option>
+      <ion-option>Andere</ion-option>
+    </ion-select>
+  </ion-item>
 
   <ion-item>
     <ion-label>Auslöser</ion-label>
@@ -99,7 +103,7 @@
     </ion-range>
   </ion-item>
 
-  
+
   <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
   <ion-list *ngIf="showList">
     <ion-item *ngFor="let item of items">
@@ -107,21 +111,12 @@
     </ion-item>
   </ion-list>
 
+    <button ion-button round color="secondary">
+      <ion-icon name="add-circle"></ion-icon>
+    </button>
+    
   <ion-item>
-    <ion-label>Port</ion-label>
-    <select-searchable
-        item-content
-        [(ngModel)]="port"
-        [items]="ports"
-        itemValueField="id"
-        itemTextField="name"
-        [canSearch]="true"
-        (onChange)="portChange($event)">
-    </select-searchable>
-</ion-item>
-
-  <ion-item>
-    <ion-input type="number" placeholder="Menge" min="0" max="15"></ion-input>
+    <ion-input type="number" placeholder="Menge" min="0" max="15" [(ngModel)]="menge" name="menge" formControlName="menge"></ion-input>
   </ion-item>
 
   <ion-item>
@@ -130,12 +125,12 @@
       <ion-option>Ja</ion-option>
       <ion-option>Nein</ion-option>
       <ion-option>Hat sich verschlimmert</ion-option>
-    </ion-select> 
+    </ion-select>
   </ion-item>
 
-  <button ion-button round large color="secondary" (click)="presentAlert()">
+  <button ion-button round large color="secondary" type="submit">
     <ion-icon name="checkmark"></ion-icon>
   </button>
 
+</form>
 </ion-content>
-<ion-nav id="nav" #content [root]="rootPage"></ion-nav>

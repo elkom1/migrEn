@@ -29,7 +29,7 @@ export class MenuPage {
   @ViewChild(Nav) nav: Nav;
  
   pages: PageInterface[] = [
-    { title: 'Startseite', pageName: 'Startseite', tabComponent: TabsPage, icon: 'home' },
+    { title: 'Startseite', pageName: 'Startseite', tabComponent: TabsPage, index: 0, icon: 'home' },
     { title: 'Entspannungsübungen', pageName: 'EntspannungsUebungen', tabComponent: EntspannungsUebungen, icon: 'rose' },
     { title: 'Wie nutze ich heMIgrania?', pageName: 'Tutorial', tabComponent: Tutorial, icon: 'help' },
     { title: 'Meine Diagnosen', pageName: 'Diagnosen', tabComponent: Diagnosen, icon: 'medkit' },
@@ -49,8 +49,8 @@ export class MenuPage {
     }
  
     // The active child nav is our Tabs Navigation
-    if (this.nav.getActiveChildNav() && page.index != undefined) {
-      this.nav.getActiveChildNav().select(page.index);
+    if (this.nav.getActiveChildNavs()[0] && page.index != undefined) {
+      this.nav.getActiveChildNavs()[0].select(page.index);
     } else {
       // Tabs are not active, so reset the root page 
       // In this case: moving to or from SpecialPage
@@ -60,7 +60,7 @@ export class MenuPage {
  
   isActive(page: PageInterface) {
     // Again the Tabs Navigation
-    let childNav = this.nav.getActiveChildNav();
+    let childNav = this.nav.getActiveChildNavs()[0];
  
     if (childNav) {
       if (childNav.getSelected() && childNav.getSelected().root === page.tabComponent) {
