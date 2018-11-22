@@ -11,42 +11,40 @@
 </ion-header>
 
 <ion-content padding>
+  <!-- This method will save all of the content form -->
+  <form (click)="presentAlert()" [formGroup]="group">
+    <p>Erfasst du gerade einen Migräneanfall oder allgemeines Unwohlsein?</p>
+    <ion-list radio-group [(ngModel)]="situation" name="situation" formControlName="situation">
+      <ion-item>
+        <ion-label>Migräneanfall</ion-label>
+        <ion-radio value="migräneanfall" checked></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>Unwohlsein</ion-label>
+        <ion-radio value="unwohlsein"></ion-radio>
+      </ion-item>
+    </ion-list>
 
-<!-- This method will save all of the content form -->
-<form (ngSubmit)="presentAlert()" [formGroup]="group">
-
-  <p>Erfasst du gerade einen Migräneanfall oder allgemeines Unwohlsein?</p>
-  <ion-list radio-group>
     <ion-item>
-      <ion-label>Migräneanfall</ion-label>
-      <ion-radio value="migräneanfall" checked></ion-radio>
+      <ion-label>Symptome</ion-label>
+      <ion-select okText="Ok" cancelText="Abbrechen" multiple="true" (ionChange)="onChangeSymptoms()" [(ngModel)]="symptome" name="symptome" formControlName="symptome">
+        <ion-option>Tränende Augen</ion-option>
+        <ion-option>Rötliche Augen</ion-option>
+        <ion-option>Nasenlaufen</ion-option>
+        <ion-option>Nasenverstopfung</ion-option>
+        <ion-option>Flimmersehen</ion-option>
+        <ion-option>Lichtempfindlichkeit</ion-option>
+        <ion-option>Geruchsempfindlichkeit</ion-option>
+        <ion-option>Gefühlsstörung</ion-option>
+        <ion-option>Sprachstörung</ion-option>
+        <ion-option>Kopfschmerzen</ion-option>
+        <ion-option>Andere</ion-option>
+      </ion-select>
     </ion-item>
-    <ion-item>
-      <ion-label>Unwohlsein</ion-label>
-      <ion-radio value="unwohlsein"></ion-radio>
+    <ion-item *ngIf="selectedOther">
+      <ion-input placeholder="Andere Symptome"></ion-input>
     </ion-item>
-  </ion-list>
-
-  <ion-item>
-    <ion-label>Symptome</ion-label>
-    <ion-select okText="Ok" cancelText="Abbrechen" (ionChange)="onChangeSymptoms()" multiple="true" [(ngModel)]="symptome" name="symptome" formControlName="symptome">
-      <ion-option>Tränende Augen</ion-option>
-      <ion-option>Rötliche Augen</ion-option>
-      <ion-option>Nasenlaufen</ion-option>
-      <ion-option>Nasenverstopfung</ion-option>
-      <ion-option>Flimmersehen</ion-option>
-      <ion-option>Lichtempfindlichkeit</ion-option>
-      <ion-option>Geruchsempfindlichkeit</ion-option>
-      <ion-option>Gefühlsstörung</ion-option>
-      <ion-option>Sprachstörung</ion-option>
-      <ion-option>Kopfschmerzen</ion-option>
-      <ion-option >Andere</ion-option>
-    </ion-select>
-  </ion-item>
-  <ion-item *ngIf="selectedOther">
-    <ion-input placeholder="Andere Symptome"></ion-input>
-  </ion-item>
-  <!-- <button ion-button (click)="showStuff()">Symptome angeben</button>
+    <!-- <button ion-button (click)="showStuff()">Symptome angeben</button>
     <ion-list *ngIf="_symptomsActive">
       <ion-item (click)="setSymptom('Kopfschmerzen')" *ngIf="_activeSymptoms.kopfschmerz">
       <ion-icon name="checkbox"></ion-icon>
@@ -57,80 +55,95 @@
       <ion-item>Andere</ion-item>
     </ion-list> -->
 
-  <ion-item>
-    <ion-label>Schmerzareal</ion-label>
-    <ion-select okText="Ok" cancelText="Abbrechen" multiple="false">
-      <ion-option>Kopf, einseitig</ion-option>
-      <ion-option>Kopf, beidseitig</ion-option>
-      <ion-option>Andere</ion-option>
-    </ion-select>
-  </ion-item>
-
-  <ion-item>
-    <ion-label>Schmerzart</ion-label>
-    <ion-select okText="Ok" cancelText="Abbrechen" popover>
-      <ion-option>Stechend</ion-option>
-      <ion-option>Dumpf</ion-option>
-      <ion-option>Andere</ion-option>
-    </ion-select>
-  </ion-item>
-
-  <ion-item>
-    <ion-label>Auslöser</ion-label>
-    <ion-select okText="Ok" cancelText="Abbrechen" multiple="true">
-      <ion-option>Menstruation</ion-option>
-      <ion-option>Stress</ion-option>
-      <ion-option>Erholung</ion-option>
-      <ion-option>Andere</ion-option>
-    </ion-select>
-  </ion-item>
-
-  <p>Dauer des Schmerzes</p>
-  <ion-item>
-    <ion-label>Von</ion-label>
-    <ion-datetime displayFormat="MMM DD, YYYY HH:mm"></ion-datetime>
-  </ion-item>
-  <ion-item>
-    <ion-label>Bis</ion-label>
-    <ion-datetime displayFormat="MMM DD, YYYY HH:mm"></ion-datetime>
-  </ion-item>
-
-  <p>Stärke des Schmerzes</p>
-  <ion-item>
-    <ion-range min="0" max="100" step="10" snaps="true" color="secondary">
-      <ion-icon small range-left name="md-happy"></ion-icon>
-      <ion-icon range-right name="md-sad"></ion-icon>
-    </ion-range>
-  </ion-item>
-
-
-  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
-  <ion-list *ngIf="showList">
-    <ion-item *ngFor="let item of items">
-      {{ item }}
+    <ion-item>
+      <ion-label>Schmerzareal</ion-label>
+      <ion-select okText="Ok" cancelText="Abbrechen" multiple="false" (ionChange)="onChangePainAreal()" [(ngModel)]="painAreal"
+        name="painAreal" formControlName="painAreal">
+        <ion-option>Kopf, einseitig</ion-option>
+        <ion-option>Kopf, beidseitig</ion-option>
+        <ion-option>Andere</ion-option>
+      </ion-select>
     </ion-item>
-  </ion-list>
+    <ion-item *ngIf="selectedOther2">
+      <ion-input placeholder="Anderes Schmerzareal"></ion-input>
+    </ion-item>
 
-    <button ion-button round color="secondary">
+    <ion-item>
+      <ion-label>Schmerzart</ion-label>
+      <ion-select okText="Ok" cancelText="Abbrechen" popover (ionChange)="onChangePainType()" [(ngModel)]="painType"
+        name="painType" formControlName="painType">
+        <ion-option>Stechend</ion-option>
+        <ion-option>Dumpf</ion-option>
+        <ion-option>Andere</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="selectedOther3">
+      <ion-input placeholder="Anderer Schmerzart"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Auslöser</ion-label>
+      <ion-select okText="Ok" cancelText="Abbrechen" multiple="true" (ionChange)="onChangeTrigger()" [(ngModel)]="trigger" name="trigger" formControlName="trigger">
+        <ion-option>Menstruation</ion-option>
+        <ion-option>Stress</ion-option>
+        <ion-option>Erholung</ion-option>
+        <ion-option>Andere</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="selectedOther4">
+      <ion-input placeholder="Andere Auslöser"></ion-input>
+    </ion-item>
+
+
+    <p>Dauer des Schmerzes</p>
+    <ion-item>
+      <ion-label>Von</ion-label>
+      <ion-datetime displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="fromDateTime" name="fromDateTime" formControlName="fromDateTime"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Bis</ion-label>
+      <ion-datetime displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="untilDateTime" name="untilDateTime" formControlName="untilDateTime"></ion-datetime>
+    </ion-item>
+
+    <p>Stärke des Schmerzes</p>
+    <ion-item>
+      <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensity" name="intensity" formControlName="intensity">
+        <ion-icon small range-left name="md-happy"></ion-icon>
+        <ion-icon range-right name="md-sad"></ion-icon>
+      </ion-range>
+    </ion-item>
+
+
+    <ion-searchbar (ionInput)="getItems($event)" [(ngModel)]="medicament" name="medicament" formControlName="medicament"></ion-searchbar>
+    <ion-list *ngIf="showList">
+      <ion-item *ngFor="let item of items">
+        {{ item }}
+      </ion-item>
+    </ion-list>
+
+    <button ion-button round color="dark">
       <ion-icon name="add-circle"></ion-icon>
     </button>
-    
-  <ion-item>
-    <ion-input type="number" placeholder="Menge" min="0" max="15" [(ngModel)]="menge" name="menge" formControlName="menge"></ion-input>
-  </ion-item>
+    <button ion-button round color="dark">
+      <ion-icon name="barcode"></ion-icon>
+    </button>
 
-  <ion-item>
-    <ion-label>Hat es gewirkt?</ion-label>
-    <ion-select okText="Ok" cancelText="Abbrechen" popover>
-      <ion-option>Ja</ion-option>
-      <ion-option>Nein</ion-option>
-      <ion-option>Hat sich verschlimmert</ion-option>
-    </ion-select>
-  </ion-item>
+    <ion-item>
+      <ion-input type="number" placeholder="Menge" min="0" max="15" [(ngModel)]="menge" name="menge" formControlName="menge"></ion-input>
+    </ion-item>
 
-  <button ion-button round large color="secondary" type="submit">
-    <ion-icon name="checkmark"></ion-icon>
-  </button>
+    <ion-item>
+      <ion-label>Hat es gewirkt?</ion-label>
+      <ion-select okText="Ok" cancelText="Abbrechen" popover [(ngModel)]="medEffect" name="medEffect" formControlName="medEffect">
+        <ion-option>Ja</ion-option>
+        <ion-option>Nein</ion-option>
+        <ion-option>Hat sich verschlimmert</ion-option>
+      </ion-select>
+    </ion-item>
 
-</form>
+    <button ion-button round large color="secondary" type="submit">
+      <ion-icon name="checkmark"></ion-icon>
+    </button>
+
+  </form>
 </ion-content>

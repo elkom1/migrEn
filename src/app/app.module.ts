@@ -26,12 +26,9 @@ import { Diagnosen } from '../pages/menu_Diagnosen/menu_Diagnosen';
 import { Datenschutz } from '../pages/menu_Datenschutz/menu_Datenschutz';
 import { MenuPage } from '../pages/menu/menu';
 
-import { SelectSearchableModule } from 'ionic-select-searchable';
 
 import { LoginPage } from "../pages/login/login";
 import { MidataService} from "../services/midataService";
-
-
 
 @NgModule({
   declarations: [
@@ -53,7 +50,7 @@ import { MidataService} from "../services/midataService";
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    SelectSearchableModule
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -82,7 +79,7 @@ import { MidataService} from "../services/midataService";
     Network,
     MidataService,
 
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })
 export class AppModule {}
