@@ -15,6 +15,8 @@ import {
   Validators,
   FormControl
 } from '@angular/forms';
+import { AttackJSON } from './attack';
+import { MidataService } from '../../services/midataService';
 
 
 @Component({
@@ -50,9 +52,9 @@ export class NewAttackPage {
   // xyz: false
   // };
   showList: boolean = false;
+  private midataService: MidataService;
 
-
-  constructor(public navCtrl: NavController, private alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, private alertCtrl: AlertController, midataService:MidataService) {
     //Here we can intialize all of the attributes which are selected and altered
     this.group = new FormGroup({
       menge: new FormControl(''),
@@ -67,30 +69,26 @@ export class NewAttackPage {
       medEffect: new FormControl(''),
       situation: new FormControl('')
     })
+    this.midataService = midataService;
     this.initializeItems();
-
   }
 
   onChangeSymptoms() {
-    console.log("in Change method");
-    this.selectedOther = this.symptome.includes("Andere");
+   this.selectedOther = this.symptome.includes("Andere");
   }
   onChangePainAreal() {
-    console.log("in Change method");
     if (this.selectedOther == true || this.selectedOther3 == true || this.selectedOther4 == true) {
       this.selectedOther2 = this.painAreal.includes("Andere");
     }
     this.selectedOther2 = this.painAreal.includes("Andere");
   }
   onChangePainType() {
-    console.log("in Change method");
     if (this.selectedOther == true || this.selectedOther2 == true || this.selectedOther4 == true) {
       this.selectedOther3 = this.painAreal.includes("Andere");
     }
     this.selectedOther3 = this.painType.includes("Andere");
   }
   onChangeTrigger() {
-    console.log("in Change method");
     if (this.selectedOther == true || this.selectedOther2 == true || this.selectedOther3 == true) {
       this.selectedOther4 = this.painAreal.includes("Andere");
     }
@@ -145,6 +143,7 @@ export class NewAttackPage {
   }
 
   presentAlert() {
+    console.log("Ohran u Musab");
     console.log("Situation der Erfassung:");
     console.log(this.situation);
     console.log("Symptome:");
@@ -173,9 +172,12 @@ export class NewAttackPage {
       buttons: ['OK']
     });
     alert.present();
-  }
 
-  
+    let json = new AttackJSON(this.midataService);
+    json.addEntry("", "", "");
+   // console.log(json.getEntry());
+
+  }
 }
 
 // showStuff() {

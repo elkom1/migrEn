@@ -12,7 +12,7 @@
 
 <ion-content padding>
   <!-- This method will save all of the content form -->
-  <form (click)="presentAlert()" [formGroup]="group">
+  <form (ngSubmit)="presentAlert()" [formGroup]="group">
     <p>Erfasst du gerade einen Migräneanfall oder allgemeines Unwohlsein?</p>
     <ion-list radio-group [(ngModel)]="situation" name="situation" formControlName="situation">
       <ion-item>

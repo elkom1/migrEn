@@ -45,7 +45,8 @@ import { MidataService} from "../services/midataService";
     Datenschutz,
     Reminder, 
     Tutorial, 
-    LoginPage, 
+    LoginPage,
+ 
   ],
   imports: [
     BrowserModule,
