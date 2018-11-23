@@ -54,7 +54,7 @@ export class NewAttackPage {
   showList: boolean = false;
   private midataService: MidataService;
 
-  constructor(public navCtrl: NavController, private alertCtrl: AlertController, midataService:MidataService) {
+  constructor(public navCtrl: NavController, private alertCtrl: AlertController, midataService: MidataService) {
     //Here we can intialize all of the attributes which are selected and altered
     this.group = new FormGroup({
       menge: new FormControl(''),
