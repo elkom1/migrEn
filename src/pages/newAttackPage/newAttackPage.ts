@@ -15,9 +15,15 @@ import {
   Validators,
   FormControl
 } from '@angular/forms';
-import { AttackJSON } from './attack';
-import { MidataService } from '../../services/midataService';
-
+import {
+  MidataService
+} from '../../services/midataService';
+import {
+  Quantity,
+  VitalSigns,
+  Observation,
+  Bundle
+} from 'Midata';
 
 @Component({
   selector: 'page-newAttack',
@@ -46,11 +52,7 @@ export class NewAttackPage {
 
   searchQuery: string = '';
   items: string[];
-  // _symptomsActive = false;
-  // _activeSymptoms = {
-  // kopfschmerz: false,
-  // xyz: false
-  // };
+
   showList: boolean = false;
   private midataService: MidataService;
 
@@ -74,7 +76,7 @@ export class NewAttackPage {
   }
 
   onChangeSymptoms() {
-   this.selectedOther = this.symptome.includes("Andere");
+    this.selectedOther = this.symptome.includes("Andere");
   }
   onChangePainAreal() {
     if (this.selectedOther == true || this.selectedOther3 == true || this.selectedOther4 == true) {
@@ -103,20 +105,6 @@ export class NewAttackPage {
     ];
   }
 
-  // getItems(ev: any) {
-  //   // Reset items back to all of the items
-  //   this.initializeItems();
-
-  //   // set val to the value of the searchbar
-  //   const val = ev.target.value;
-
-  //   // if the value is an empty string don't filter the items
-  //   if (val && val.trim() != '') {
-  //     this.items = this.items.filter((item) => {
-  //       return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
-  //     })
-  //   }
-  // }
 
   getItems(ev: any) {
     // Reset items back to all of the items
@@ -173,26 +161,47 @@ export class NewAttackPage {
     });
     alert.present();
 
-    let json = new AttackJSON(this.midataService);
-    json.addEntry("", "", "");
-   // console.log(json.getEntry());
+    let codingStuff = {
+      coding: [{
+        system: 'http://snomed.info/sct',
+        code: '418138009',
+        display: 'Patient condition finding'
+      }]
+    }
+
+    let category = {
+        coding: [{
+          system: 'http://hl7.org/fhir/observation-category',
+          code: 'survey',
+          display: 'Survey'
+        }],
+      },
+      effectivePeriod: {
+        start: DateTime;
+        end: DateTime;
+      }
+
+    let entry = new Observation({_dateTime: new Date().toISOString()}, codingStuff, category);
+
+    entry.addComponent({
+
+      code: {
+        coding: [{
+          "system": "http://snomed.info/sct",
+          "code": "425401001",
+          "display": "Pain intensity rating scale (assessment scale)"
+        }]
+      },
+      valueQuantity: {
+        value: this.intensity
+      }
+
+    })
+
+    let bundle = new Bundle("transaction");
+    bundle.addEntry("POST", entry.resourceType, entry);
+    this.midataService.save(bundle);
 
   }
+
 }
-
-// showStuff() {
-//   this._symptomsActive = !this._symptomsActive;
-// }
-
-// setSymptom(sType: Symptoms) {
-//   switch (sType) {
-//     case 'Kopfschmerzen':
-//       this._activeSymptoms.kopfschmerz = !this._activeSymptoms.kopfschmerz
-//       break;
-//     default:
-//       break;
-//   }
-// } 
-
-
-// export type Symptoms = "Kopfschmerzen" | "XYZ";

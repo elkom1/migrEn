@@ -4,7 +4,14 @@ import {
 import {
   NavController
 } from 'ionic-angular';
-import { Tutorial } from './../menu_tutorial/menu_tutorial';
+import {
+  Tutorial
+} from './../menu_tutorial/menu_tutorial';
+
+import {
+  MidataService
+} from '../../services/midataService';
+import { LoginPage } from '../login/login';
 
 
 @Component({
@@ -13,15 +20,17 @@ import { Tutorial } from './../menu_tutorial/menu_tutorial';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {
+  private midataService: MidataService;
+
+  constructor(public navCtrl: NavController, midataService: MidataService) {
+    this.midataService = midataService;
   }
   openHomePage() {
-    this.navCtrl.setRoot(HomePage); 
+    this.navCtrl.setRoot(HomePage);
   }
 
-goTutorial(){
-    this.navCtrl.push(Tutorial);
-        this.navCtrl.setRoot(Tutorial); 
-
+  logout() {
+    this.midataService.logout;
+    this.navCtrl.push(LoginPage); 
   }
 }

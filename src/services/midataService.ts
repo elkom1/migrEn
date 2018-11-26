@@ -4,7 +4,7 @@ import { SecureStorage, SecureStorageObject } from "@ionic-native/secure-storage
 import { Events, Platform } from "ionic-angular";
 import { Network } from "@ionic-native/network";
 import {NativeStorage} from '@ionic-native/native-storage';
-import { TokenRefreshResponse, TokenResponse} from "midata/dist/src/api";
+import { TokenRefreshResponse, TokenResponse } from "midata/dist/src/api";
 import {Promise} from 'es6-promise';
 
 @Injectable()
@@ -294,7 +294,8 @@ export class MidataService {
         });
           return Promise.resolve(true);
         })
-        .catch(() => {
+        .catch((err) => {
+          console.warn(err);
         return Promise.reject(false);
         })
     } else {
