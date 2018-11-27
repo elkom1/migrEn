@@ -6,6 +6,7 @@ import {NativeStorage} from '@ionic-native/native-storage';
 import { InAppBrowser } from "@ionic-native/in-app-browser";
 import { Network } from '@ionic-native/network';
 import { SecureStorage, SecureStorageObject } from '@ionic-native/secure-storage';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
 
 import { MyDayPage } from '../pages/myDayPage/myDayPage';
@@ -79,6 +80,7 @@ import { MidataService} from "../services/midataService";
     SecureStorage,
     Network,
     MidataService,
+    BarcodeScanner,
 
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]

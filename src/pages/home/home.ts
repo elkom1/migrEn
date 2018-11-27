@@ -30,7 +30,7 @@ export class HomePage {
   }
 
   logout() {
-    this.midataService.logout;
+    this.midataService.logout();
     this.navCtrl.push(LoginPage); 
   }
 }

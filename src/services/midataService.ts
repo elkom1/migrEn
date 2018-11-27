@@ -77,6 +77,7 @@ export class MidataService {
    * @returns Boolean describing the current connection state
    */
   getNetworkState() {
+    console.log("MIDATA SRV", "get network state", this.networkState)
     return this.networkState;
   }
 
@@ -310,12 +311,15 @@ export class MidataService {
    * @returns Promise of type boolean
    */
   openSession() : Promise<boolean>{
+    console.log("MIDATA SRV", "we are in open session function")
     if(this.getNetworkState()){
       return this.getConnection().fetchFHIRConformanceStatement()
         .then(() => {
+          console.log("MIDATA SRV", "we got conformance statement")
           return this.refresh()
         })
         .then(() => {
+          console.log("MIDATA SRV", "refresh did work...")
           this.syncResourceMap().catch(() => {
             // synchronize asynchronously.
             // Do not wait for the method to return.
@@ -328,6 +332,7 @@ export class MidataService {
         return Promise.reject(false);
         })
     } else {
+      console.log("MIDATA SRV", "no network state")
       return this.getSecureStorageToken().then((msg) => {
         return Promise.resolve(true);
       }).catch((msg) => {
@@ -344,9 +349,11 @@ export class MidataService {
   // TODO: Return values of promise chain should be of type TokenRefreshResponse. This way, the
   // TODO: app.component can distinguish the error message and act appropriately.
     private refresh(): Promise<any> {
+      console.log("MIDATA SRV", "we are in refresh function")
         let refreshToken: string;
         return this.getSecureStorageToken()
           .then((rT) => {
+            console.log("MIDATA SRV", "got refresh token:", rT)
             if (rT === undefined || rT == '' || rT == null) {
               return Promise.reject('Error, refresh token not available inside secure storage');
             } else {
@@ -354,12 +361,15 @@ export class MidataService {
             }
           })
           .then(() => {
+            console.log("MIDATA SRV", "now executing refresh with token:", refreshToken)
             return this.midata.refresh(refreshToken);
           })
           .then((rsp : TokenRefreshResponse) => {
+            console.log("MIDATA SRV", "got response from midata:", rsp)
             return this.setSecureStorageToken(rsp.refresh_token)
           })
           .then((msg) => {
+            console.log("MIDATA SRV", "resolve witdh msg:", msg)
             return Promise.resolve(msg);
           })
           .catch((error) => {

@@ -19,11 +19,14 @@ import {
   MidataService
 } from '../../services/midataService';
 import {
-  Quantity,
-  VitalSigns,
   Observation,
   Bundle
 } from 'Midata';
+import {
+  BarcodeScanner
+} from '@ionic-native/barcode-scanner';
+
+
 
 @Component({
   selector: 'page-newAttack',
@@ -56,7 +59,10 @@ export class NewAttackPage {
   showList: boolean = false;
   private midataService: MidataService;
 
-  constructor(public navCtrl: NavController, private alertCtrl: AlertController, midataService: MidataService) {
+  encodeText: string = '';
+
+
+  constructor(public navCtrl: NavController, private alertCtrl: AlertController, midataService: MidataService, private scanner: BarcodeScanner) {
     //Here we can intialize all of the attributes which are selected and altered
     this.group = new FormGroup({
       menge: new FormControl(''),
@@ -130,6 +136,14 @@ export class NewAttackPage {
     }
   }
 
+  scan() {
+    this.scanner.scan().then((data) => {
+      console.log('Barcode data:', data);
+    }).catch(err => {
+      console.log('Error', err);
+    }); 
+  }
+
   presentAlert() {
     console.log("Ohran u Musab");
     console.log("Situation der Erfassung:");
@@ -181,10 +195,35 @@ export class NewAttackPage {
         end: DateTime;
       }
 
-    let entry = new Observation({_dateTime: new Date().toISOString()}, codingStuff, category);
+    let entry = new Observation({
+      _dateTime: new Date().toISOString()
+    }, codingStuff, category);
 
     entry.addComponent({
+      code: {
+        coding: [{
+          "system": "http://snomed.info/sct",
+          "code": "420103007",
+          "display": "Watery eye"
+        }]
+      },
+      valueString: this.symptome[0]
+    })
+    
+    entry.addComponent({
+      code: {
+        coding: [{
+          "system": "http://snomed.info/sct",
+          "code": "408102007",
+          "display": "Medicament intake quantity"
+        }]
+      },
+      valueQuantity: {
+        value: this.menge
+      }
+    })
 
+    entry.addComponent({
       code: {
         coding: [{
           "system": "http://snomed.info/sct",
@@ -195,7 +234,6 @@ export class NewAttackPage {
       valueQuantity: {
         value: this.intensity
       }
-
     })
 
     let bundle = new Bundle("transaction");

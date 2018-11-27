@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, Platform } from 'ionic-angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { MenuPage } from '../../pages/menu/menu';
 import { MidataService } from '../../services/midataService';
@@ -18,7 +18,8 @@ export class LoginPage {
       public navCtrl: NavController,
       private loadingCtrl: LoadingController,
       private inAppBrowser: InAppBrowser,
-      private midataService: MidataService) {
+      private midataService: MidataService,
+      private platform: Platform) {
   }
 
   register(){
@@ -30,13 +31,17 @@ export class LoginPage {
   }
 
   ngAfterViewInit() {
-    this.midataService.openSession().then(success => {
+    this.platform.ready().then(() => {
+      console.log("LOGIN PAGE", "view init, try to open session now...")
+      this.midataService.openSession().then(success => {
+      console.log("LOGIN PAGE", "was open session successfull?", success)
       if (success) {
         this.navCtrl.setRoot(MenuPage)
       }
       else {
         console.warn('bii baa buu wubba lubba dubb dubb');
       }
+    });
     });
   }
 
