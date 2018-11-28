@@ -25,9 +25,6 @@ import {
 import {
   BarcodeScanner
 } from '@ionic-native/barcode-scanner';
-import {
-  Symptome
-} from '../../models/symptome.model';
 
 @Component({
   selector: 'page-newAttack',
@@ -35,29 +32,16 @@ import {
 })
 export class NewAttackPage {
 
-  symptomeArray: Symptome[] = [
-    {id: 1, name: 'Tränende Augen'},
-    {id: 2, name: 'Rötliche Augen'},
-    {id: 3, name: 'Nasenlaufen'},
-    {id: 4, name: 'Nasenverstopfung'},
-    {id: 5, name: 'Flimmersehen'},
-    {id: 6, name: 'Lichtempfindlichkeit'},
-    {id: 7, name: 'Geruchsempfindlichkeit'},
-    {id: 8, name: 'Gefühlsstörung'},
-    {id: 9, name: 'Sprachstörung'},
-    {id: 10, name: 'Kopfschmerzen'},
-    {id: 11, name: 'Andere'}
-  ]
-
   situation: any;
   symptome: string[];
+  otherSymptom: string; 
   painAreal: any;
   painType: any;
   trigger: any;
   fromDateTime: DateTime;
   untilDateTime: DateTime;
   intensity: number = 0;
-  medicament: String = "";
+  medicament: string = "";
   menge: number = 0;
   medEffect: any;
 
@@ -82,6 +66,7 @@ export class NewAttackPage {
     this.group = new FormGroup({
       menge: new FormControl(''),
       symptome: new FormControl(''),
+      otherSymptom: new FormControl(''),
       painAreal: new FormControl(''),
       painType: new FormControl(''),
       trigger: new FormControl(''),
@@ -159,47 +144,15 @@ export class NewAttackPage {
     });
   }
 
-  // isSelected() {
-  //   if (this.symptomeArray.length > 0) {
-  //     this.symptomeArray.forEach((symptom) => {
-  //       console.log(symptom)
-  //     });
-  //     return 1;
-  //   }
-  //   return 0;
-  // }
+//-------------------------------- START PERSISTENCE IN MIDATA OF ALL THE INPUT FIELDS---------------------------------------------------------
   presentAlert() {
+    //test the forEach method 
     this.symptome.forEach(val => {
       console.log("Element in symtomeArr --> " + val);
-      
     })
-
-    
+    //test the find method 
     console.log((this.symptome.find(val => val == "Tränende Augen") == null) ? 0 : 1)
 
-
-    console.log("Situation der Erfassung:");
-    console.log(this.situation);
-    console.log("Symptome:");
-    console.log(this.symptome);
-    console.log("Schmerzareal:");
-    console.log(this.painAreal);
-    console.log("Schmerzart:");
-    console.log(this.painType);
-    console.log("Auslöser:");
-    console.log(this.trigger);
-    console.log("Dauer von:");
-    console.log(this.fromDateTime);
-    console.log("Dauer bis:");
-    console.log(this.untilDateTime);
-    console.log("stärke des Schmerzes:");
-    console.log(this.intensity);
-    console.log("eingenommenes Medikament");
-    console.log(this.medicament);
-    console.log("Menge:");
-    console.log(this.menge);
-    console.log("Hat es gewirkt?");
-    console.log(this.medEffect);
 
     let alert = this.alertCtrl.create({
       message: 'Deine Daten wurden erfasst',
@@ -369,7 +322,7 @@ export class NewAttackPage {
           display: "Other symptoms"
         }]
       }, //ngModel für andere Symotome muss noch deklariert werden
-      valueString: this.symptome.find(val => val == "Andere")
+      valueString: (this.symptome.find(val => val == "Andere") == null) ? "No other symptoms" : this.otherSymptom
     })
 
     // entry.addComponent({
