@@ -25,8 +25,9 @@ import {
 import {
   BarcodeScanner
 } from '@ionic-native/barcode-scanner';
-
-
+import {
+  Symptome
+} from '../../models/symptome.model';
 
 @Component({
   selector: 'page-newAttack',
@@ -34,8 +35,22 @@ import {
 })
 export class NewAttackPage {
 
+  symptomeArray: Symptome[] = [
+    {id: 1, name: 'Tränende Augen'},
+    {id: 2, name: 'Rötliche Augen'},
+    {id: 3, name: 'Nasenlaufen'},
+    {id: 4, name: 'Nasenverstopfung'},
+    {id: 5, name: 'Flimmersehen'},
+    {id: 6, name: 'Lichtempfindlichkeit'},
+    {id: 7, name: 'Geruchsempfindlichkeit'},
+    {id: 8, name: 'Gefühlsstörung'},
+    {id: 9, name: 'Sprachstörung'},
+    {id: 10, name: 'Kopfschmerzen'},
+    {id: 11, name: 'Andere'}
+  ]
+
   situation: any;
-  symptome: any;
+  symptome: string[];
   painAreal: any;
   painType: any;
   trigger: any;
@@ -77,12 +92,13 @@ export class NewAttackPage {
       medEffect: new FormControl(''),
       situation: new FormControl('')
     })
+    this.symptome = [];
     this.midataService = midataService;
     this.initializeItems();
   }
 
   onChangeSymptoms() {
-    this.selectedOther = this.symptome.includes("Andere");
+  this.selectedOther = this.symptome.find(val => val=="Andere") == null ? false : true
   }
   onChangePainAreal() {
     if (this.selectedOther == true || this.selectedOther3 == true || this.selectedOther4 == true) {
@@ -110,7 +126,6 @@ export class NewAttackPage {
       'Ibuprofen',
     ];
   }
-
 
   getItems(ev: any) {
     // Reset items back to all of the items
@@ -141,11 +156,28 @@ export class NewAttackPage {
       console.log('Barcode data:', data);
     }).catch(err => {
       console.log('Error', err);
-    }); 
+    });
   }
 
+  // isSelected() {
+  //   if (this.symptomeArray.length > 0) {
+  //     this.symptomeArray.forEach((symptom) => {
+  //       console.log(symptom)
+  //     });
+  //     return 1;
+  //   }
+  //   return 0;
+  // }
   presentAlert() {
-    console.log("Ohran u Musab");
+    this.symptome.forEach(val => {
+      console.log("Element in symtomeArr --> " + val);
+      
+    })
+
+    
+    console.log((this.symptome.find(val => val == "Tränende Augen") == null) ? 0 : 1)
+
+
     console.log("Situation der Erfassung:");
     console.log(this.situation);
     console.log("Symptome:");
@@ -202,22 +234,163 @@ export class NewAttackPage {
     entry.addComponent({
       code: {
         coding: [{
-          "system": "http://snomed.info/sct",
-          "code": "420103007",
-          "display": "Watery eye"
+          system: "http://snomed.info/sct",
+          code: "420103007",
+          display: "Watery eye"
         }]
       },
-      valueString: this.symptome[0]
+      valueQuantity: {
+      value: (this.symptome.find(val => val == "Tränende Augen") == null) ? 0 : 1
+      }
+    })
+
+    entry.addComponent({
+      code: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "703630003",
+          display: "Red eye"
+        }]
+      },
+      valueQuantity: {
+      value: (this.symptome.find(val => val == "Rötliche Augen") == null) ? 0 : 1
+      }
+    })
+
+    entry.addComponent({
+      code: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "703630003",
+          display: "Nasal discharge"
+        }]
+      },
+      valueQuantity: {
+      value: (this.symptome.find(val => val == "Nasenlaufen") == null) ? 0 : 1
+      }
     })
     
     entry.addComponent({
       code: {
         coding: [{
-          "system": "http://snomed.info/sct",
-          "code": "408102007",
-          "display": "Medicament intake quantity"
+          system: "http://snomed.info/sct",
+          code: "119711004",
+          display: "Nose closure"
         }]
       },
+      valueQuantity: {
+      value: (this.symptome.find(val => val == "Nasenverstopfung") == null) ? 0 : 1
+      }
+    })
+
+    entry.addComponent({
+      code: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "73905001",
+          display: "Sees flickering lights"
+        }]
+      },
+      valueQuantity: {
+      value: (this.symptome.find(val => val == "Flimmersehen") == null) ? 0 : 1
+      }
+    })
+
+    entry.addComponent({
+      code: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "409668002",
+          display: "Photophobia"
+        }]
+      },
+      valueQuantity: {
+      value: (this.symptome.find(val => val == "Lichtempfindlichkeit") == null) ? 0 : 1
+      }
+    })
+
+    entry.addComponent({
+      code: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "313387002",
+          display: "Phonophobia"
+        }]
+      },
+      valueQuantity: {
+      value: (this.symptome.find(val => val == "Lärmempfindlichkeit") == null) ? 0 : 1
+      }
+    })
+
+    entry.addComponent({
+      code: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "279079003",
+          display: "Dysesthesia"
+        }]
+      },
+      valueQuantity: {
+      value: (this.symptome.find(val => val == "Gefühlsstörung") == null) ? 0 : 1
+      }
+    })
+
+    entry.addComponent({
+      code: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "47004009",
+          display: "Dysphonia"
+        }]
+      },
+      valueQuantity: {
+      value: (this.symptome.find(val => val == "Sprachstörung") == null) ? 0 : 1
+      }
+    })
+
+    entry.addComponent({
+      code: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "25064002",
+          display: "Headache"
+        }]
+      },
+      valueQuantity: {
+      value: (this.symptome.find(val => val == "Kopfschmerzen") == null) ? 0 : 1
+      }
+    })
+
+    entry.addComponent({
+      code: {
+        coding: [{
+          system: "",
+          code: "",
+          display: "Other symptoms"
+        }]
+      }, //ngModel für andere Symotome muss noch deklariert werden
+      valueString: this.symptome.find(val => val == "Andere")
+    })
+
+    // entry.addComponent({
+    //   code: {
+    //     coding: [{
+    //       system: "http://snomed.info/sct",
+    //       code: "408102007",
+    //       display: "Medicament intake quantity"
+    //     }]
+    //   },
+    //   valueDateTime: ""+this.fromDateTime.getDefaultValueDateString
+    // })
+    
+    entry.addComponent({
+      code: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "408102007",
+          display: "Dose"
+        }]
+      }, //muss als String gegeben werden gemäss ERM Modell
       valueQuantity: {
         value: this.menge
       }
@@ -226,9 +399,9 @@ export class NewAttackPage {
     entry.addComponent({
       code: {
         coding: [{
-          "system": "http://snomed.info/sct",
-          "code": "425401001",
-          "display": "Pain intensity rating scale (assessment scale)"
+          system: "http://snomed.info/sct",
+          code: "425401001",
+          display: "Pain intensity rating scale (assessment scale)"
         }]
       },
       valueQuantity: {
