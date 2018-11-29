@@ -485,16 +485,23 @@ export class NewAttackPage {
 
 
    //========================= START JSON ADD PAIN PERIOD COMPONENTS===========================================
-    // entry.addComponent({
-    //   code: {
-    //     coding: [{
-    //       system: "http://snomed.info/sct",
-    //       code: "",
-    //       display: ""
-    //     }]
-    //   },
-    //   valueDateTime: ""+this.fromDateTime.getDefaultValueDateString
-    // })
+    entry.addComponent({
+      code: {
+        coding: [{
+          display: "Start time of pain"
+        }]
+      },
+      valueDateTime: ""+ this.fromDateTime
+    })
+
+    entry.addComponent({
+      code: {
+        coding: [{
+          display: "End time of pain"
+        }]
+      },
+      valueDateTime: ""+ this.untilDateTime
+    })
   //========================= END JSON ADD PAIN PERIOD COMPONENTS===========================================
 
 
@@ -504,7 +511,7 @@ export class NewAttackPage {
         coding: [{
           system: "http://snomed.info/sct",
           code: "425401001",
-          display: "Pain intensity rating scale (assessment scale)"
+          display: "Pain intensity rating scale"
         }]
       },
       valueQuantity: {
