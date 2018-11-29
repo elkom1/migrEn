@@ -33,7 +33,7 @@ import {
 export class NewAttackPage {
 
 //-------------------------------------START INITIALIZE ITEMS -------------------------------------------------
-  situation: any;
+  situation: string;
   symptome: string[];
   otherSymptom: string; 
   painAreal: string[];
@@ -208,7 +208,7 @@ export class NewAttackPage {
         display: "Attack"
       }]
     }, //funktioniert nicht wie es sollte ??????? 
-    //valueString: (this.situation.value =="Unwohlsein") ? "Feels unwell" : "Migrain attack"
+    valueString: (this.situation.match("unwohlsein")) ? "Feels unwell" : "Migrain attack"
   })
    //========================= END JSON ADD SITUATION COMPONENTS=============================================
 
