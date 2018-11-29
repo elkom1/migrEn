@@ -82,7 +82,6 @@
       <ion-input placeholder="Andere Auslöser" [(ngModel)]="otherTrigger" name="otherTrigger" formControlName="otherTrigger"></ion-input>
     </ion-item>
 
-
     <p>Dauer des Schmerzes</p>
     <ion-item>
       <ion-label>Von</ion-label>
@@ -101,7 +100,7 @@
       </ion-range>
     </ion-item>
 
-
+    <p>Eingenommene Medikamente</p>
     <ion-searchbar (ionInput)="getItems($event)" [(ngModel)]="medicament" name="medicament" formControlName="medicament"></ion-searchbar>
     <ion-list *ngIf="showList">
       <ion-item *ngFor="let item of items">
@@ -116,13 +115,15 @@
       <ion-icon name="barcode" (click)="scan()"></ion-icon>
     </button>
 
+    <p>Anzahl Tabletten oder Tropfen</p>
     <ion-item>
-      <ion-input type="number" placeholder="Menge der Tabletten, Tropfen etc." min="0" max="15" [(ngModel)]="menge" name="menge" formControlName="menge"></ion-input>
+      <ion-input type="number" min="0" max="15" [(ngModel)]="menge" name="menge" formControlName="menge"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label>Hat es gewirkt?</ion-label>
-      <ion-select okText="Ok" cancelText="Abbrechen" popover [(ngModel)]="medEffect" name="medEffect" formControlName="medEffect">
+      <!-- eigentlich "multiple = false" aber es geht nicht dann mit array.find methode dann -->
+      <ion-select okText="Ok" cancelText="Abbrechen" multiple="true" [(ngModel)]="medEffect" name="medEffect" formControlName="medEffect">
         <ion-option>Ja</ion-option>
         <ion-option>Nein</ion-option>
         <ion-option>Hat sich verschlimmert</ion-option>

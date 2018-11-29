@@ -44,9 +44,9 @@ export class NewAttackPage {
   fromDateTime: DateTime;
   untilDateTime: DateTime;
   intensity: number = 0;
-  medicament: string = "";
+  medicament: string;
   menge: number = 0;
-  medEffect: any;
+  medEffect: string[];
 
   selectedOther = false;
   selectedOther3 = false;
@@ -87,6 +87,8 @@ export class NewAttackPage {
     this.painAreal = [];
     this.painType = [];  
     this.trigger = []; 
+    this.medEffect = []; 
+
     this.midataService = midataService;
     this.initializeItems();
   }
@@ -522,8 +524,15 @@ export class NewAttackPage {
 
 
   //========================= START JSON ADD MEDICAMENT COMPONENTS===========================================
-
-    //NOCH DER SEARCH BAR ITEMS
+    entry.addComponent({
+      code: {
+        coding: [{
+          display: "Medicament name"
+        }]
+      }, 
+      valueString: this.medicament
+    })
+  
     entry.addComponent({
       code: {
         coding: [{
@@ -536,7 +545,15 @@ export class NewAttackPage {
         value: this.menge
       }
     })
-  
+
+    entry.addComponent({
+      code: {
+        coding: [{
+          display: "Effect of medicine"
+        }]
+      }, //muss als String gegeben werden gemäss ERM Modell
+      valueString: (this.medEffect.find(val => val == "Nein") == null && this.medEffect.find(val => val =="Hat sich verschlimmert") == null) ? "Good" : (this.medEffect.find(val => val == "Ja") == null && this.medEffect.find(val => val =="Nein") == null) ? "Bad" : "None"
+    })
    //========================= END JSON ADD MEDICAMENT COMPONENT===========================================
 
 
