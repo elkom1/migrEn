@@ -32,11 +32,13 @@ import {
 })
 export class NewAttackPage {
 
+//-------------------------------------START INITIALIZE ITEMS -------------------------------------------------
   situation: any;
   symptome: string[];
   otherSymptom: string; 
-  painAreal: any;
-  painType: any;
+  painAreal: string[];
+  painType: string[];
+  otherPainType: string; 
   trigger: any;
   fromDateTime: DateTime;
   untilDateTime: DateTime;
@@ -46,7 +48,6 @@ export class NewAttackPage {
   medEffect: any;
 
   selectedOther = false;
-  selectedOther2 = false;
   selectedOther3 = false;
   selectedOther4 = false;
 
@@ -59,8 +60,10 @@ export class NewAttackPage {
   private midataService: MidataService;
 
   encodeText: string = '';
+//-------------------------------------END INITIALIZE ITEMS -------------------------------------------------
 
 
+//-------------------------------------START CONSTRUCTOR ----------------------------------------------------
   constructor(public navCtrl: NavController, private alertCtrl: AlertController, midataService: MidataService, private scanner: BarcodeScanner) {
     //Here we can intialize all of the attributes which are selected and altered
     this.group = new FormGroup({
@@ -69,6 +72,7 @@ export class NewAttackPage {
       otherSymptom: new FormControl(''),
       painAreal: new FormControl(''),
       painType: new FormControl(''),
+      otherPainType: new FormControl(''),
       trigger: new FormControl(''),
       fromDateTime: new FormControl(''),
       untilDateTime: new FormControl(''),
@@ -78,32 +82,35 @@ export class NewAttackPage {
       situation: new FormControl('')
     })
     this.symptome = [];
+    this.painAreal = [];
+    this.painType = [];  
     this.midataService = midataService;
     this.initializeItems();
   }
+  //-------------------------------------END CONSTRUCTOR ----------------------------------------------------
 
+
+  //-------------------------------------START ONCHANGE METHODS FOR "OTHER SELECTION"------------------------
   onChangeSymptoms() {
   this.selectedOther = this.symptome.find(val => val=="Andere") == null ? false : true
   }
-  onChangePainAreal() {
-    if (this.selectedOther == true || this.selectedOther3 == true || this.selectedOther4 == true) {
-      this.selectedOther2 = this.painAreal.includes("Andere");
-    }
-    this.selectedOther2 = this.painAreal.includes("Andere");
-  }
+
   onChangePainType() {
-    if (this.selectedOther == true || this.selectedOther2 == true || this.selectedOther4 == true) {
-      this.selectedOther3 = this.painAreal.includes("Andere");
+    if (this.selectedOther == true || this.selectedOther4 == true) {
+      this.selectedOther3 = this.painType.find(val => val=="Andere") == null ? false : true
     }
-    this.selectedOther3 = this.painType.includes("Andere");
+    this.selectedOther3 = this.painType.find(val => val=="Andere") == null ? false : true
   }
+
   onChangeTrigger() {
-    if (this.selectedOther == true || this.selectedOther2 == true || this.selectedOther3 == true) {
-      this.selectedOther4 = this.painAreal.includes("Andere");
+    if (this.selectedOther == true || this.selectedOther3 == true) {
+      this.selectedOther4 = this.trigger.includes("Andere");
     }
     this.selectedOther4 = this.trigger.includes("Andere");
   }
+  //-------------------------------------END ONCHANGE METHODS FOR "OTHER SELECTION"------------------------
 
+  //-------------------------------------START METHODS FOR MEDICATION SEARCH-------------------------------
   initializeItems() {
     this.items = [
       'Panadol',
@@ -143,8 +150,9 @@ export class NewAttackPage {
       console.log('Error', err);
     });
   }
+  //-------------------------------------END METHODS FOR MEDICATION SEARCH-------------------------------
 
-//-------------------------------- START PERSISTENCE IN MIDATA OF ALL THE INPUT FIELDS---------------------------------------------------------
+  //-------------------------------- START PERSISTENCE IN MIDATA OF ALL THE INPUT FIELDS---------------------------------------------------------
   presentAlert() {
     //test the forEach method 
     this.symptome.forEach(val => {
@@ -152,7 +160,7 @@ export class NewAttackPage {
     })
     //test the find method 
     console.log((this.symptome.find(val => val == "Tränende Augen") == null) ? 0 : 1)
-
+    
 
     let alert = this.alertCtrl.create({
       message: 'Deine Daten wurden erfasst',
@@ -160,6 +168,7 @@ export class NewAttackPage {
     });
     alert.present();
 
+    //========================= START JSON FOR THE OBSERVATION "PATIENT CONDITION FINDING"================================
     let codingStuff = {
       coding: [{
         system: 'http://snomed.info/sct',
@@ -184,6 +193,22 @@ export class NewAttackPage {
       _dateTime: new Date().toISOString()
     }, codingStuff, category);
 
+
+   //========================= START JSON ADD SITUATION COMPONENTS===========================================
+   entry.addComponent({
+    code: {
+      coding: [{
+        system: "http://snomed.info/sct",
+        code: "216299002",
+        display: "Attack"
+      }]
+    }, //funktioniert nicht wie es sollte ??????? 
+    //valueString: (this.situation.value =="Unwohlsein") ? "Feels unwell" : "Migrain attack"
+  })
+   //========================= END JSON ADD SITUATION COMPONENTS=============================================
+
+
+    //========================= START JSON ADD SYMPTOM COMPONENTS===========================================
     entry.addComponent({
       code: {
         coding: [{
@@ -321,34 +346,114 @@ export class NewAttackPage {
           code: "",
           display: "Other symptoms"
         }]
-      }, //ngModel für andere Symotome muss noch deklariert werden
+      }, 
       valueString: (this.symptome.find(val => val == "Andere") == null) ? "No other symptoms" : this.otherSymptom
     })
+   //========================= END JSON ADD SYMPTOM COMPONENTS===========================================
 
+
+   //========================= START JSON ADD PAIN AREAL COMPONENTS===========================================
+   entry.addComponent({
+    code: {
+      coding: [{
+        system: "http://snomed.info/sct",
+        code: "29624005",
+        display: "Right side of head"
+      }]
+    }, 
+    valueQuantity: {
+      value: (this.painAreal.find(val => val == "Kopf rechtsseitig") == null) ? 0 : 1
+      } 
+  })
+
+  entry.addComponent({
+    code: {
+      coding: [{
+        system: "http://snomed.info/sct",
+        code: "64237003",
+        display: "Left side of head"
+      }]
+    }, 
+    valueQuantity: {
+      value: (this.painAreal.find(val => val == "Kopf linksseitig") == null) ? 0 : 1
+      } 
+  })
+
+  entry.addComponent({
+    code: {
+      coding: [{
+        system: "http://snomed.info/sct",
+        code: "162301005",
+        display: "Bilateral headache"
+      }]
+    }, 
+    valueQuantity: {
+      value: (this.painAreal.find(val => val == "Kopf beidseitig") == null) ? 0 : 1
+      } 
+  })
+   //========================= END JSON ADD PAIN AREAL COMPONENTS===========================================
+
+
+   //========================= START JSON ADD PAIN TYPE COMPONENTS===========================================
+   entry.addComponent({
+    code: {
+      coding: [{
+        system: "http://snomed.info/sct",
+        code: "162308004",
+        display: "Throbbing headache"
+      }]
+    },
+    valueQuantity: {
+    value: (this.painType.find(val => val == "Stechender Schmerz") == null) ? 0 : 1
+    }
+  })
+
+  entry.addComponent({
+    code: {
+      coding: [{
+        system: "http://snomed.info/sct",
+        code: "83644001",
+        display: "Dull pain"
+      }]
+    },
+    valueQuantity: {
+    value: (this.painType.find(val => val == "Dumpfer Schmerz") == null) ? 0 : 1
+    }
+  })
+
+  entry.addComponent({
+    code: {
+      coding: [{
+        system: "",
+        code: "",
+        display: "Other pain type"
+      }]
+    }, 
+    valueString: (this.painType.find(val => val == "Andere") == null) ? "No other pain type" : this.otherPainType
+  })
+   //========================= END JSON ADD PAIN TYPE COMPONENTS===========================================
+
+
+   //========================= START JSON ADD TRIGGER COMPONENTS===========================================
+    
+   //========================= END JSON ADD TRIGGER COMPONENTS===========================================
+
+
+   //========================= START JSON ADD PAIN PERIOD COMPONENTS===========================================
     // entry.addComponent({
     //   code: {
     //     coding: [{
     //       system: "http://snomed.info/sct",
-    //       code: "408102007",
-    //       display: "Medicament intake quantity"
+    //       code: "",
+    //       display: ""
     //     }]
     //   },
     //   valueDateTime: ""+this.fromDateTime.getDefaultValueDateString
     // })
-    
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "408102007",
-          display: "Dose"
-        }]
-      }, //muss als String gegeben werden gemäss ERM Modell
-      valueQuantity: {
-        value: this.menge
-      }
-    })
+  //========================= END JSON ADD PAIN PERIOD COMPONENTS===========================================
 
+
+  //========================= START JSON ADD PAIN INTENSITY SCALE COMPONENT===========================================
     entry.addComponent({
       code: {
         coding: [{
@@ -361,11 +466,37 @@ export class NewAttackPage {
         value: this.intensity
       }
     })
+  //========================= END JSON ADD PAIN INTENSITY SCALE COMPONENT===========================================
 
+
+  //========================= START JSON ADD MEDICAMENT COMPONENTS===========================================
+
+    //NOCH DER SEARCH BAR ITEMS
+    entry.addComponent({
+      code: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "408102007",
+          display: "Dose"
+        }]
+      }, //muss als String gegeben werden gemäss ERM Modell
+      valueQuantity: {
+        value: this.menge
+      }
+    })
+  
+   //========================= END JSON ADD MEDICAMENT COMPONENT===========================================
+
+
+   //========================= START JSON PUT COMPONENTS IN BUNDLE AND SAVE===========================================
     let bundle = new Bundle("transaction");
     bundle.addEntry("POST", entry.resourceType, entry);
     this.midataService.save(bundle);
+   //========================= END JSON PUT COMPONENTS IN BUNDLE AND SAVE===========================================
 
   }
+  //========================= END JSON FOR THE OBSERVATION "PATIENT CONDITION FINDING"================================
+
+  //-------------------------------- END PERSISTENCE IN MIDATA OF ALL THE INPUT FIELDS---------------------------------------------------------
 
 }

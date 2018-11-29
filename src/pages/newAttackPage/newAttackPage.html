@@ -13,11 +13,12 @@
 <ion-content padding>
   <!-- This method will save all of the content form -->
   <form [formGroup]="group">
+    
     <p>Erfasst du gerade einen Migräneanfall oder allgemeines Unwohlsein?</p>
     <ion-list radio-group [(ngModel)]="situation" name="situation" formControlName="situation">
       <ion-item>
         <ion-label>Migräneanfall</ion-label>
-        <ion-radio value="migräneanfall"></ion-radio>
+        <ion-radio value="migräneanfall" checked></ion-radio>
       </ion-item>
       <ion-item>
         <ion-label>Unwohlsein</ion-label>
@@ -47,28 +48,25 @@
 
     <ion-item>
       <ion-label>Schmerzareal</ion-label>
-      <ion-select okText="Ok" cancelText="Abbrechen" multiple="false" (ionChange)="onChangePainAreal()" [(ngModel)]="painAreal"
-        name="painAreal" formControlName="painAreal">
-        <ion-option>Kopf, einseitig</ion-option>
-        <ion-option>Kopf, beidseitig</ion-option>
-        <ion-option>Andere</ion-option>
+      <!-- eigentlich "multiple = false" aber es geht nicht dann mit array.find methode dann -->
+      <ion-select okText="Ok" cancelText="Abbrechen" multiple="true" [(ngModel)]="painAreal" name="painAreal" formControlName="painAreal">
+        <ion-option>Kopf rechtsseitig</ion-option>
+        <ion-option>Kopf linksseitig</ion-option>
+        <ion-option>Kopf beidseitig</ion-option>
       </ion-select>
-    </ion-item>
-    <ion-item *ngIf="selectedOther2">
-      <ion-input placeholder="Anderes Schmerzareal"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label>Schmerzart</ion-label>
-      <ion-select okText="Ok" cancelText="Abbrechen" popover (ionChange)="onChangePainType()" [(ngModel)]="painType"
-        name="painType" formControlName="painType">
-        <ion-option>Stechend</ion-option>
-        <ion-option>Dumpf</ion-option>
+      <!-- eigentlich "multiple = false" aber es geht nicht dann mit array.find methode dann -->
+      <ion-select okText="Ok" cancelText="Abbrechen" multiple="true" (ionChange)="onChangePainType()" [(ngModel)]="painType" name="painType" formControlName="painType">
+        <ion-option>Stechender Schmerz</ion-option>
+        <ion-option>Dumpfer Schmerz</ion-option>
         <ion-option>Andere</ion-option>
       </ion-select>
     </ion-item>
     <ion-item *ngIf="selectedOther3">
-      <ion-input placeholder="Anderer Schmerzart"></ion-input>
+      <ion-input placeholder="Anderer Schmerzart" [(ngModel)]="otherPainType" name="otherPainType" formControlName="otherPainType"></ion-input>
     </ion-item>
 
     <ion-item>
