@@ -39,7 +39,8 @@ export class NewAttackPage {
   painAreal: string[];
   painType: string[];
   otherPainType: string; 
-  trigger: any;
+  trigger: string[];
+  otherTrigger: string; 
   fromDateTime: DateTime;
   untilDateTime: DateTime;
   intensity: number = 0;
@@ -74,6 +75,7 @@ export class NewAttackPage {
       painType: new FormControl(''),
       otherPainType: new FormControl(''),
       trigger: new FormControl(''),
+      otherTrigger: new FormControl(''),
       fromDateTime: new FormControl(''),
       untilDateTime: new FormControl(''),
       intensity: new FormControl(''),
@@ -84,6 +86,7 @@ export class NewAttackPage {
     this.symptome = [];
     this.painAreal = [];
     this.painType = [];  
+    this.trigger = []; 
     this.midataService = midataService;
     this.initializeItems();
   }
@@ -104,9 +107,9 @@ export class NewAttackPage {
 
   onChangeTrigger() {
     if (this.selectedOther == true || this.selectedOther3 == true) {
-      this.selectedOther4 = this.trigger.includes("Andere");
+      this.selectedOther4 = this.trigger.find(val => val=="Andere") == null ? false : true
     }
-    this.selectedOther4 = this.trigger.includes("Andere");
+    this.selectedOther4 = this.trigger.find(val => val=="Andere") == null ? false : true
   }
   //-------------------------------------END ONCHANGE METHODS FOR "OTHER SELECTION"------------------------
 
@@ -342,8 +345,6 @@ export class NewAttackPage {
     entry.addComponent({
       code: {
         coding: [{
-          system: "",
-          code: "",
           display: "Other symptoms"
         }]
       }, 
@@ -424,8 +425,6 @@ export class NewAttackPage {
   entry.addComponent({
     code: {
       coding: [{
-        system: "",
-        code: "",
         display: "Other pain type"
       }]
     }, 
@@ -435,7 +434,53 @@ export class NewAttackPage {
 
 
    //========================= START JSON ADD TRIGGER COMPONENTS===========================================
-    
+   entry.addComponent({
+    code: {
+      coding: [{
+        system: "http://snomed.info/sct",
+        code: "276319003",
+        display: "Menstruation finding"
+      }]
+    },
+    valueQuantity: {
+    value: (this.trigger.find(val => val == "Menstruation") == null) ? 0 : 1
+    }
+  })
+
+  entry.addComponent({
+    code: {
+      coding: [{
+        system: "http://snomed.info/sct",
+        code: "73595000",
+        display: "Stress"
+      }]
+    },
+    valueQuantity: {
+    value: (this.trigger.find(val => val == "Stress") == null) ? 0 : 1
+    }
+  })
+
+  entry.addComponent({
+    code: {
+      coding: [{
+        system: "http://snomed.info/sct",
+        code: "102894008",
+        display: "Relaxed feeling"
+      }]
+    },
+    valueQuantity: {
+    value: (this.trigger.find(val => val == "Erholung") == null) ? 0 : 1
+    }
+  })
+
+  entry.addComponent({
+    code: {
+      coding: [{
+        display: "Other triggers"
+      }]
+    }, 
+    valueString: (this.trigger.find(val => val == "Andere") == null) ? "No other triggers" : this.otherTrigger
+  })
    //========================= END JSON ADD TRIGGER COMPONENTS===========================================
 
 
