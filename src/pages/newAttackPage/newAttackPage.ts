@@ -330,6 +330,32 @@ export class NewAttackPage {
       value: (this.symptome.find(val => val == "Sprachstörung") == null) ? 0 : 1
       }
     })
+    
+    entry.addComponent({
+      code: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "45846002",
+          display: "Sensitive to smells"
+        }]
+      },
+      valueQuantity: {
+      value: (this.symptome.find(val => val == "Geruchsempfindlichkeit") == null) ? 0 : 1
+      }
+    })
+
+    entry.addComponent({
+      code: {
+        coding: [{
+          system: "http://snomed.info/sct",
+          code: "1985008",
+          display: "Vomitus"
+        }]
+      },
+      valueQuantity: {
+      value: (this.symptome.find(val => val == "Erbrechen") == null) ? 0 : 1
+      }
+    })
 
     entry.addComponent({
       code: {
