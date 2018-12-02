@@ -7,7 +7,10 @@ import { NavController } from 'ionic-angular';
 })
 export class Reminder {
 
+  reminder: any; 
+  myTime: any; 
+
   constructor(public navCtrl: NavController) {
   }
-
+  
 }

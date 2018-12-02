@@ -25,6 +25,7 @@ import {
 import {
   BarcodeScanner
 } from '@ionic-native/barcode-scanner';
+import { getLocaleDateTimeFormat, getLocaleCurrencySymbol } from '@angular/common';
 
 @Component({
   selector: 'page-newAttack',
@@ -36,8 +37,8 @@ export class NewAttackPage {
   situation: string;
   symptome: string[];
   otherSymptom: string; 
-  painAreal: string[];
-  painType: string[];
+  painAreal: string;
+  painType: string;
   otherPainType: string; 
   trigger: string[];
   otherTrigger: string; 
@@ -46,7 +47,7 @@ export class NewAttackPage {
   intensity: number = 0;
   medicament: string;
   menge: number = 0;
-  medEffect: string[];
+  medEffect: string;
 
   selectedOther = false;
   selectedOther3 = false;
@@ -84,15 +85,17 @@ export class NewAttackPage {
       situation: new FormControl('')
     })
     this.symptome = [];
-    this.painAreal = [];
-    this.painType = [];  
     this.trigger = []; 
-    this.medEffect = []; 
 
     this.midataService = midataService;
     this.initializeItems();
   }
   //-------------------------------------END CONSTRUCTOR ----------------------------------------------------
+
+  ngAfterViewInit() {
+    this.menge = 1; 
+
+  }
 
 
   //-------------------------------------START ONCHANGE METHODS FOR "OTHER SELECTION"------------------------
@@ -102,9 +105,9 @@ export class NewAttackPage {
 
   onChangePainType() {
     if (this.selectedOther == true || this.selectedOther4 == true) {
-      this.selectedOther3 = this.painType.find(val => val=="Andere") == null ? false : true
+      this.selectedOther3 = this.painType.match("Andere") ? true : false
     }
-    this.selectedOther3 = this.painType.find(val => val=="Andere") == null ? false : true
+    this.selectedOther3 = this.painType.match("Andere") ? true : false
   }
 
   onChangeTrigger() {
@@ -118,9 +121,13 @@ export class NewAttackPage {
   //-------------------------------------START METHODS FOR MEDICATION SEARCH-------------------------------
   initializeItems() {
     this.items = [
-      'Panadol',
-      'Dafalgan',
-      'Ibuprofen',
+      'Dafalgan 1000mg',
+      'Dafalgan 500mg',
+      'Dafalgan 200mg',
+      'Ibuprofen 400mg',
+      'Ibuprofen 800mg',
+      'Diclofenac 25mg',
+      'Diclofenac 50mg'
     ];
   }
 
@@ -159,13 +166,6 @@ export class NewAttackPage {
 
   //-------------------------------- START PERSISTENCE IN MIDATA OF ALL THE INPUT FIELDS---------------------------------------------------------
   presentAlert() {
-    //test the forEach method 
-    this.symptome.forEach(val => {
-      console.log("Element in symtomeArr --> " + val);
-    })
-    //test the find method 
-    console.log((this.symptome.find(val => val == "Tränende Augen") == null) ? 0 : 1)
-    
 
     let alert = this.alertCtrl.create({
       message: 'Deine Daten wurden erfasst',
@@ -181,7 +181,7 @@ export class NewAttackPage {
         display: 'Patient condition finding'
       }]
     }
-
+    
     let category = {
         coding: [{
           system: 'http://hl7.org/fhir/observation-category',
@@ -207,7 +207,7 @@ export class NewAttackPage {
         code: "216299002",
         display: "Attack"
       }]
-    }, //funktioniert nicht wie es sollte ??????? 
+    }, 
     valueString: (this.situation.match("unwohlsein")) ? "Feels unwell" : "Migrain attack"
   })
    //========================= END JSON ADD SITUATION COMPONENTS=============================================
@@ -391,7 +391,7 @@ export class NewAttackPage {
       }]
     }, 
     valueQuantity: {
-      value: (this.painAreal.find(val => val == "Kopf rechtsseitig") == null) ? 0 : 1
+      value: (this.painAreal.match("Kopf rechtsseitig")) ? 1 : 0
       } 
   })
 
@@ -404,7 +404,7 @@ export class NewAttackPage {
       }]
     }, 
     valueQuantity: {
-      value: (this.painAreal.find(val => val == "Kopf linksseitig") == null) ? 0 : 1
+      value: (this.painAreal.match("Kopf linksseitig")) ? 1 : 0
       } 
   })
 
@@ -417,7 +417,7 @@ export class NewAttackPage {
       }]
     }, 
     valueQuantity: {
-      value: (this.painAreal.find(val => val == "Kopf beidseitig") == null) ? 0 : 1
+      value: (this.painAreal.match("Kopf beidseitig")) ? 1 : 0
       } 
   })
    //========================= END JSON ADD PAIN AREAL COMPONENTS===========================================
@@ -433,7 +433,7 @@ export class NewAttackPage {
       }]
     },
     valueQuantity: {
-    value: (this.painType.find(val => val == "Stechender Schmerz") == null) ? 0 : 1
+    value: (this.painType.match("Stechender Schmerz")) ? 1 : 0
     }
   })
 
@@ -446,7 +446,7 @@ export class NewAttackPage {
       }]
     },
     valueQuantity: {
-    value: (this.painType.find(val => val == "Dumpfer Schmerz") == null) ? 0 : 1
+    value: (this.painType.match("Dumpfer Schmerz")) ? 1 : 0
     }
   })
 
@@ -456,7 +456,7 @@ export class NewAttackPage {
         display: "Other pain type"
       }]
     }, 
-    valueString: (this.painType.find(val => val == "Andere") == null) ? "No other pain type" : this.otherPainType
+    valueString: (this.painType.match("Andere")) ? this.otherPainType : "No other pain type" 
   })
    //========================= END JSON ADD PAIN TYPE COMPONENTS===========================================
 
@@ -549,41 +549,7 @@ export class NewAttackPage {
   //========================= END JSON ADD PAIN INTENSITY SCALE COMPONENT===========================================
 
 
-  // //========================= START JSON ADD MEDICAMENT COMPONENTS===========================================
-  //   entry.addComponent({
-  //     code: {
-  //       coding: [{
-  //         display: "Medicament name"
-  //       }]
-  //     }, 
-  //     valueString: this.medicament
-  //   })
-  
-  //   entry.addComponent({
-  //     code: {
-  //       coding: [{
-  //         system: "http://snomed.info/sct",
-  //         code: "408102007",
-  //         display: "Dose"
-  //       }]
-  //     }, //muss als String gegeben werden gemäss ERM Modell
-  //     valueQuantity: {
-  //       value: this.menge
-  //     }
-  //   })
-
-  //   entry.addComponent({
-  //     code: {
-  //       coding: [{
-  //         display: "Effect of medicine"
-  //       }]
-  //     }, //muss als String gegeben werden gemäss ERM Modell
-  //     valueString: (this.medEffect.find(val => val == "Nein") == null && this.medEffect.find(val => val =="Hat sich verschlimmert") == null) ? "Good" : (this.medEffect.find(val => val == "Ja") == null && this.medEffect.find(val => val =="Nein") == null) ? "Bad" : "None"
-  //   })
-  //  //========================= END JSON ADD MEDICAMENT COMPONENT===========================================
-
-
-   //========================= START JSON PUT COMPONENTS IN BUNDLE AND SAVE===========================================
+  //========================= START JSON PUT COMPONENTS IN BUNDLE AND SAVE===========================================
     let bundle = new Bundle("transaction");
     bundle.addEntry("POST", entry.resourceType, entry);
     this.midataService.save(bundle);
@@ -641,8 +607,10 @@ export class NewAttackPage {
       coding: [{
         display: "Effect of medicine"
       }]
-    }, //muss als String gegeben werden gemäss ERM Modell
-    valueString: (this.medEffect.find(val => val == "Nein") == null && this.medEffect.find(val => val =="Hat sich verschlimmert") == null) ? "Good" : (this.medEffect.find(val => val == "Ja") == null && this.medEffect.find(val => val =="Nein") == null) ? "Bad" : "None"
+    }, //muss als String gegeben werden gemäss ERM Modell ??
+    valueString:  (this.medEffect.match("Nein")) ? "None" : (this.medEffect.match("Ja")) 
+                  ? "Good" : (this.medEffect.match("Hat sich verschlimmert"))
+                  ? "Bad" : " " 
   })
  //========================= END JSON ADD MEDICAMENT COMPONENT===========================================
  

@@ -1,5 +1,5 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header no-border>
+  <ion-toolbar color="primary">
     <button ion-button menuToggle left>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -10,21 +10,34 @@
 
 </ion-header>
 
-<ion-content padding>
+<ion-content padding style="background-color: lightblue !important">
+  <h2 text-center style="font-weight: bold">Hallo <br /> Willkommen zu heMIgrania</h2>
+  <h5 text-center>
+    Danke, dass du heMIgrania nutzt
+    <br />
+    <div style="font-weight: bold">Vergiss nicht!</div>
+    Je besser du deine Einträge erfasst, desto besser kannst du deine
+    <br />Migräne verstehen
+  </h5>
 
-  <h2>Hallo BFH-Student</h2>
-  <p>
-    Danke, dass du heMIgrania nutzst. Vergiss nicht, je besser du deine Einträge erfasst, desto besser kannst du deine
-    Migräne verstehen.
-  </p>
-
-<div text-center align-items-center>
-            <button ion-button large class="btn-wrapper" (click)="logout()">logout</button>
-           </div>
+  <div class="Row" text-center style="font-size: 18px">
+    <div class="Column">
+      <ion-label style="font-weight: bold">0</ion-label>
+      <ion-label>Migräne- <br/>attacken <br/>diesen Monat</ion-label>
+    </div>
+    <div class="Column">
+      <ion-label style="font-weight: bold">0</ion-label>
+      <ion-label>Tage <br/> ohne <br/> Migräne</ion-label>
+    </div>
+    <div class="Column">
+      <ion-label style="font-weight: bold">0</ion-label>
+      <ion-label>Migräne- <br/>attacken <br/>letzten Monat</ion-label>
+    </div>
+  </div>
 
 
   <div text-center>
-    <img src="assets/imgs/icon.png" alt="heMIgrania logo" style="margin-top: 200px;">
+    <img src="assets/imgs/icon.png" alt="heMIgrania logo" style="margin-bottom: 50px;">
   </div>
 
 </ion-content>

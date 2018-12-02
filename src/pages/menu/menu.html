@@ -1,15 +1,15 @@
 <ion-menu [content]="content">
   <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
       <ion-title>Menu</ion-title>
       <br />
       <ion-icon name="contact"> Omar.Besic@midata.ch</ion-icon>
     </ion-toolbar>
   </ion-header>
 
-  <ion-content>
+  <ion-content style="background-color: lightblue !important">
     <ion-list>
-      <button ion-item menuClose *ngFor="let p of pages" (click)="openPage(p)">
+      <button ion-item menuClose *ngFor="let p of pages" (click)="openPage(p)" style="background-color: lightblue !important">
         <ion-icon item-start [name]="p.icon" [color]="isActive(p)"></ion-icon>
         {{ p.title }}
       </button>

@@ -29,8 +29,4 @@ export class HomePage {
     this.navCtrl.setRoot(HomePage);
   }
 
-  logout() {
-    this.midataService.logout();
-    this.navCtrl.push(LoginPage); 
-  }
 }

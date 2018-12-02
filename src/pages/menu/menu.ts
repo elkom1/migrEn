@@ -8,6 +8,7 @@ import { TabsPage } from './../tabs/tabs';
 import { Tutorial } from './../menu_tutorial/menu_tutorial';
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, Nav } from 'ionic-angular';
+import { LogoutPage } from '../logout/logout';
  
 export interface PageInterface {
   title: string;
@@ -36,6 +37,7 @@ export class MenuPage {
     { title: 'Reminder', pageName: 'Reminder', tabComponent: Reminder, icon: 'alarm' },
     { title: 'Datenschutzerklärung', pageName: 'Datenschutz', tabComponent: Datenschutz, icon: 'lock' },
     { title: 'Impressum', pageName: 'Impressum', tabComponent: Impressum, icon: 'contacts' },
+    { title: 'Logout', pageName: 'LogoutPage', tabComponent: LogoutPage, icon: 'log-out' },
   ];
  
   constructor(public navCtrl: NavController) { }

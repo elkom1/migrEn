@@ -29,6 +29,7 @@ import { MenuPage } from '../pages/menu/menu';
 
 
 import { LoginPage } from "../pages/login/login";
+import { LogoutPage } from "../pages/logout/logout";
 import { MidataService} from "../services/midataService";
 
 @NgModule({
@@ -47,6 +48,7 @@ import { MidataService} from "../services/midataService";
     Reminder, 
     Tutorial, 
     LoginPage,
+    LogoutPage,
  
   ],
   imports: [
@@ -70,6 +72,7 @@ import { MidataService} from "../services/midataService";
     Reminder, 
     Tutorial, 
     LoginPage, 
+    LogoutPage,
   ],
   providers: [
     StatusBar,
