@@ -1,12 +1,34 @@
-import { Component } from '@angular/core';
-import { NavController, DateTime } from 'ionic-angular';
-import { AlertController } from 'ionic-angular';
+import {
+  Component
+} from '@angular/core';
+import {
+  NavController,
+  DateTime,
+  Checkbox,
+  Tab,
+  TabButton,
+  TabHighlight
+} from 'ionic-angular';
+import {
+  AlertController
+} from 'ionic-angular';
 import {
   FormGroup,
   Validators,
   FormControl
 } from '@angular/forms';
-import { NewAttackPage } from '../newAttackPage/newAttackPage';
+import {
+  NewAttackPage
+} from '../newAttackPage/newAttackPage';
+import {
+  HomePage
+} from '../home/home';
+import {
+  TabsPage
+} from '../tabs/tabs';
+import {
+  MenuPage
+} from '../menu/menu';
 
 
 @Component({
@@ -14,16 +36,18 @@ import { NewAttackPage } from '../newAttackPage/newAttackPage';
   templateUrl: 'myDayPage.html'
 })
 export class MyDayPage {
-  testCheckboxOpen = false; 
+  testCheckboxOpen = false;
 
   group: FormGroup;
 
-  sleepTime: DateTime; 
-  awakeTime: DateTime; 
-  sleepQuality: number; 
-  eatingHabit: any; 
-  exercises: any; 
-  date: Date; 
+  sleepTime: DateTime;
+  awakeTime: DateTime;
+  sleepQuality: number;
+  eatingHabit: any;
+  exercises: any;
+  date: Date;
+
+  tabsPage: TabsPage; 
 
   constructor(public navCtrl: NavController, private alertCtrl: AlertController) {
     //Here we can intialize all of the attributes which are selected and altered
@@ -34,16 +58,15 @@ export class MyDayPage {
       eatingHabit: new FormControl(''),
       exercises: new FormControl(''),
       date: new FormControl(''),
-
     })
   }
 
   openHomePage() {
-    this.navCtrl.setRoot(MyDayPage); 
+    this.navCtrl.setRoot(MyDayPage);
   }
 
 
-showCheckbox() {
+  showCheckbox() {
     console.log("Schlafzeit:");
     console.log(this.sleepTime);
     console.log("aufwachzeit:");
@@ -56,21 +79,21 @@ showCheckbox() {
     console.log(this.exercises);
     console.log("Datum");
     console.log(this.date);
-    
-    
+
+
     let alert = this.alertCtrl.create();
-    alert.setTitle('Hattest du heute irgendwelche Beschwerden? Falls ja, trage Sie bitte noch ein');
+    alert.setTitle('Hattest du sonstige Beschwerden?');
 
     alert.addInput({
       type: 'radio',
-      label: 'Keine Beschwerden',
+      label: 'Nein',
       value: 'value1',
       checked: true
     });
 
     alert.addInput({
       type: 'radio',
-      label: 'Möchte ich noch eintragen',
+      label: 'Ja, möchte ich noch eintragen',
       value: 'value2'
     });
 
@@ -79,9 +102,12 @@ showCheckbox() {
       text: 'Okay',
       handler: data => {
         console.log('Checkbox data:', data);
-        //this.navCtrl.push(NewAttackPage);
-        this.testCheckboxOpen = false;
-       // this.testCheckboxResult = data;
+        if (data == "value2") {
+          this.navCtrl.push(NewAttackPage)
+          //this.tabsPage.getAnimationDirection(2)
+        
+        }
+        else this.navCtrl.push(HomePage)
       }
     });
     alert.present();

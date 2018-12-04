@@ -44,7 +44,7 @@ export class TabsPage {
     this.tabIndex = navParams.data.tabIndex || 0;
   }
   // Create the function for getting animation direction by tab index
-  private getAnimationDirection(index): string {
+  public getAnimationDirection(index): string {
     var currentIndex = this.tabIndex;
 
     this.tabIndex = index;

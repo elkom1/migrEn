@@ -1,5 +1,5 @@
 <ion-header no-border>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <button ion-button menuToggle left>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -10,13 +10,13 @@
 
 </ion-header>
 
-<ion-content padding style="background-color: lightblue !important">
+<ion-content padding>
 
   <form [formGroup]="group">
 
     <ion-card>
       <ion-card-header text-center>
-        <h1 style="font-weight: bold">Was erfasst du gerade?</h1>
+        <h1 style="font-weight: bold; color: white">Was erfasst du gerade?</h1>
       </ion-card-header>
       <ion-list radio-group [(ngModel)]="situation" name="situation" formControlName="situation">
         <div class="Row">
@@ -38,12 +38,13 @@
 
     <ion-card>
       <ion-card-header text-center>
-        <h1 style="font-weight: bold">Auffälligkeiten</h1>
+        <h1 style="font-weight: bold; color: white">Auffälligkeiten</h1>
       </ion-card-header>
       <ion-item no-lines>
         <ion-label>Symptome</ion-label>
         <ion-select okText="Ok" cancelText="Abbrechen" multiple="true" (ionChange)="onChangeSymptoms()" [(ngModel)]="symptome"
           name="symptome" formControlName="symptome">
+          <ion-option>Kopfschmerzen</ion-option>
           <ion-option>Tränende Augen</ion-option>
           <ion-option>Rötliche Augen</ion-option>
           <ion-option>Nasenlaufen</ion-option>
@@ -55,7 +56,6 @@
           <ion-option>Sprachstörung</ion-option>
           <ion-option>Geruchsempfindlichkeit</ion-option>
           <ion-option>Erbrechen</ion-option>
-          <ion-option>Kopfschmerzen</ion-option>
           <ion-option>Andere</ion-option>
         </ion-select>
       </ion-item>
@@ -63,7 +63,7 @@
         <ion-input placeholder="Andere Symptome" [(ngModel)]="otherSymptom" name="otherSymptom" formControlName="otherSymptom"></ion-input>
       </ion-item>
 
-      <ion-item no-lines>
+      <ion-item *ngIf="selectedHeadache" no-lines>
         <ion-label>Schmerzareal</ion-label>
         <ion-select okText="Ok" cancelText="Abbrechen" [(ngModel)]="painAreal" name="painAreal" formControlName="painAreal">
           <ion-option>Kopf rechtsseitig</ion-option>
@@ -72,7 +72,7 @@
         </ion-select>
       </ion-item>
 
-      <ion-item no-lines>
+      <ion-item *ngIf="selectedHeadache" no-lines>
         <ion-label>Schmerzart</ion-label>
         <ion-select okText="Ok" cancelText="Abbrechen" (ionChange)="onChangePainType()" [(ngModel)]="painType" name="painType"
           formControlName="painType">
@@ -102,7 +102,7 @@
 
     <ion-card>
       <ion-card-header text-center>
-        <h1 style="font-weight: bold">Dauer des Schmerzes</h1>
+        <h1 style="font-weight: bold; color: white">Dauer des Schmerzes</h1>
       </ion-card-header>
       <ion-item no-lines>
         <ion-label>Von</ion-label>
@@ -114,7 +114,7 @@
           formControlName="untilDateTime"></ion-datetime>
       </ion-item>
 
-      <ion-item no-lines>
+      <ion-item *ngIf="selectedHeadache" no-lines>
         <ion-label>Stärke des Schmerzes</ion-label>
         <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensity" name="intensity"
           formControlName="intensity">
@@ -126,7 +126,7 @@
 
     <ion-card>
       <ion-card-header text-center>
-        <h1 style="font-weight: bold">Medikamente</h1>
+        <h1 style="font-weight: bold; color: white">Medikamente</h1>
       </ion-card-header>
       <ion-card-content style="background-color: white">
         <div class="Row">
@@ -146,7 +146,7 @@
           </div>
         </div>
 
-        <ion-label text-center style="font-size: 16px">Anzahl Tabletten oder Tropfen</ion-label>
+        <ion-label style="font-size: 16px">Anzahl Tabletten oder Tropfen</ion-label>
         <div class="Row">
           <div class="Column">
             <ion-item no-lines>
@@ -166,7 +166,7 @@
           </div>
         </div>
 
-        <button ion-button color="light">
+        <button ion-button color="light" (click)="addMedicament()">
           <ion-icon name="add-circle"></ion-icon>
         </button>
       </ion-card-content>
