@@ -25,8 +25,6 @@ export class HomePage {
   constructor(public navCtrl: NavController, midataService: MidataService) {
     this.midataService = midataService;
   }
-  openHomePage() {
-    this.navCtrl.setRoot(HomePage);
-  }
+
 
 }

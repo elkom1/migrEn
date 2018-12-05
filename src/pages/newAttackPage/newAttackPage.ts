@@ -105,7 +105,8 @@ export class NewAttackPage {
     this.menge = 1;
 
   }
-
+  
+  
 
   //-------------------------------------START ONCHANGE METHODS FOR "OTHER SELECTION"------------------------
   onChangeSymptoms() {
@@ -457,7 +458,7 @@ export class NewAttackPage {
         value: (this.symptome.find(val => val == "Erbrechen") == null) ? 0 : 1
       }
     })
-    
+
     entry.addComponent({
       code: {
         coding: [{
@@ -618,28 +619,28 @@ export class NewAttackPage {
 
 
     //========================= START JSON ADD PAIN PERIOD COMPONENTS===========================================
-    entry.addComponent({
-      code: {
-        coding: [{
-          display: "Start time of pain"
-        }]
-      },
-      valueDateTime: "" + this.fromDateTime
-    })
-
-    entry.addComponent({
-      code: {
-        coding: [{
-          display: "End time of pain"
-        }]
-      },
-      valueDateTime: "" + this.untilDateTime
-    })
-    //========================= END JSON ADD PAIN PERIOD COMPONENTS===========================================
-
-
-    //========================= START JSON ADD PAIN INTENSITY SCALE COMPONENT===========================================
     if (this.selectedHeadache == true) {
+      entry.addComponent({
+        code: {
+          coding: [{
+            display: "Start time of pain"
+          }]
+        },
+        valueDateTime: "" + this.fromDateTime
+      })
+
+      entry.addComponent({
+        code: {
+          coding: [{
+            display: "End time of pain"
+          }]
+        },
+        valueDateTime: "" + this.untilDateTime
+      })
+      //========================= END JSON ADD PAIN PERIOD COMPONENTS===========================================
+
+
+      //========================= START JSON ADD PAIN INTENSITY SCALE COMPONENT===========================================
       entry.addComponent({
         code: {
           coding: [{
@@ -741,6 +742,7 @@ export class NewAttackPage {
     let bundle2 = new Bundle("transaction");
     bundle2.addEntry("POST", medEntry.resourceType, medEntry);
     this.midataService.save(bundle2);
+
     //========================= END JSON PUT MEDICATION COMPONENTS IN BUNDLE2 AND SAVE===========================================
   }
   //-------------------------------- END PERSISTENCE IN MIDATA OF ALL THE INPUT FIELDS---------------------------------------------------------

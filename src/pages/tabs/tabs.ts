@@ -38,9 +38,9 @@ export class TabsPage {
   loaded: boolean = false;
   tabIndex: number = 0;
 
-  constructor(private nativePageTransitions: NativePageTransitions, 
-              private navParams: NavParams,
-              private navCtrl: NavController) {
+  constructor(public nativePageTransitions: NativePageTransitions, 
+              public navParams: NavParams,
+              public navCtrl: NavController) {
     this.tabIndex = navParams.data.tabIndex || 0;
   }
   // Create the function for getting animation direction by tab index

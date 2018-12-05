@@ -47,7 +47,7 @@ export class MyDayPage {
   exercises: any;
   date: Date;
 
-  tabsPage: TabsPage; 
+  tabsPage: TabsPage;
 
   constructor(public navCtrl: NavController, private alertCtrl: AlertController) {
     //Here we can intialize all of the attributes which are selected and altered
@@ -59,10 +59,6 @@ export class MyDayPage {
       exercises: new FormControl(''),
       date: new FormControl(''),
     })
-  }
-
-  openHomePage() {
-    this.navCtrl.setRoot(MyDayPage);
   }
 
 
@@ -79,7 +75,6 @@ export class MyDayPage {
     console.log(this.exercises);
     console.log("Datum");
     console.log(this.date);
-
 
     let alert = this.alertCtrl.create();
     alert.setTitle('Hattest du sonstige Beschwerden?');
@@ -103,11 +98,9 @@ export class MyDayPage {
       handler: data => {
         console.log('Checkbox data:', data);
         if (data == "value2") {
-          this.navCtrl.push(NewAttackPage)
+          this.navCtrl.setRoot(NewAttackPage)
           //this.tabsPage.getAnimationDirection(2)
-        
-        }
-        else this.navCtrl.push(HomePage)
+        } else this.navCtrl.setRoot(HomePage)
       }
     });
     alert.present();

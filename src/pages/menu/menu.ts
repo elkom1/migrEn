@@ -106,6 +106,7 @@ export class MenuPage {
   ];
 
   constructor(public navCtrl: NavController) {}
+  
 
   openPage(page: PageInterface) {
     let params = {};

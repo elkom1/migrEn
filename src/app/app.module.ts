@@ -54,7 +54,6 @@ import { MidataService} from "../services/midataService";
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-
   ],
   bootstrap: [IonicApp],
   entryComponents: [

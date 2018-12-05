@@ -100,7 +100,7 @@
       </ion-item>
     </ion-card>
 
-    <ion-card>
+    <ion-card *ngIf="selectedHeadache">
       <ion-card-header text-center>
         <h1 style="font-weight: bold; color: white">Dauer des Schmerzes</h1>
       </ion-card-header>
@@ -114,7 +114,7 @@
           formControlName="untilDateTime"></ion-datetime>
       </ion-item>
 
-      <ion-item *ngIf="selectedHeadache" no-lines>
+      <ion-item no-lines>
         <ion-label>Stärke des Schmerzes</ion-label>
         <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensity" name="intensity"
           formControlName="intensity">

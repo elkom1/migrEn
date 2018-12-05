@@ -46,6 +46,7 @@
     "cordova-plugin-x-toast": "^2.7.2",
     "ionic-angular": "3.9.2",
     "ionic-select-searchable": "^2.10.0",
+    "ionic2-super-tabs": "^5.0.2",
     "ionicons": "3.0.0",
     "midata": "git+https://github.com/i4mi/midata.js.git#efa921515ae5242a712fe46722ba1a8950440a1a",
     "phonegap-plugin-barcodescanner": "^8.0.1",
