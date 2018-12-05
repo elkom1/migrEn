@@ -28,11 +28,13 @@ import {
 } from '@angular/core';
 import {
   NavController,
-  Nav
+  Nav,
+  Tab
 } from 'ionic-angular';
 import {
   LogoutPage
 } from '../logout/logout';
+import { LoginPage } from '../login/login';
 
 
 export interface PageInterface {
@@ -54,11 +56,17 @@ export class MenuPage {
   // Reference to the app's root nav
   @ViewChild(Nav) nav: Nav;
 
-  pages: PageInterface[] = [{
+  pages: PageInterface[] = [
+    {
+      title: 'MIDATA Benutzerkonto',
+      pageName: 'LoginPage',
+      tabComponent: LoginPage,
+      icon: 'contact'
+    },
+    {
       title: 'Startseite',
-      pageName: 'Startseite',
-      tabComponent: TabsPage,
-      index: 0,
+      pageName: 'MenuPage',
+      tabComponent: MenuPage,
       icon: 'home'
     },
     {
@@ -110,21 +118,20 @@ export class MenuPage {
 
   openPage(page: PageInterface) {
     let params = {};
-
     // The index is equal to the order of our tabs inside tabs.ts
     if (page.index) {
       params = {
         tabIndex: page.index
       };
     }
-
     // The active child nav is our Tabs Navigation
     if (this.nav.getActiveChildNavs()[0] && page.index != undefined) {
       this.nav.getActiveChildNavs()[0].select(page.index);
     } else {
       // Tabs are not active, so reset the root page 
       // In this case: moving to or from SpecialPage
-      this.nav.setRoot(page.tabComponent, params);
+      this.nav.push(page.tabComponent, params);
+      this.isActive(this.nav.getActiveChildNav())
     }
   }
 
@@ -132,13 +139,12 @@ export class MenuPage {
     // Again the Tabs Navigation
     let childNav = this.nav.getActiveChildNavs()[0];
 
-    if (childNav) {
-      if (childNav.getSelected() && childNav.getSelected().root === page.tabComponent) {
+    if (childNav = undefined) {
+      if (childNav.getSelected() === page.tabComponent) {
         return 'primary';
       }
       return;
     }
-
     // Fallback needed when there is no active childnav (tabs not active)
     if (this.nav.getActive() && this.nav.getActive().name === page.pageName) {
       return 'primary';

@@ -98,9 +98,9 @@ export class MyDayPage {
       handler: data => {
         console.log('Checkbox data:', data);
         if (data == "value2") {
-          this.navCtrl.setRoot(NewAttackPage)
-          //this.tabsPage.getAnimationDirection(2)
-        } else this.navCtrl.setRoot(HomePage)
+          this.navCtrl.push(NewAttackPage); //navigate the tab does not function
+        } else 
+        this.navCtrl.push(HomePage);//navigate the tab does not function
       }
     });
     alert.present();
