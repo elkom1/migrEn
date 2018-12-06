@@ -144,7 +144,7 @@ export class NewAttackPage {
 
   chooseMedicament(item) {
     this.medicament = item;
-    //hide meeeeee
+    //hide 
    this.items.splice(item)   
   }
   getItems(ev: any) {
