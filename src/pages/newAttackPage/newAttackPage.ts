@@ -142,6 +142,11 @@ export class NewAttackPage {
     ];
   }
 
+  chooseMedicament(item) {
+    this.medicament = item;
+    //hide meeeeee
+   this.items.splice(item)   
+  }
   getItems(ev: any) {
     // Reset items back to all of the items
     this.initializeItems();

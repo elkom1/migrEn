@@ -139,7 +139,7 @@
           <div class="Column">
             <ion-searchbar (ionInput)="getItems($event)" [(ngModel)]="medicament" name="medicament" formControlName="medicament"></ion-searchbar>
             <ion-list *ngIf="showList">
-              <ion-item *ngFor="let item of items">
+              <ion-item *ngFor="let item of items" (click)="chooseMedicament(item)">
                 {{ item }}
               </ion-item>
             </ion-list>
