@@ -105,8 +105,8 @@ export class NewAttackPage {
     this.menge = 1;
 
   }
-  
-  
+
+
 
   //-------------------------------------START ONCHANGE METHODS FOR "OTHER SELECTION"------------------------
   onChangeSymptoms() {
@@ -145,7 +145,7 @@ export class NewAttackPage {
   chooseMedicament(item) {
     this.medicament = item;
     //hide 
-   this.items.splice(item)   
+    this.items.splice(item)
   }
   getItems(ev: any) {
     // Reset items back to all of the items
@@ -191,12 +191,12 @@ export class NewAttackPage {
     });
     addMedAlert.present();
 
-    //========================= START JSON FOR THE OBSERVATION "Acute Therapy" (Medication)================================
+    //========================= START JSON FOR THE MEDICATION STATEMENT================================
     let code = {
       coding: [{
         system: 'http://midata.coop	',
-        code: 'MedicationStatement',
-        display: 'MedicationStatement'
+        code: 'Medication Name',
+        display: this.medicament
       }]
     }
 
@@ -204,7 +204,7 @@ export class NewAttackPage {
       coding: [{
         system: "http://hl7.org/fhir/ValueSet/medication-statement-category",
         code: "patientspecified",
-        display: this.medicament
+        display: "preferred"
       }],
     }
 
@@ -214,47 +214,17 @@ export class NewAttackPage {
 
     let medEntry = new MedicationStatement(new Date(), code, medStatus, cat, {}, medTaken);
 
-    //========================= START JSON ADD MEDICAMENT COMPONENTS===========================================
-    //  medEntry.addComponent({
-    //   code: {
-    //     coding: [{
-    //       display: "Medicament name"
-    //     }]
-    //   }, 
-    //   valueString: this.medicament
-    //   //valueString: (this.medicament == null) ? "No medicament intake" : this.medicament
-    // })
-
-    medEntry.addProperty("dosage", this.menge);
-    // medEntry.addComponent({
-    //   code: {
-    //     coding: [{
-    //       system: "http://snomed.info/sct",
-    //       code: "408102007",
-    //       display: "Dose"
-    //     }]
-    //   }, //muss als String gegeben werden gemäss ERM Modell
-    //   valueQuantity: {
-    //     value: this.menge
-    //   }
-    // })
-
-    medEntry.addProperty("note", (this.medEffect.match("Nein")) ? "None" : (this.medEffect.match("Ja")) ?
-      "Good" : (this.medEffect.match("Hat sich verschlimmert")) ?
-      "Bad" : " ");
-    // medEntry.addComponent({
-    //   code: {
-    //     coding: [{
-    //       display: "Effect of medicine"
-    //     }]
-    //   }, //muss als String gegeben werden gemäss ERM Modell ??
-    //   valueString:  (this.medEffect.match("Nein")) ? "None" : (this.medEffect.match("Ja")) 
-    //                 ? "Good" : (this.medEffect.match("Hat sich verschlimmert"))
-    //                 ? "Bad" : " " 
-    // })
-    //========================= END JSON ADD MEDICAMENT COMPONENT===========================================
-
-    //========================= END JSON FOR THE OBSERVATION "ACUTE THERAPY" (MEDICATION)===========================================
+    let dosage = [{
+      resourceType: "Dosage",
+      doseQuantity: {
+        value: this.menge
+      },
+      text: (this.medEffect.match("Nein")) ? "None" : (this.medEffect.match("Ja")) ?
+        "Good" : (this.medEffect.match("Hat sich verschlimmert")) ?
+        "Bad" : ""
+    }]
+    medEntry.addProperty("dosage", dosage);
+    //========================= END JSON FOR THE Medicatin Statement ===========================================
 
 
     //========================= START JSON PUT MEDICATION COMPONENTS IN BUNDLE2 AND SAVE===========================================
@@ -671,12 +641,12 @@ export class NewAttackPage {
     //========================= END JSON FOR THE OBSERVATION "PATIENT CONDITION FINDING"================================
 
 
-    //========================= START JSON FOR THE OBSERVATION "Acute Therapy" (Medication)================================
+    //========================= START JSON FOR THE MEDICATION STATEMENT================================
     let code = {
       coding: [{
         system: 'http://midata.coop	',
-        code: 'MedicationStatement',
-        display: 'MedicationStatement'
+        code: 'Medication Name',
+        display: this.medicament
       }]
     }
 
@@ -684,71 +654,40 @@ export class NewAttackPage {
       coding: [{
         system: "http://hl7.org/fhir/ValueSet/medication-statement-category",
         code: "patientspecified",
-        display: this.medicament
+        display: "preferred"
       }],
     }
 
     let medStatus: medicationStatus = "active";
 
-    let subject = {
-      reference: '',
-      code: '',
-      display: ''
-    }
-
     let medTaken: medicationTaken = "y";
 
     let medEntry = new MedicationStatement(new Date(), code, medStatus, cat, {}, medTaken);
 
-    //========================= START JSON ADD MEDICAMENT COMPONENTS===========================================
-    //  medEntry.addComponent({
-    //   code: {
-    //     coding: [{
-    //       display: "Medicament name"
-    //     }]
-    //   }, 
-    //   valueString: this.medicament
-    //   //valueString: (this.medicament == null) ? "No medicament intake" : this.medicament
-    // })
-
-    medEntry.addProperty("dosage", this.menge);
-    // medEntry.addComponent({
-    //   code: {
-    //     coding: [{
-    //       system: "http://snomed.info/sct",
-    //       code: "408102007",
-    //       display: "Dose"
-    //     }]
-    //   }, //muss als String gegeben werden gemäss ERM Modell
-    //   valueQuantity: {
-    //     value: this.menge
-    //   }
-    // })
-
-    medEntry.addProperty("note", (this.medEffect.match("Nein")) ? "None" : (this.medEffect.match("Ja")) ?
-      "Good" : (this.medEffect.match("Hat sich verschlimmert")) ?
-      "Bad" : " ");
-    // medEntry.addComponent({
-    //   code: {
-    //     coding: [{
-    //       display: "Effect of medicine"
-    //     }]
-    //   }, //muss als String gegeben werden gemäss ERM Modell ??
-    //   valueString:  (this.medEffect.match("Nein")) ? "None" : (this.medEffect.match("Ja")) 
-    //                 ? "Good" : (this.medEffect.match("Hat sich verschlimmert"))
-    //                 ? "Bad" : " " 
-    // })
-    //========================= END JSON ADD MEDICAMENT COMPONENT===========================================
-
-    //========================= END JSON FOR THE OBSERVATION "ACUTE THERAPY" (MEDICATION)===========================================
+    let dosage = [{
+      resourceType: "Dosage",
+      doseQuantity: {
+        value: this.menge
+      },
+      text: (this.medEffect.match("Nein")) ? "None" : (this.medEffect.match("Ja")) ?
+        "Good" : (this.medEffect.match("Hat sich verschlimmert")) ?
+        "Bad" : ""
+    }]
+    medEntry.addProperty("dosage", dosage);
+    //========================= END JSON FOR THE Medicatin Statement ===========================================
 
 
     //========================= START JSON PUT MEDICATION COMPONENTS IN BUNDLE2 AND SAVE===========================================
     let bundle2 = new Bundle("transaction");
     bundle2.addEntry("POST", medEntry.resourceType, medEntry);
     this.midataService.save(bundle2);
-
     //========================= END JSON PUT MEDICATION COMPONENTS IN BUNDLE2 AND SAVE===========================================
+
+    //update the medication fields 
+    this.medicament = "";
+    this.menge = 1;
+    this.medEffect = null;
+
   }
   //-------------------------------- END PERSISTENCE IN MIDATA OF ALL THE INPUT FIELDS---------------------------------------------------------
 
