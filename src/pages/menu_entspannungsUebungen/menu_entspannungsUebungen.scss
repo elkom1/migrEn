@@ -1,16 +1,4 @@
 page-entspannungsUebungen {
-    .btn-wrapper {
-        text-align: center;
-        width: 75%;
-        padding: 25px;
-        font-size: 24px;
-        color: white;
-        background-color: blue;
-        border-radius: 3px;
-        border: none;
-        margin: 10px;
-        font-weight: bold; 
-    }
     ion-content {
         margin-top: 25px; 
     }
@@ -20,5 +8,9 @@ page-entspannungsUebungen {
         padding: 0 5px 1px;
         width: 60%;
         height: 100%;
+      }
+      
+      .card {
+        background-color: #bfcff1ee;        
       }
 }

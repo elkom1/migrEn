@@ -20,7 +20,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { NativePageTransitions } from '@ionic-native/native-page-transitions';
 import { Impressum } from '../pages/menu_impressum/menu_impressum';
 import { Tutorial } from '../pages/menu_tutorial/menu_tutorial';
-import { Startseite } from '../pages/menu_startseite/menu_startseite';
 import { Reminder } from '../pages/menu_reminder/menu_reminder';
 import { EntspannungsUebungen } from '../pages/menu_entspannungsUebungen/menu_entspannungsUebungen';
 import { Diagnosen } from '../pages/menu_Diagnosen/menu_Diagnosen';
@@ -41,7 +40,6 @@ import { MidataService} from "../services/midataService";
     HomePage,
     TabsPage,
     MenuPage,
-    Startseite,
     EntspannungsUebungen, 
     Diagnosen, 
     Datenschutz,
@@ -64,7 +62,6 @@ import { MidataService} from "../services/midataService";
     TabsPage,
     Impressum,
     MenuPage, 
-    Startseite,
     EntspannungsUebungen,
     Diagnosen, 
     Datenschutz,

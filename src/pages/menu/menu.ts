@@ -2,9 +2,6 @@ import {
   Impressum
 } from './../menu_impressum/menu_impressum';
 import {
-  Startseite
-} from './../menu_startseite/menu_startseite';
-import {
   EntspannungsUebungen
 } from './../menu_entspannungsUebungen/menu_entspannungsUebungen';
 import {
