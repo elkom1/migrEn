@@ -92,6 +92,12 @@ export class MyDayPage {
       value: 'value2'
     });
 
+    alert.addInput({
+      type: 'radio',
+      label: 'Habe keine Zeit dafür',
+      value: 'value3'
+    });
+
     alert.addButton('Cancel');
     alert.addButton({
       text: 'Okay',
@@ -99,7 +105,11 @@ export class MyDayPage {
         console.log('Checkbox data:', data);
         if (data == "value2") {
           this.navCtrl.push(NewAttackPage); //navigate the tab does not function
-        } else 
+        } 
+        if(data == "value3") {
+          this.navCtrl.push(HomePage)
+        }
+        else 
         this.navCtrl.push(HomePage);//navigate the tab does not function
       }
     });

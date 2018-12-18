@@ -3,7 +3,8 @@ import {
 } from '@angular/core';
 import {
   NavController,
-  DateTime
+  DateTime,
+  Form
 } from 'ionic-angular';
 
 import {
@@ -28,12 +29,14 @@ import {
 } from '@ionic-native/barcode-scanner';
 import {
   getLocaleDateTimeFormat,
-  getLocaleCurrencySymbol
+  getLocaleCurrencySymbol,
+  getLocaleDateFormat
 } from '@angular/common';
 import {
   medicationStatus,
   medicationTaken
 } from 'Midata/dist/src/resources/MedicationStatement';
+import { renderDateTime } from 'ionic-angular/umd/util/datetime-util';
 
 @Component({
   selector: 'page-newAttack',
@@ -103,10 +106,8 @@ export class NewAttackPage {
 
   ngAfterViewInit() {
     this.menge = 1;
-
+    this.situation = "migräneanfall"; 
   }
-
-
 
   //-------------------------------------START ONCHANGE METHODS FOR "OTHER SELECTION"------------------------
   onChangeSymptoms() {
