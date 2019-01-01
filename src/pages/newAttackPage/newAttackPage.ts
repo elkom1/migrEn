@@ -36,7 +36,12 @@ import {
   medicationStatus,
   medicationTaken
 } from 'Midata/dist/src/resources/MedicationStatement';
-import { renderDateTime } from 'ionic-angular/umd/util/datetime-util';
+import {
+  renderDateTime
+} from 'ionic-angular/umd/util/datetime-util';
+import {
+  text
+} from '@angular/core/src/render3/instructions';
 
 @Component({
   selector: 'page-newAttack',
@@ -51,8 +56,6 @@ export class NewAttackPage {
   painAreal: string;
   painType: string;
   otherPainType: string;
-  trigger: string[];
-  otherTrigger: string;
   fromDateTime: DateTime;
   untilDateTime: DateTime;
   intensity: number = 0;
@@ -87,8 +90,6 @@ export class NewAttackPage {
       painAreal: new FormControl(''),
       painType: new FormControl(''),
       otherPainType: new FormControl(''),
-      trigger: new FormControl(''),
-      otherTrigger: new FormControl(''),
       fromDateTime: new FormControl(''),
       untilDateTime: new FormControl(''),
       intensity: new FormControl(''),
@@ -97,7 +98,6 @@ export class NewAttackPage {
       situation: new FormControl('')
     })
     this.symptome = [];
-    this.trigger = [];
 
     this.midataService = midataService;
     this.initializeItems();
@@ -106,7 +106,7 @@ export class NewAttackPage {
 
   ngAfterViewInit() {
     this.menge = 1;
-    this.situation = "migräneanfall"; 
+    this.intensity = 2;
   }
 
   //-------------------------------------START ONCHANGE METHODS FOR "OTHER SELECTION"------------------------
@@ -120,13 +120,6 @@ export class NewAttackPage {
       this.selectedOther3 = this.painType.match("Andere") ? true : false
     }
     this.selectedOther3 = this.painType.match("Andere") ? true : false
-  }
-
-  onChangeTrigger() {
-    if (this.selectedOther == true || this.selectedOther3 == true) {
-      this.selectedOther4 = this.trigger.find(val => val == "Andere") == null ? false : true
-    }
-    this.selectedOther4 = this.trigger.find(val => val == "Andere") == null ? false : true
   }
   //-------------------------------------END ONCHANGE METHODS FOR "OTHER SELECTION"------------------------
 
@@ -187,57 +180,67 @@ export class NewAttackPage {
 
   addMedicament() {
     let addMedAlert = this.alertCtrl.create({
-      message: (this.medicament != null && this.menge >= 1 && this.medEffect != null) ? this.medicament + "<br/>" + "wurde gespeichert" + "<br/>" + "<br/>" + "Du kannst noch weitere Medikamente hinzufügen" : "Du hast noch kein Medikament erfasst",
+      message: (this.medicament != null && this.menge >= 1) ? this.medicament + "<br/>" + "wurde gespeichert" + "<br/>" + "<br/>" + "Du kannst noch weitere Medikamente hinzufügen" : "Du hast noch kein Medikament erfasst",
       buttons: ['OK']
     });
     addMedAlert.present();
 
     //========================= START JSON FOR THE MEDICATION STATEMENT================================
-    let code = {
-      coding: [{
-        system: 'http://midata.coop	',
-        code: 'Medication Name',
-        display: this.medicament
-      }]
+    if (this.medicament != null) {
+      let code = {
+        coding: [{
+          system: 'http://midata.coop	',
+          code: 'Medication Name',
+          display: this.medicament
+        }]
+      }
+
+      let cat = {
+        coding: [{
+          system: "http://hl7.org/fhir/ValueSet/medication-statement-category",
+          code: "patientspecified",
+          display: "preferred"
+        }],
+      }
+
+      let medStatus: medicationStatus = "active";
+
+      let medTaken: medicationTaken = "y";
+
+      let medEntry = new MedicationStatement(new Date(), code, medStatus, cat, {}, medTaken);
+
+      if (this.medEffect != null) {
+        let dosage = [{
+          resourceType: "Dosage",
+          doseQuantity: {
+            value: this.menge
+          },
+          text: (this.medEffect.match("Nein")) ? "None" : (this.medEffect.match("Ja")) ?
+            "Good" : (this.medEffect.match("Hat sich verschlimmert")) ?
+            "Bad" : ""
+        }]
+        medEntry.addProperty("dosage", dosage);
+      }
+
+      if (this.medEffect == null) {
+        let dosage = [{
+          resourceType: "Dosage",
+          doseQuantity: {
+            value: this.menge
+          }
+        }]
+        medEntry.addProperty("dosage", dosage);
+      }
+
+      let bundle2 = new Bundle("transaction");
+      bundle2.addEntry("POST", medEntry.resourceType, medEntry);
+      this.midataService.save(bundle2);
+
+      //update the medication fields 
+      this.medicament = null;
+      this.menge = 1;
+      this.medEffect = null;
     }
-
-    let cat = {
-      coding: [{
-        system: "http://hl7.org/fhir/ValueSet/medication-statement-category",
-        code: "patientspecified",
-        display: "preferred"
-      }],
-    }
-
-    let medStatus: medicationStatus = "active";
-
-    let medTaken: medicationTaken = "y";
-
-    let medEntry = new MedicationStatement(new Date(), code, medStatus, cat, {}, medTaken);
-
-    let dosage = [{
-      resourceType: "Dosage",
-      doseQuantity: {
-        value: this.menge
-      },
-      text: (this.medEffect.match("Nein")) ? "None" : (this.medEffect.match("Ja")) ?
-        "Good" : (this.medEffect.match("Hat sich verschlimmert")) ?
-        "Bad" : ""
-    }]
-    medEntry.addProperty("dosage", dosage);
-    //========================= END JSON FOR THE Medicatin Statement ===========================================
-
-
-    //========================= START JSON PUT MEDICATION COMPONENTS IN BUNDLE2 AND SAVE===========================================
-    let bundle2 = new Bundle("transaction");
-    bundle2.addEntry("POST", medEntry.resourceType, medEntry);
-    this.midataService.save(bundle2);
-    //========================= END JSON PUT MEDICATION COMPONENTS IN BUNDLE2 AND SAVE===========================================
-
-    //update the medication fields 
-    this.medicament = "";
-    this.menge = 1;
-    this.medEffect = null;
   }
   //-------------------------------------END METHODS FOR MEDICATION SEARCH-------------------------------
 
@@ -251,372 +254,156 @@ export class NewAttackPage {
     });
     alert.present();
 
-    //========================= START JSON FOR THE OBSERVATION "PATIENT CONDITION FINDING"================================
-    let codingStuff = {
-      coding: [{
-        system: 'http://snomed.info/sct',
-        code: '418138009',
-        display: 'Patient condition finding'
-      }]
-    }
+    // //========================= START JSON ADD SITUATION COMPONENTS===========================================
+    if (this.situation != null) {
+      let coding1 = {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '418138009',
+          display: 'General finding of observation of patient' //General finding of observation of patient .. muss registriert werden
+        }]
+      }
 
-    let category = {
+      let category1 = {
         coding: [{
           system: 'http://hl7.org/fhir/observation-category',
           code: 'survey',
           display: 'Survey'
         }],
-      },
-      effectivePeriod: {
-        start: DateTime;
-        end: DateTime;
       }
 
-    let entry = new Observation({
-      _dateTime: new Date().toISOString()
-    }, codingStuff, category);
+      let entry1 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, coding1, category1);
 
+      entry1.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "216299002",
+            display: "Attack"
+          }]
+        },
+        valueString: (this.situation.match("unwohlsein")) ? "No" : "yes"
+      })
 
-    //========================= START JSON ADD SITUATION COMPONENTS===========================================
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "216299002",
-          display: "Attack"
-        }]
-      },
-      valueString: (this.situation.match("unwohlsein")) ? "Feels unwell" : "Migrain attack"
-    })
+      let bundle1 = new Bundle("transaction");
+      bundle1.addEntry("POST", entry1.resourceType, entry1);
+      this.midataService.save(bundle1);
+    }
     //========================= END JSON ADD SITUATION COMPONENTS=============================================
 
 
-    //========================= START JSON ADD SYMPTOM COMPONENTS===========================================
-    entry.addComponent({
-      code: {
+    //========================= START JSON FOR THE OBSERVATION "Headache Charachter"================================
+    if (this.symptome.find(val => val == "Kopfschmerzen") != null) {
+
+      let codingStuff = {
         coding: [{
-          system: "http://snomed.info/sct",
-          code: "420103007",
-          display: "Watery eye"
+          system: 'http://snomed.info/sct',
+          code: '418138009',
+          display: 'Headache Character' //Headache Character registrieren auf MIDATA 
         }]
-      },
-      valueQuantity: {
-        value: (this.symptome.find(val => val == "Tränende Augen") == null) ? 0 : 1
       }
-    })
 
-    entry.addComponent({
-      code: {
+      let category = {
         coding: [{
-          system: "http://snomed.info/sct",
-          code: "703630003",
-          display: "Red eye"
-        }]
-      },
-      valueQuantity: {
-        value: (this.symptome.find(val => val == "Rötliche Augen") == null) ? 0 : 1
+          system: 'http://hl7.org/fhir/observation-category',
+          code: 'survey',
+          display: 'Survey'
+        }],
       }
-    })
 
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "703630003",
-          display: "Nasal discharge"
-        }]
-      },
-      valueQuantity: {
-        value: (this.symptome.find(val => val == "Nasenlaufen") == null) ? 0 : 1
-      }
-    })
+      let entry = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff, category);
 
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "119711004",
-          display: "Nose closure"
-        }]
-      },
-      valueQuantity: {
-        value: (this.symptome.find(val => val == "Nasenverstopfung") == null) ? 0 : 1
-      }
-    })
-
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "73905001",
-          display: "Sees flickering lights"
-        }]
-      },
-      valueQuantity: {
-        value: (this.symptome.find(val => val == "Flimmersehen") == null) ? 0 : 1
-      }
-    })
-
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "409668002",
-          display: "Photophobia"
-        }]
-      },
-      valueQuantity: {
-        value: (this.symptome.find(val => val == "Lichtempfindlichkeit") == null) ? 0 : 1
-      }
-    })
-
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "313387002",
-          display: "Phonophobia"
-        }]
-      },
-      valueQuantity: {
-        value: (this.symptome.find(val => val == "Lärmempfindlichkeit") == null) ? 0 : 1
-      }
-    })
-
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "279079003",
-          display: "Dysesthesia"
-        }]
-      },
-      valueQuantity: {
-        value: (this.symptome.find(val => val == "Gefühlsstörung") == null) ? 0 : 1
-      }
-    })
-
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "47004009",
-          display: "Dysphonia"
-        }]
-      },
-      valueQuantity: {
-        value: (this.symptome.find(val => val == "Sprachstörung") == null) ? 0 : 1
-      }
-    })
-
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "45846002",
-          display: "Sensitive to smells"
-        }]
-      },
-      valueQuantity: {
-        value: (this.symptome.find(val => val == "Geruchsempfindlichkeit") == null) ? 0 : 1
-      }
-    })
-
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "1985008",
-          display: "Vomitus"
-        }]
-      },
-      valueQuantity: {
-        value: (this.symptome.find(val => val == "Erbrechen") == null) ? 0 : 1
-      }
-    })
-
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "25064002",
-          display: "Headache"
-        }]
-      },
-      valueQuantity: {
-        value: (this.symptome.find(val => val == "Kopfschmerzen") == null) ? 0 : 1
-      }
-    })
-
-    entry.addComponent({
-      code: {
-        coding: [{
-          display: "Other symptoms"
-        }]
-      },
-      valueString: (this.symptome.find(val => val == "Andere") == null) ? "No other symptoms" : this.otherSymptom
-    })
-    //========================= END JSON ADD SYMPTOM COMPONENTS===========================================
-
-
-    //========================= START JSON ADD PAIN AREAL COMPONENTS===========================================
-    if (this.selectedHeadache == true) {
-      entry.addComponent({
-        code: {
-          coding: [{
-            system: "http://snomed.info/sct",
-            code: "29624005",
-            display: "Right side of head"
-          }]
-        },
-        valueQuantity: {
-          value: (this.painAreal.match("Kopf rechtsseitig")) ? 1 : 0
+      if (this.painAreal != null) {
+        if (this.painAreal.match("Kopf rechtsseitig")) {
+          entry.addComponent({
+            code: {
+              coding: [{
+                system: "http://snomed.info/sct",
+                code: "29624005",
+                display: "Right side of head"
+              }]
+            },
+          })
         }
-      })
 
-      entry.addComponent({
-        code: {
-          coding: [{
-            system: "http://snomed.info/sct",
-            code: "64237003",
-            display: "Left side of head"
-          }]
-        },
-        valueQuantity: {
-          value: (this.painAreal.match("Kopf linksseitig")) ? 1 : 0
+        if (this.painAreal.match("Kopf linksseitig")) {
+          entry.addComponent({
+            code: {
+              coding: [{
+                system: "http://snomed.info/sct",
+                code: "64237003",
+                display: "Left side of head"
+              }]
+            },
+          })
         }
-      })
 
-      entry.addComponent({
-        code: {
-          coding: [{
-            system: "http://snomed.info/sct",
-            code: "162301005",
-            display: "Bilateral headache"
-          }]
-        },
-        valueQuantity: {
-          value: (this.painAreal.match("Kopf beidseitig")) ? 1 : 0
+        if (this.painAreal.match("Kopf beidseitig")) {
+          entry.addComponent({
+            code: {
+              coding: [{
+                system: "http://snomed.info/sct",
+                code: "162301005",
+                display: "Bilateral headache"
+              }]
+            },
+          })
         }
-      })
-    }
-    //========================= END JSON ADD PAIN AREAL COMPONENTS===========================================
-
-
-    //========================= START JSON ADD PAIN TYPE COMPONENTS===========================================
-    if (this.selectedHeadache == true) {
-      entry.addComponent({
-        code: {
-          coding: [{
-            system: "http://snomed.info/sct",
-            code: "162308004",
-            display: "Throbbing headache"
-          }]
-        },
-        valueQuantity: {
-          value: (this.painType.match("Stechender Schmerz")) ? 1 : 0
-        }
-      })
-
-      entry.addComponent({
-        code: {
-          coding: [{
-            system: "http://snomed.info/sct",
-            code: "83644001",
-            display: "Dull pain"
-          }]
-        },
-        valueQuantity: {
-          value: (this.painType.match("Dumpfer Schmerz")) ? 1 : 0
-        }
-      })
-
-      entry.addComponent({
-        code: {
-          coding: [{
-            display: "Other pain type"
-          }]
-        },
-        valueString: (this.painType.match("Andere")) ? this.otherPainType : "No other pain type"
-      })
-    }
-    //========================= END JSON ADD PAIN TYPE COMPONENTS===========================================
-
-
-    //========================= START JSON ADD TRIGGER COMPONENTS===========================================
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "276319003",
-          display: "Menstruation finding"
-        }]
-      },
-      valueQuantity: {
-        value: (this.trigger.find(val => val == "Menstruation") == null) ? 0 : 1
       }
-    })
 
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "73595000",
-          display: "Stress"
-        }]
-      },
-      valueQuantity: {
-        value: (this.trigger.find(val => val == "Stress") == null) ? 0 : 1
+      if (this.painType != null) {
+        if (this.painType.match("Starker Schmerz")) {
+          entry.addComponent({
+            code: {
+              coding: [{
+                system: "http://snomed.info/sct",
+                code: "162307009",
+                display: "Aching headache"
+              }]
+            },
+          })
+        }
+
+        if (this.painType.match("Stechender Schmerz")) {
+          entry.addComponent({
+            code: {
+              coding: [{
+                system: "http://snomed.info/sct",
+                code: "162308004",
+                display: "Throbbing headache"
+              }]
+            },
+          })
+        }
+
+        if (this.painType.match("Dumpfer Schmerz")) {
+          entry.addComponent({
+            code: {
+              coding: [{
+                system: "http://snomed.info/sct",
+                code: "162309007",
+                display: "Shooting headache"
+              }]
+            },
+          })
+        }
+
+        if (this.painType.match("Andere")) {
+          entry.addComponent({
+            code: {
+              coding: [{
+                display: "Other pain type"
+              }]
+            },
+            valueString: this.otherPainType
+          })
+        }
       }
-    })
 
-    entry.addComponent({
-      code: {
-        coding: [{
-          system: "http://snomed.info/sct",
-          code: "102894008",
-          display: "Relaxed feeling"
-        }]
-      },
-      valueQuantity: {
-        value: (this.trigger.find(val => val == "Erholung") == null) ? 0 : 1
-      }
-    })
-
-    entry.addComponent({
-      code: {
-        coding: [{
-          display: "Other triggers"
-        }]
-      },
-      valueString: (this.trigger.find(val => val == "Andere") == null) ? "No other triggers" : this.otherTrigger
-    })
-    //========================= END JSON ADD TRIGGER COMPONENTS===========================================
-
-
-    //========================= START JSON ADD PAIN PERIOD COMPONENTS===========================================
-    if (this.selectedHeadache == true) {
-      entry.addComponent({
-        code: {
-          coding: [{
-            display: "Start time of pain"
-          }]
-        },
-        valueDateTime: "" + this.fromDateTime
-      })
-
-      entry.addComponent({
-        code: {
-          coding: [{
-            display: "End time of pain"
-          }]
-        },
-        valueDateTime: "" + this.untilDateTime
-      })
-      //========================= END JSON ADD PAIN PERIOD COMPONENTS===========================================
-
-
-      //========================= START JSON ADD PAIN INTENSITY SCALE COMPONENT===========================================
       entry.addComponent({
         code: {
           coding: [{
@@ -629,66 +416,606 @@ export class NewAttackPage {
           value: this.intensity
         }
       })
+
+      let bundle = new Bundle("transaction");
+      bundle.addEntry("POST", entry.resourceType, entry);
+      this.midataService.save(bundle);
     }
-    //========================= END JSON ADD PAIN INTENSITY SCALE COMPONENT===========================================
+    //========================= END JSON FOR THE OBSERVATION "Headache Character"================================
 
 
-    //========================= START JSON PUT COMPONENTS IN BUNDLE AND SAVE===========================================
-    let bundle = new Bundle("transaction");
-    bundle.addEntry("POST", entry.resourceType, entry);
-    this.midataService.save(bundle);
-    //========================= END JSON PUT COMPONENTS IN BUNDLE AND SAVE===========================================
+    //========================= START JSON FOR THE OBSERVATION ""Clinical finding present""================================
+    if (this.symptome.find(val => val == "Tränende Augen") != null || this.symptome.find(val => val == "Rötliche Augen") != null || this.symptome.find(val => val == "Nasenlaufen") != null || this.symptome.find(val => val == "Nasenverstopfung") != null || this.symptome.find(val => val == "Übelkeit") != null) {
 
-    //========================= END JSON FOR THE OBSERVATION "PATIENT CONDITION FINDING"================================
+      let codingStuff4 = {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '418138009',
+          display: 'Clinical finding present' //"Clinical finding present" .. registrieren noch 
+        }]
+      }
+
+      let category4 = {
+        coding: [{
+          system: 'http://hl7.org/fhir/observation-category',
+          code: 'survey',
+          display: 'Survey'
+        }],
+      }
+
+      let entry4 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff4, category4);
+
+      if (this.symptome.find(val => val == "Tränende Augen") != null) {
+        entry4.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "420103007",
+              display: "Watery eye"
+            }]
+          },
+        })
+      }
+
+      if (this.symptome.find(val => val == "Rötliche Augen") != null) {
+        entry4.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "703630003",
+              display: "Red eye"
+            }]
+          },
+        })
+      }
+
+      if (this.symptome.find(val => val == "Nasenlaufen") != null) {
+        entry4.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "703630003",
+              display: "Nasal discharge"
+            }]
+          },
+        })
+      }
+
+      if (this.symptome.find(val => val == "Nasenverstopfung") != null) {
+        entry4.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "119711004",
+              display: "Nose closure"
+            }]
+          },
+        })
+      }
+
+      if (this.symptome.find(val => val == "Übelkeit") != null) {
+        entry4.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "162057007",
+              display: "Nausea"
+            }]
+          },
+        })
+      }
+
+      if (this.symptome.find(val => val == "Erbrechen") != null) {
+        entry4.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "422400008",
+              display: "Vomiting"
+            }]
+          },
+        })
+      }
+
+      let bundle4 = new Bundle("transaction");
+      bundle4.addEntry("POST", entry4.resourceType, entry4);
+      this.midataService.save(bundle4);
+    }
+    //========================= END JSON FOR THE OBSERVATION "Clinical finding present"================================
 
 
-    //========================= START JSON FOR THE MEDICATION STATEMENT================================
-    let code = {
+    //========================= START JSON FOR THE OBSERVATION ""Visual function""================================
+    if (this.symptome.find(val => val == "Flimmersehen") != null) {
+
+      let codingStuff5 = {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '418138009',
+          display: 'Visual function' //"Visual function .. registrieren noch 
+        }]
+      }
+
+      let category5 = {
+        coding: [{
+          system: 'http://hl7.org/fhir/observation-category',
+          code: 'survey',
+          display: 'Survey'
+        }],
+      }
+
+      let entry5 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff5, category5);
+
+      entry5.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "73905001",
+            display: "Sees flickering lights"
+          }]
+        },
+      })
+
+      let bundle5 = new Bundle("transaction");
+      bundle5.addEntry("POST", entry5.resourceType, entry5);
+      this.midataService.save(bundle5);
+    }
+    //========================= END JSON FOR THE OBSERVATION ""Visual function""================================
+
+
+    //========================= START JSON FOR THE OBSERVATION ""General reaction to light""================================
+    if (this.symptome.find(val => val == "Lichtempfindlichkeit") != null) {
+
+      let codingStuff6 = {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '418138009',
+          display: 'General reaction to light' //"General reaction to light .. registrieren noch 
+        }]
+      }
+
+      let category6 = {
+        coding: [{
+          system: 'http://hl7.org/fhir/observation-category',
+          code: 'survey',
+          display: 'Survey'
+        }],
+      }
+
+      let entry6 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff6, category6);
+
+      entry6.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "409668002",
+            display: "Photophobia"
+          }]
+        },
+      })
+
+      let bundle6 = new Bundle("transaction");
+      bundle6.addEntry("POST", entry6.resourceType, entry6);
+      this.midataService.save(bundle6);
+    }
+    //========================= END JSON FOR THE OBSERVATION ""General reaction to light""================================
+
+
+    //========================= START JSON FOR THE OBSERVATION ""Emotion""================================
+    if (this.symptome.find(val => val == "Lärmempfindlichkeit") != null || this.symptome.find(val => val == "Erholung") != null) {
+
+      let codingStuff7 = {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '418138009',
+          display: 'Emotion' //"Emotion .. registrieren noch 
+        }]
+      }
+
+      let category7 = {
+        coding: [{
+          system: 'http://hl7.org/fhir/observation-category',
+          code: 'survey',
+          display: 'Survey'
+        }],
+      }
+
+      let entry7 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff7, category7);
+
+      if (this.symptome.find(val => val == "Lärmempfindlichkeit") != null) {
+        entry7.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "313387002",
+              display: "Phonophobia"
+            }]
+          },
+        })
+      }
+
+      if (this.symptome.find(val => val == "Erholung") != null) {
+        entry7.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "102894008",
+              display: "Feeling calm"
+            }]
+          },
+        })
+      }
+
+      let bundle7 = new Bundle("transaction");
+      bundle7.addEntry("POST", entry7.resourceType, entry7);
+      this.midataService.save(bundle7);
+    }
+    //========================= END JSON FOR THE OBSERVATION ""Emotion""================================
+
+
+    //========================= START JSON FOR THE OBSERVATION ""Touch sensation""================================
+    if (this.symptome.find(val => val == "Gefühlsstörung") != null) {
+
+      let codingStuff8 = {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '418138009',
+          display: 'Touch sensation' //"Touch sensation .. registrieren noch 
+        }]
+      }
+
+      let category8 = {
+        coding: [{
+          system: 'http://hl7.org/fhir/observation-category',
+          code: 'survey',
+          display: 'Survey'
+        }],
+      }
+
+      let entry8 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff8, category8);
+
+      entry8.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "130984007",
+            display: "Tactile alteration"
+          }]
+        },
+      })
+
+      let bundle8 = new Bundle("transaction");
+      bundle8.addEntry("POST", entry8.resourceType, entry8);
+      this.midataService.save(bundle8);
+    }
+    //========================= END JSON FOR THE OBSERVATION ""Touch sensation""================================
+
+
+    //========================= START JSON FOR THE OBSERVATION ""Speech observable""================================
+    if (this.symptome.find(val => val == "Sprachstörung") != null) {
+
+      let codingStuff9 = {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '418138009',
+          display: 'Speech observable' //"Speech observable .. registrieren noch 
+        }]
+      }
+
+      let category9 = {
+        coding: [{
+          system: 'http://hl7.org/fhir/observation-category',
+          code: 'survey',
+          display: 'Survey'
+        }],
+      }
+
+      let entry9 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff9, category9);
+
+      entry9.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "29164008",
+            display: "Speech impairment"
+          }]
+        },
+      })
+
+      let bundle9 = new Bundle("transaction");
+      bundle9.addEntry("POST", entry9.resourceType, entry9);
+      this.midataService.save(bundle9);
+    }
+    //========================= END JSON FOR THE OBSERVATION ""Speech observable""================================
+
+
+    //========================= START JSON FOR THE OBSERVATION ""Sense of smell""================================
+    if (this.symptome.find(val => val == "Geruchsempfindlichkeit") != null) {
+
+      let codingStuff10 = {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '418138009',
+          display: 'Sense of smell' //"Sense of smell .. registrieren noch 
+        }]
+      }
+
+      let category10 = {
+        coding: [{
+          system: 'http://hl7.org/fhir/observation-category',
+          code: 'survey',
+          display: 'Survey'
+        }],
+      }
+
+      let entry10 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff10, category10);
+
+      entry10.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "45846002",
+            display: "Sensitive to smells"
+          }]
+        },
+      })
+
+      let bundle10 = new Bundle("transaction");
+      bundle10.addEntry("POST", entry10.resourceType, entry10);
+      this.midataService.save(bundle10);
+    }
+    //========================= END JSON FOR THE OBSERVATION ""Sense of smell""================================
+
+    //========================= START JSON FOR THE OBSERVATION ""Mental state, behavior""================================
+    if (this.symptome.find(val => val == "Stress") != null || this.symptome.find(val => val == "Leseschwäche") != null) {
+
+      let codingStuff11 = {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '418138009',
+          display: 'Mental state, behavior' //"Mental state, behavior .. registrieren noch 
+        }]
+      }
+
+      let category11 = {
+        coding: [{
+          system: 'http://hl7.org/fhir/observation-category',
+          code: 'survey',
+          display: 'Survey'
+        }],
+      }
+
+      let entry11 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff11, category11);
+
+      if (this.symptome.find(val => val == "Stress") != null) {
+        entry11.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "73595000",
+              display: "Stress"
+            }]
+          },
+        })
+      }
+
+      if (this.symptome.find(val => val == "Leseschwäche") != null) {
+        entry11.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "309253009",
+              display: "Difficulty reading"
+            }]
+          },
+        })
+      }
+
+      let bundle11 = new Bundle("transaction");
+      bundle11.addEntry("POST", entry11.resourceType, entry11);
+      this.midataService.save(bundle11);
+    }
+    //========================= END JSON FOR THE OBSERVATION ""Mental state, behavior""================================
+
+    //========================= START JSON FOR THE OBSERVATION ""Female reproductive function""================================
+    if (this.symptome.find(val => val == "Menstruation") != null) {
+
+      let codingStuff12 = {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '418138009',
+          display: 'Female reproductive function' //"Female reproductive function .. registrieren noch 
+        }]
+      }
+
+      let category12 = {
+        coding: [{
+          system: 'http://hl7.org/fhir/observation-category',
+          code: 'survey',
+          display: 'Survey'
+        }],
+      }
+
+      let entry12 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff12, category12);
+
+      entry12.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "276319003",
+            display: "Menstruation finding"
+          }]
+        },
+      })
+
+
+      let bundle12 = new Bundle("transaction");
+      bundle12.addEntry("POST", entry12.resourceType, entry12);
+      this.midataService.save(bundle12);
+    }
+    //========================= END JSON FOR THE OBSERVATION ""Female reproductive function""================================
+
+    //========================= START JSON FOR THE OBSERVATION ""Other Symptoms""================================
+    if (this.symptome.find(val => val == "Andere") != null) {
+
+      let codingStuff13 = {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '418138009',
+          display: 'Other Symptoms'
+        }]
+      }
+
+      let category13 = {
+        coding: [{
+          system: 'http://hl7.org/fhir/observation-category',
+          code: 'survey',
+          display: 'Survey'
+        }],
+      }
+
+      let entry13 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff13, category13);
+
+      entry13.addComponent({
+        code: {
+          coding: [{
+            display: "Other symptoms"
+          }]
+        },
+        valueString: (this.otherSymptom == null) ? "No other symptoms" : this.otherSymptom
+      })
+
+      let bundle13 = new Bundle("transaction");
+      bundle13.addEntry("POST", entry13.resourceType, entry13);
+      this.midataService.save(bundle13);
+    }
+    //========================= END JSON FOR THE OBSERVATION ""Other Symptoms""================================
+
+    //========================= START JSON ADD PAIN PERIOD COMPONENTS===========================================
+    let coding3 = {
       coding: [{
-        system: 'http://midata.coop	',
-        code: 'Medication Name',
-        display: this.medicament
+        system: 'http://midata.coop',
+        code: 'user-observation',
+        display: 'User Observation'
       }]
     }
 
-    let cat = {
+    let category3 = {
       coding: [{
-        system: "http://hl7.org/fhir/ValueSet/medication-statement-category",
-        code: "patientspecified",
-        display: "preferred"
+        system: 'http://hl7.org/fhir/observation-category',
+        code: 'survey',
+        display: 'Survey'
       }],
     }
 
-    let medStatus: medicationStatus = "active";
+    let entry3 = new Observation({
+      _dateTime: new Date().toISOString()
+    }, coding3, category3);
 
-    let medTaken: medicationTaken = "y";
-
-    let medEntry = new MedicationStatement(new Date(), code, medStatus, cat, {}, medTaken);
-
-    let dosage = [{
-      resourceType: "Dosage",
-      doseQuantity: {
-        value: this.menge
+    entry3.addComponent({
+      code: {
+        coding: [{
+          display: "Start time of pain"
+        }]
       },
-      text: (this.medEffect.match("Nein")) ? "None" : (this.medEffect.match("Ja")) ?
-        "Good" : (this.medEffect.match("Hat sich verschlimmert")) ?
-        "Bad" : ""
-    }]
-    medEntry.addProperty("dosage", dosage);
-    //========================= END JSON FOR THE Medicatin Statement ===========================================
+      valueDateTime: "" + this.fromDateTime
+    })
+
+    entry3.addComponent({
+      code: {
+        coding: [{
+          display: "End time of pain"
+        }]
+      },
+      valueDateTime: "" + this.untilDateTime
+    })
+
+    let bundle3 = new Bundle("transaction");
+    bundle3.addEntry("POST", entry3.resourceType, entry3);
+    this.midataService.save(bundle3);
+    //========================= END JSON ADD PAIN PERIOD COMPONENTS===========================================
 
 
-    //========================= START JSON PUT MEDICATION COMPONENTS IN BUNDLE2 AND SAVE===========================================
-    let bundle2 = new Bundle("transaction");
-    bundle2.addEntry("POST", medEntry.resourceType, medEntry);
-    this.midataService.save(bundle2);
-    //========================= END JSON PUT MEDICATION COMPONENTS IN BUNDLE2 AND SAVE===========================================
+    //========================= START JSON FOR THE MEDICATION STATEMENT================================
+    if (this.medicament != null) {
+      let code = {
+        coding: [{
+          system: 'http://midata.coop	',
+          code: 'Medication Name',
+          display: this.medicament
+        }]
+      }
 
-    //update the medication fields 
-    this.medicament = "";
-    this.menge = 1;
-    this.medEffect = null;
+      let cat = {
+        coding: [{
+          system: "http://hl7.org/fhir/ValueSet/medication-statement-category",
+          code: "patientspecified",
+          display: "preferred"
+        }],
+      }
 
+      let medStatus: medicationStatus = "active";
+
+      let medTaken: medicationTaken = "y";
+
+      let medEntry = new MedicationStatement(new Date(), code, medStatus, cat, {}, medTaken);
+
+      if (this.medEffect != null) {
+        let dosage = [{
+          resourceType: "Dosage",
+          doseQuantity: {
+            value: this.menge
+          },
+          text: (this.medEffect.match("Nein")) ? "None" : (this.medEffect.match("Ja")) ?
+            "Good" : (this.medEffect.match("Hat sich verschlimmert")) ?
+            "Bad" : ""
+        }]
+        medEntry.addProperty("dosage", dosage);
+      }
+
+      if (this.medEffect == null) {
+        let dosage = [{
+          resourceType: "Dosage",
+          doseQuantity: {
+            value: this.menge
+          }
+        }]
+        medEntry.addProperty("dosage", dosage);
+      }
+
+      let bundle2 = new Bundle("transaction");
+      bundle2.addEntry("POST", medEntry.resourceType, medEntry);
+      this.midataService.save(bundle2);
+      //========================= END JSON PUT MEDICATION COMPONENTS IN BUNDLE2 AND SAVE===========================================
+
+      //update the input fields 
+      this.situation = null;
+      this.symptome = null;
+      this.fromDateTime = null;
+      this.untilDateTime = null;
+      this.medicament = null;
+      this.menge = 1;
+      this.medEffect = null;
+    }
   }
   //-------------------------------- END PERSISTENCE IN MIDATA OF ALL THE INPUT FIELDS---------------------------------------------------------
 
