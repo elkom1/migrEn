@@ -63,10 +63,37 @@ export class NewAttackPage {
   menge: number = 0;
   medEffect: string;
 
+  intensityWateryEye: number = 0;
+  intensityRedEye: number = 0; 
+  intensityNasenLaufen: number = 0; 
+  intensityNasenVerstopfung: number = 0; 
+  intensityFlimmerSehen: number = 0; 
+  intensityPhotophobia: number = 0; 
+  intensityPhonophobia: number = 0; 
+  intensityTouchSensation: number = 0; 
+  intensitySpeechDisorder: number = 0; 
+  intensitySmellSensitivity: number = 0; 
+  intensityVomiting: number = 0; 
+  intensityNausea: number = 0; 
+  intensityStress: number = 0; 
+
   selectedOther = false;
   selectedOther3 = false;
   selectedOther4 = false;
   selectedHeadache = false;
+  selectedWateryEye = false; 
+  selectedRedEye = false; 
+  selectedNasenLaufen = false; 
+  selectedNasenVerstopfung = false; 
+  selectedFlimmerSehen = false; 
+  selectedPhotophobia = false;
+  selectedPhonophobia = false;
+  selectedTouchSensation = false; 
+  selectedSpeechDisorder = false;  
+  selectedSmellSensitivity = false;  
+  selectedVomiting = false; 
+  selectedNausea = false; 
+  selectedStress = false; 
 
   group: FormGroup;
 
@@ -95,7 +122,21 @@ export class NewAttackPage {
       intensity: new FormControl(''),
       medicament: new FormControl(''),
       medEffect: new FormControl(''),
-      situation: new FormControl('')
+      situation: new FormControl(''),
+      intensityWateryEye: new FormControl(''),
+      intensityRedEye: new FormControl(''),
+      intensityNasenLaufen: new FormControl(''),
+      intensityNasenVerstopfung: new FormControl(''),
+      intensityFlimmerSehen: new FormControl(''),
+      intensityPhonophobia: new FormControl(''),
+      intensityPhotophobia: new FormControl(''),
+      intensityTouchSensation: new FormControl(''),
+      intensitySpeechDisorder: new FormControl(''),
+      intensitySmellSensitivity: new FormControl(''),
+      intensityVomiting: new FormControl(''),
+      intensityNausea: new FormControl(''),
+      intensityStress: new FormControl(''),
+
     })
     this.symptome = [];
 
@@ -106,13 +147,26 @@ export class NewAttackPage {
 
   ngAfterViewInit() {
     this.menge = 1;
-    this.intensity = 2;
+   
   }
 
   //-------------------------------------START ONCHANGE METHODS FOR "OTHER SELECTION"------------------------
   onChangeSymptoms() {
     this.selectedOther = this.symptome.find(val => val == "Andere") == null ? false : true
     this.selectedHeadache = this.symptome.find(value => value == "Kopfschmerzen") == null ? false : true
+    this.selectedWateryEye = this.symptome.find(value => value == "Tränende Augen") == null ? false : true
+    this.selectedRedEye = this.symptome.find(value => value == "Rötliche Augen") == null ? false : true
+    this.selectedNasenLaufen = this.symptome.find(value => value == "Nasenlaufen") == null ? false : true
+    this.selectedNasenVerstopfung = this.symptome.find(value => value == "Nasenverstopfung") == null ? false : true
+    this.selectedFlimmerSehen = this.symptome.find(value => value == "Flimmersehen") == null ? false : true
+    this.selectedPhotophobia = this.symptome.find(value => value == "Lichtempfindlichkeit") == null ? false : true
+    this.selectedPhonophobia = this.symptome.find(value => value == "Lärmempfindlichkeit") == null ? false : true
+    this.selectedTouchSensation = this.symptome.find(value => value == "Gefühlsstörung") == null ? false : true
+    this.selectedSpeechDisorder = this.symptome.find(value => value == "Sprachstörung") == null ? false : true
+    this.selectedSmellSensitivity = this.symptome.find(value => value == "Geruchsempfindlichkeit") == null ? false : true
+    this.selectedVomiting = this.symptome.find(value => value == "Erbrechen") == null ? false : true
+    this.selectedNausea = this.symptome.find(value => value == "Übelkeit") == null ? false : true
+    this.selectedStress = this.symptome.find(value => value == "Stress") == null ? false : true
   }
 
   onChangePainType() {
@@ -457,6 +511,18 @@ export class NewAttackPage {
             }]
           },
         })
+        entry4.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "425401001",
+              display: "Pain intensity rating scale"
+            }]
+          },
+          valueQuantity: {
+            value: this.intensityWateryEye
+          }
+        })
       }
 
       if (this.symptome.find(val => val == "Rötliche Augen") != null) {
@@ -468,6 +534,18 @@ export class NewAttackPage {
               display: "Red eye"
             }]
           },
+        })
+        entry4.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "425401001",
+              display: "Pain intensity rating scale"
+            }]
+          },
+          valueQuantity: {
+            value: this.intensityRedEye
+          }
         })
       }
 
@@ -481,6 +559,18 @@ export class NewAttackPage {
             }]
           },
         })
+        entry4.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "425401001",
+              display: "Pain intensity rating scale"
+            }]
+          },
+          valueQuantity: {
+            value: this.intensityNasenLaufen
+          }
+        })
       }
 
       if (this.symptome.find(val => val == "Nasenverstopfung") != null) {
@@ -492,6 +582,18 @@ export class NewAttackPage {
               display: "Nose closure"
             }]
           },
+        })
+        entry4.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "425401001",
+              display: "Pain intensity rating scale"
+            }]
+          },
+          valueQuantity: {
+            value: this.intensityNasenVerstopfung
+          }
         })
       }
 
@@ -505,6 +607,18 @@ export class NewAttackPage {
             }]
           },
         })
+        entry4.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "425401001",
+              display: "Pain intensity rating scale"
+            }]
+          },
+          valueQuantity: {
+            value: this.intensityNausea
+          }
+        })
       }
 
       if (this.symptome.find(val => val == "Erbrechen") != null) {
@@ -516,6 +630,18 @@ export class NewAttackPage {
               display: "Vomiting"
             }]
           },
+        })
+        entry4.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "425401001",
+              display: "Pain intensity rating scale"
+            }]
+          },
+          valueQuantity: {
+            value: this.intensityVomiting
+          }
         })
       }
 
@@ -559,6 +685,19 @@ export class NewAttackPage {
         },
       })
 
+      entry5.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "425401001",
+            display: "Pain intensity rating scale"
+          }]
+        },
+        valueQuantity: {
+          value: this.intensityFlimmerSehen
+        }
+      })
+
       let bundle5 = new Bundle("transaction");
       bundle5.addEntry("POST", entry5.resourceType, entry5);
       this.midataService.save(bundle5);
@@ -597,6 +736,19 @@ export class NewAttackPage {
             display: "Photophobia"
           }]
         },
+      })
+
+      entry6.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "425401001",
+            display: "Pain intensity rating scale"
+          }]
+        },
+        valueQuantity: {
+          value: this.intensityPhotophobia
+        }
       })
 
       let bundle6 = new Bundle("transaction");
@@ -638,6 +790,19 @@ export class NewAttackPage {
               display: "Phonophobia"
             }]
           },
+        })
+
+        entry7.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "425401001",
+              display: "Pain intensity rating scale"
+            }]
+          },
+          valueQuantity: {
+            value: this.intensityPhonophobia
+          }
         })
       }
 
@@ -693,6 +858,19 @@ export class NewAttackPage {
         },
       })
 
+      entry8.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "425401001",
+            display: "Pain intensity rating scale"
+          }]
+        },
+        valueQuantity: {
+          value: this.intensityTouchSensation
+        }
+      })
+
       let bundle8 = new Bundle("transaction");
       bundle8.addEntry("POST", entry8.resourceType, entry8);
       this.midataService.save(bundle8);
@@ -731,6 +909,19 @@ export class NewAttackPage {
             display: "Speech impairment"
           }]
         },
+      })
+
+      entry9.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "425401001",
+            display: "Pain intensity rating scale"
+          }]
+        },
+        valueQuantity: {
+          value: this.intensitySpeechDisorder
+        }
       })
 
       let bundle9 = new Bundle("transaction");
@@ -773,6 +964,19 @@ export class NewAttackPage {
         },
       })
 
+      entry10.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "425401001",
+            display: "Pain intensity rating scale"
+          }]
+        },
+        valueQuantity: {
+          value: this.intensitySmellSensitivity
+        }
+      })
+
       let bundle10 = new Bundle("transaction");
       bundle10.addEntry("POST", entry10.resourceType, entry10);
       this.midataService.save(bundle10);
@@ -811,6 +1015,18 @@ export class NewAttackPage {
               display: "Stress"
             }]
           },
+        })
+        entry11.addComponent({
+          code: {
+            coding: [{
+              system: "http://snomed.info/sct",
+              code: "425401001",
+              display: "Pain intensity rating scale"
+            }]
+          },
+          valueQuantity: {
+            value: this.intensityStress
+          }
         })
       }
 
@@ -1005,6 +1221,8 @@ export class NewAttackPage {
       let bundle2 = new Bundle("transaction");
       bundle2.addEntry("POST", medEntry.resourceType, medEntry);
       this.midataService.save(bundle2);
+
+    }
       //========================= END JSON PUT MEDICATION COMPONENTS IN BUNDLE2 AND SAVE===========================================
 
       //update the input fields 
@@ -1015,7 +1233,24 @@ export class NewAttackPage {
       this.medicament = null;
       this.menge = 1;
       this.medEffect = null;
-    }
+      this.selectedHeadache = false; 
+      this.selectedOther = false; 
+      this.selectedOther3 = false; 
+      this.selectedOther4 = false; 
+      this.selectedWateryEye = false; 
+      this.selectedRedEye = false; 
+      this.selectedNasenLaufen = false; 
+      this.selectedNasenVerstopfung = false; 
+      this.selectedFlimmerSehen = false; 
+      this.selectedPhotophobia = false;
+      this.selectedPhonophobia = false;
+      this.selectedTouchSensation = false; 
+      this.selectedSpeechDisorder = false;  
+      this.selectedSmellSensitivity = false;  
+      this.selectedVomiting = false; 
+      this.selectedNausea = false; 
+      this.selectedStress = false; 
+    
   }
   //-------------------------------- END PERSISTENCE IN MIDATA OF ALL THE INPUT FIELDS---------------------------------------------------------
 

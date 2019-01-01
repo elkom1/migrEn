@@ -107,6 +107,203 @@
     </ion-card>
 
 
+    <ion-card *ngIf="selectedWateryEye">
+      <ion-card-header text-center>
+        <h1 style="font-weight: bold; color: white">Tränende Augen</h1>
+      </ion-card-header>
+
+      <ion-item no-lines>
+        <ion-label>Stärke</ion-label>
+        <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensityWateryEye" name="intensityWateryEye"
+          formControlName="intensityWateryEye">
+          <ion-icon small range-left name="md-happy"></ion-icon>
+          <ion-icon range-right name="md-sad"></ion-icon>
+        </ion-range>
+      </ion-item>
+    </ion-card>
+
+    <ion-card *ngIf="selectedRedEye">
+      <ion-card-header text-center>
+        <h1 style="font-weight: bold; color: white">Rötliche Augen</h1>
+      </ion-card-header>
+
+      <ion-item no-lines>
+        <ion-label>Stärke</ion-label>
+        <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensityRedEye" name="intensityRedEye"
+          formControlName="intensityRedEye">
+          <ion-icon small range-left name="md-happy"></ion-icon>
+          <ion-icon range-right name="md-sad"></ion-icon>
+        </ion-range>
+      </ion-item>
+    </ion-card>
+
+    
+    <ion-card *ngIf="selectedNasenLaufen">
+      <ion-card-header text-center>
+        <h1 style="font-weight: bold; color: white">Nasenlaufen</h1>
+      </ion-card-header>
+
+      <ion-item no-lines>
+        <ion-label>Stärke</ion-label>
+        <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensityNasenLaufen" name="intensityNasenLaufen"
+          formControlName="intensityNasenLaufen">
+          <ion-icon small range-left name="md-happy"></ion-icon>
+          <ion-icon range-right name="md-sad"></ion-icon>
+        </ion-range>
+      </ion-item>
+    </ion-card>
+
+    <ion-card *ngIf="selectedNasenVerstopfung">
+      <ion-card-header text-center>
+        <h1 style="font-weight: bold; color: white">Nasenverstopfung</h1>
+      </ion-card-header>
+
+      <ion-item no-lines>
+        <ion-label>Stärke</ion-label>
+        <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensityNasenVerstopfung" name="intensityNasenVerstopfung"
+          formControlName="intensityNasenVerstopfung">
+          <ion-icon small range-left name="md-happy"></ion-icon>
+          <ion-icon range-right name="md-sad"></ion-icon>
+        </ion-range>
+      </ion-item>
+    </ion-card>
+
+    <ion-card *ngIf="selectedFlimmerSehen">
+      <ion-card-header text-center>
+        <h1 style="font-weight: bold; color: white">Flimmersehen</h1>
+      </ion-card-header>
+
+      <ion-item no-lines>
+        <ion-label>Stärke</ion-label>
+        <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensityFlimmerSehen" name="intensityFlimmerSehen"
+          formControlName="intensityFlimmerSehen">
+          <ion-icon small range-left name="md-happy"></ion-icon>
+          <ion-icon range-right name="md-sad"></ion-icon>
+        </ion-range>
+      </ion-item>
+    </ion-card>
+
+    <ion-card *ngIf="selectedPhotophobia">
+      <ion-card-header text-center>
+        <h1 style="font-weight: bold; color: white">Lichtempfindlichkeit</h1>
+      </ion-card-header>
+
+      <ion-item no-lines>
+        <ion-label>Stärke</ion-label>
+        <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensityPhotophobia" name="intensityPhotophobia"
+          formControlName="intensityPhotophobia">
+          <ion-icon small range-left name="md-happy"></ion-icon>
+          <ion-icon range-right name="md-sad"></ion-icon>
+        </ion-range>
+      </ion-item>
+    </ion-card>
+
+    <ion-card *ngIf="selectedPhonophobia">
+      <ion-card-header text-center>
+        <h1 style="font-weight: bold; color: white">Lärmempfindlichkeit</h1>
+      </ion-card-header>
+
+      <ion-item no-lines>
+        <ion-label>Stärke</ion-label>
+        <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensityPhonophobia" name="intensityPhonophobia"
+          formControlName="intensityPhonophobia">
+          <ion-icon small range-left name="md-happy"></ion-icon>
+          <ion-icon range-right name="md-sad"></ion-icon>
+        </ion-range>
+      </ion-item>
+    </ion-card>
+
+    <ion-card *ngIf="selectedTouchSensation">
+      <ion-card-header text-center>
+        <h1 style="font-weight: bold; color: white">Gefühlsstörung</h1>
+      </ion-card-header>
+
+      <ion-item no-lines>
+        <ion-label>Stärke</ion-label>
+        <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensityTouchSensation" name="intensityTouchSensation"
+          formControlName="intensityTouchSensation">
+          <ion-icon small range-left name="md-happy"></ion-icon>
+          <ion-icon range-right name="md-sad"></ion-icon>
+        </ion-range>
+      </ion-item>
+    </ion-card>
+
+    <ion-card *ngIf="selectedSpeechDisorder">
+      <ion-card-header text-center>
+        <h1 style="font-weight: bold; color: white">Sprachstörung</h1>
+      </ion-card-header>
+
+      <ion-item no-lines>
+        <ion-label>Stärke</ion-label>
+        <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensitySpeechDisorder" name="intensitySpeechDisorder"
+          formControlName="intensitySpeechDisorder">
+          <ion-icon small range-left name="md-happy"></ion-icon>
+          <ion-icon range-right name="md-sad"></ion-icon>
+        </ion-range>
+      </ion-item>
+    </ion-card>
+
+    <ion-card *ngIf="selectedSmellSensitivity">
+      <ion-card-header text-center>
+        <h1 style="font-weight: bold; color: white">Geruchsempfindlichkeit</h1>
+      </ion-card-header>
+
+      <ion-item no-lines>
+        <ion-label>Stärke</ion-label>
+        <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensitySmellSensitivity" name="intensitySmellSensitivity"
+          formControlName="intensitySmellSensitivity">
+          <ion-icon small range-left name="md-happy"></ion-icon>
+          <ion-icon range-right name="md-sad"></ion-icon>
+        </ion-range>
+      </ion-item>
+    </ion-card>
+
+    <ion-card *ngIf="selectedVomiting">
+      <ion-card-header text-center>
+        <h1 style="font-weight: bold; color: white">Erbrechen</h1>
+      </ion-card-header>
+
+      <ion-item no-lines>
+        <ion-label>Stärke</ion-label>
+        <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensityVomiting" name="intensityVomiting"
+          formControlName="intensityVomiting">
+          <ion-icon small range-left name="md-happy"></ion-icon>
+          <ion-icon range-right name="md-sad"></ion-icon>
+        </ion-range>
+      </ion-item>
+    </ion-card>
+
+    <ion-card *ngIf="selectedNausea">
+      <ion-card-header text-center>
+        <h1 style="font-weight: bold; color: white">Übelkeit</h1>
+      </ion-card-header>
+
+      <ion-item no-lines>
+        <ion-label>Stärke</ion-label>
+        <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensityNausea" name="intensityNausea"
+          formControlName="intensityNausea">
+          <ion-icon small range-left name="md-happy"></ion-icon>
+          <ion-icon range-right name="md-sad"></ion-icon>
+        </ion-range>
+      </ion-item>
+    </ion-card>
+
+    <ion-card *ngIf="selectedStress">
+      <ion-card-header text-center>
+        <h1 style="font-weight: bold; color: white">Stress</h1>
+      </ion-card-header>
+
+      <ion-item no-lines>
+        <ion-label>Stärke</ion-label>
+        <ion-range min="0" max="10" step="1" snaps="true" color="secondary" [(ngModel)]="intensityStress" name="intensityStress"
+          formControlName="intensityStress">
+          <ion-icon small range-left name="md-happy"></ion-icon>
+          <ion-icon range-right name="md-sad"></ion-icon>
+        </ion-range>
+      </ion-item>
+    </ion-card>
+
+
     <ion-card>
       <ion-card-header text-center>
         <h1 style="font-weight: bold; color: white">Dauer des Schmerzes</h1>
