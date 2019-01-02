@@ -156,15 +156,15 @@ export class MyDayPage {
         }
       })
 
-      if(this.date != null) { 
-      entry1.addComponent({
-        code: {
-          coding: [{
-            display: "Date of entry"
-          }]
-        },
-        valueDateTime: "" + this.date
-      })
+      if (this.date != null) {
+        entry1.addComponent({
+          code: {
+            coding: [{
+              display: "Date of entry"
+            }]
+          },
+          valueDateTime: "" + this.date
+        })
       }
 
       let bundle1 = new Bundle("transaction");
@@ -231,7 +231,7 @@ export class MyDayPage {
         })
       }
 
-      if(this.date != null) { 
+      if (this.date != null) {
         entry2.addComponent({
           code: {
             coding: [{
@@ -240,7 +240,7 @@ export class MyDayPage {
           },
           valueDateTime: "" + this.date
         })
-        }
+      }
 
       let bundle2 = new Bundle("transaction");
       bundle2.addEntry("POST", entry2.resourceType, entry2);
@@ -300,7 +300,7 @@ export class MyDayPage {
         })
       }
 
-      if(this.date != null) { 
+      if (this.date != null) {
         entry3.addComponent({
           code: {
             coding: [{
@@ -309,7 +309,7 @@ export class MyDayPage {
           },
           valueDateTime: "" + this.date
         })
-        }
+      }
 
       let bundle3 = new Bundle("transaction");
       bundle3.addEntry("POST", entry3.resourceType, entry3);
@@ -318,11 +318,12 @@ export class MyDayPage {
     //========================= END JSON FOR THE OBSERVATION "Relaxation Exercises"================================
 
     //update the input fields 
-    this.sleepTime = null; 
-    this.awakeTime = null; 
-    this.sleepQuality = null; 
-    this.eatingHabit = null; 
-    this.exercises = null; 
-    this.date = null;
+      this.sleepTime = null;
+      this.awakeTime = null;
+      this.sleepQuality = null;
+      this.eatingHabit = null;
+      this.exercises = null;
+      this.date = null;
+
   }
 }
