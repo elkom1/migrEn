@@ -1127,6 +1127,7 @@ export class NewAttackPage {
     //========================= END JSON FOR THE OBSERVATION ""Other Symptoms""================================
 
     //========================= START JSON ADD PAIN PERIOD COMPONENTS===========================================
+    if (this.fromDateTime != null && this.untilDateTime != null) {
     let coding3 = {
       coding: [{
         system: 'http://midata.coop',
@@ -1168,6 +1169,7 @@ export class NewAttackPage {
     let bundle3 = new Bundle("transaction");
     bundle3.addEntry("POST", entry3.resourceType, entry3);
     this.midataService.save(bundle3);
+    }
     //========================= END JSON ADD PAIN PERIOD COMPONENTS===========================================
 
 
@@ -1221,7 +1223,6 @@ export class NewAttackPage {
       let bundle2 = new Bundle("transaction");
       bundle2.addEntry("POST", medEntry.resourceType, medEntry);
       this.midataService.save(bundle2);
-
     }
       //========================= END JSON PUT MEDICATION COMPONENTS IN BUNDLE2 AND SAVE===========================================
 
