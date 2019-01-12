@@ -931,14 +931,14 @@ export class NewAttackPage {
     }
     //========================= END JSON FOR THE OBSERVATION ""Emotion""================================
 
-    //========================= START JSON FOR THE OBSERVATION ""Touch sensation""================================
+    //========================= START JSON FOR THE OBSERVATION ""Altered sensation of skin""================================
     if (this.symptome.find(val => val == "Gefühlsstörung") != null) {
 
       let codingStuff8 = {
         coding: [{
           system: 'http://snomed.info/sct',
           code: '418138009',
-          display: 'Touch sensation' //"Touch sensation .. registrieren noch 
+          display: 'Altered sensation of skin' //"Altered sensation of skin .. registrieren noch 
         }]
       }
 
@@ -954,15 +954,20 @@ export class NewAttackPage {
         _dateTime: new Date().toISOString()
       }, codingStuff8, category8);
 
-      entry8.addComponent({
-        code: {
-          coding: [{
-            system: "http://snomed.info/sct",
-            code: "130984007",
-            display: "Tactile alteration"
-          }]
-        },
-      })
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry8.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
+      }
+
+      entry8.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '279079003',
+          display: "Dysesthesia"
+        }]
+      });
 
       entry8.addComponent({
         code: {
@@ -981,8 +986,7 @@ export class NewAttackPage {
       bundle8.addEntry("POST", entry8.resourceType, entry8);
       this.midataService.save(bundle8);
     }
-    //========================= END JSON FOR THE OBSERVATION ""Touch sensation""================================
-
+    //========================= END JSON FOR THE OBSERVATION ""Altered sensation of skin""================================
 
     //========================= START JSON FOR THE OBSERVATION ""Speech observable""================================
     if (this.symptome.find(val => val == "Sprachstörung") != null) {
