@@ -1011,15 +1011,20 @@ export class NewAttackPage {
         _dateTime: new Date().toISOString()
       }, codingStuff9, category9);
 
-      entry9.addComponent({
-        code: {
-          coding: [{
-            system: "http://snomed.info/sct",
-            code: "29164008",
-            display: "Speech impairment"
-          }]
-        },
-      })
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry9.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
+      }
+
+      entry9.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '29164008',
+          display: "Speech impairment"
+        }]
+      });
 
       entry9.addComponent({
         code: {
@@ -1039,7 +1044,6 @@ export class NewAttackPage {
       this.midataService.save(bundle9);
     }
     //========================= END JSON FOR THE OBSERVATION ""Speech observable""================================
-
 
     //========================= START JSON FOR THE OBSERVATION ""Sense of smell""================================
     if (this.symptome.find(val => val == "Geruchsempfindlichkeit") != null) {
