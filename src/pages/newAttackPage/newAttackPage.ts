@@ -1103,8 +1103,6 @@ export class NewAttackPage {
     //========================= END JSON FOR THE OBSERVATION ""Sense of smell""================================
 
     //========================= START JSON FOR THE OBSERVATION ""Mental state, behavior""================================
-    if (this.symptome.find(val => val == "Stress") != null || this.symptome.find(val => val == "Leseschwäche") != null) {
-
       let codingStuff11 = {
         coding: [{
           system: 'http://snomed.info/sct',
@@ -1121,38 +1119,58 @@ export class NewAttackPage {
         }],
       }
 
+      //Observation: Stress
+      if (this.symptome.find(val => val == "Stress") != null) {
       let entry11 = new Observation({
         _dateTime: new Date().toISOString()
       }, codingStuff11, category11);
 
-      if (this.symptome.find(val => val == "Stress") != null) {
-        entry11.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "73595000",
-              display: "Stress"
-            }]
-          },
-        })
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry11.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
       }
 
-      if (this.symptome.find(val => val == "Leseschwäche") != null) {
-        entry11.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "309253009",
-              display: "Difficulty reading"
-            }]
-          },
-        })
-      }
+      entry11.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '73595000',
+          display: "Stress"
+        }]
+      });
 
       let bundle11 = new Bundle("transaction");
       bundle11.addEntry("POST", entry11.resourceType, entry11);
       this.midataService.save(bundle11);
-    }
+      }
+      //-----------------------------------------------------------------------------
+      //Observation: Leseschwäche
+      if (this.symptome.find(val => val == "Leseschwäche") != null) {
+        let entry11_1 = new Observation({
+          _dateTime: new Date().toISOString()
+        }, codingStuff11, category11);
+
+        if (this.fromDateTime != null && this.untilDateTime != null) {
+          entry11_1.addProperty("effectivePeriod", {
+            start: this.fromDateTime,
+            end: this.untilDateTime
+          });
+        }
+  
+        entry11_1.addProperty("valueCodeableConcept", {
+          coding: [{
+            system: 'http://snomed.info/sct',
+            code: '309253009',
+            display: "Difficulty reading"
+          }]
+        });
+
+      let bundle11_1 = new Bundle("transaction");
+      bundle11_1.addEntry("POST", entry11_1.resourceType, entry11_1);
+      this.midataService.save(bundle11_1);
+      }
+    
     //========================= END JSON FOR THE OBSERVATION ""Mental state, behavior""================================
 
     //========================= START JSON FOR THE OBSERVATION ""Female reproductive function""================================
@@ -1178,16 +1196,20 @@ export class NewAttackPage {
         _dateTime: new Date().toISOString()
       }, codingStuff12, category12);
 
-      entry12.addComponent({
-        code: {
-          coding: [{
-            system: "http://snomed.info/sct",
-            code: "276319003",
-            display: "Menstruation finding"
-          }]
-        },
-      })
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry12.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
+      }
 
+      entry12.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '276319003',
+          display: "Menstruation finding"
+        }]
+      });
 
       let bundle12 = new Bundle("transaction");
       bundle12.addEntry("POST", entry12.resourceType, entry12);
