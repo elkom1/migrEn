@@ -728,9 +728,9 @@ export class NewAttackPage {
         }
       })
 
-    let bundle4_5 = new Bundle("transaction");
-    bundle4_5.addEntry("POST", entry4_5.resourceType, entry4_5);
-    this.midataService.save(bundle4_5);
+      let bundle4_5 = new Bundle("transaction");
+      bundle4_5.addEntry("POST", entry4_5.resourceType, entry4_5);
+      this.midataService.save(bundle4_5);
     }
     //========================= END JSON FOR THE OBSERVATION "Nausea and Vomiting Status"================================ 
 
@@ -848,73 +848,88 @@ export class NewAttackPage {
     }
     //========================= END JSON FOR THE OBSERVATION ""General reaction to light""================================
 
-
     //========================= START JSON FOR THE OBSERVATION ""Emotion""================================
-    if (this.symptome.find(val => val == "Lärmempfindlichkeit") != null || this.symptome.find(val => val == "Erholung") != null) {
+    let codingStuff7 = {
+      coding: [{
+        system: 'http://snomed.info/sct',
+        code: '418138009',
+        display: 'Emotion' //"Emotion .. registrieren noch 
+      }]
+    }
 
-      let codingStuff7 = {
-        coding: [{
-          system: 'http://snomed.info/sct',
-          code: '418138009',
-          display: 'Emotion' //"Emotion .. registrieren noch 
-        }]
-      }
+    let category7 = {
+      coding: [{
+        system: 'http://hl7.org/fhir/observation-category',
+        code: 'survey',
+        display: 'Survey'
+      }],
+    }
 
-      let category7 = {
-        coding: [{
-          system: 'http://hl7.org/fhir/observation-category',
-          code: 'survey',
-          display: 'Survey'
-        }],
-      }
-
+    //Observation: Phonophobia
+    if (this.symptome.find(val => val == "Lärmempfindlichkeit") != null) {
       let entry7 = new Observation({
         _dateTime: new Date().toISOString()
       }, codingStuff7, category7);
 
-      if (this.symptome.find(val => val == "Lärmempfindlichkeit") != null) {
-        entry7.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "313387002",
-              display: "Phonophobia"
-            }]
-          },
-        })
-
-        entry7.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "425401001",
-              display: "Pain intensity rating scale"
-            }]
-          },
-          valueQuantity: {
-            value: this.intensityPhonophobia
-          }
-        })
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry7.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
       }
 
-      if (this.symptome.find(val => val == "Erholung") != null) {
-        entry7.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "102894008",
-              display: "Feeling calm"
-            }]
-          },
-        })
-      }
+      entry7.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '313387002',
+          display: "Phonophobia"
+        }]
+      });
+
+      entry7.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "425401001",
+            display: "Pain intensity rating scale"
+          }]
+        },
+        valueQuantity: {
+          value: this.intensityPhonophobia
+        }
+      })
 
       let bundle7 = new Bundle("transaction");
       bundle7.addEntry("POST", entry7.resourceType, entry7);
       this.midataService.save(bundle7);
     }
-    //========================= END JSON FOR THE OBSERVATION ""Emotion""================================
 
+    //Observation: Erholung
+    if (this.symptome.find(val => val == "Erholung") != null) {
+      let entry7_1 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff7, category7);
+
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry7_1.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
+      }
+
+      entry7_1.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '102894008',
+          display: "Feeling calm"
+        }]
+      });
+
+      let bundle7_1 = new Bundle("transaction");
+      bundle7_1.addEntry("POST", entry7_1.resourceType, entry7_1);
+      this.midataService.save(bundle7_1);
+    }
+    //========================= END JSON FOR THE OBSERVATION ""Emotion""================================
 
     //========================= START JSON FOR THE OBSERVATION ""Touch sensation""================================
     if (this.symptome.find(val => val == "Gefühlsstörung") != null) {
