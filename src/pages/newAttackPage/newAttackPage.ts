@@ -28,20 +28,13 @@ import {
   BarcodeScanner
 } from '@ionic-native/barcode-scanner';
 import {
-  getLocaleDateTimeFormat,
-  getLocaleCurrencySymbol,
-  getLocaleDateFormat
-} from '@angular/common';
-import {
   medicationStatus,
   medicationTaken
 } from 'Midata/dist/src/resources/MedicationStatement';
 import {
-  renderDateTime
-} from 'ionic-angular/umd/util/datetime-util';
-import {
-  text
-} from '@angular/core/src/render3/instructions';
+  endTimeRange
+} from '@angular/core/src/profile/wtf_impl';
+
 
 @Component({
   selector: 'page-newAttack',
@@ -64,36 +57,34 @@ export class NewAttackPage {
   medEffect: string;
 
   intensityWateryEye: number = 0;
-  intensityRedEye: number = 0; 
-  intensityNasenLaufen: number = 0; 
-  intensityNasenVerstopfung: number = 0; 
-  intensityFlimmerSehen: number = 0; 
-  intensityPhotophobia: number = 0; 
-  intensityPhonophobia: number = 0; 
-  intensityTouchSensation: number = 0; 
-  intensitySpeechDisorder: number = 0; 
-  intensitySmellSensitivity: number = 0; 
-  intensityVomiting: number = 0; 
-  intensityNausea: number = 0; 
-  intensityStress: number = 0; 
+  intensityRedEye: number = 0;
+  intensityNasenLaufen: number = 0;
+  intensityNasenVerstopfung: number = 0;
+  intensityFlimmerSehen: number = 0;
+  intensityPhotophobia: number = 0;
+  intensityPhonophobia: number = 0;
+  intensityTouchSensation: number = 0;
+  intensitySpeechDisorder: number = 0;
+  intensitySmellSensitivity: number = 0;
+  intensityVomiting: number = 0;
+  intensityNausea: number = 0;
 
   selectedOther = false;
   selectedOther3 = false;
   selectedOther4 = false;
   selectedHeadache = false;
-  selectedWateryEye = false; 
-  selectedRedEye = false; 
-  selectedNasenLaufen = false; 
-  selectedNasenVerstopfung = false; 
-  selectedFlimmerSehen = false; 
+  selectedWateryEye = false;
+  selectedRedEye = false;
+  selectedNasenLaufen = false;
+  selectedNasenVerstopfung = false;
+  selectedFlimmerSehen = false;
   selectedPhotophobia = false;
   selectedPhonophobia = false;
-  selectedTouchSensation = false; 
-  selectedSpeechDisorder = false;  
-  selectedSmellSensitivity = false;  
-  selectedVomiting = false; 
-  selectedNausea = false; 
-  selectedStress = false; 
+  selectedTouchSensation = false;
+  selectedSpeechDisorder = false;
+  selectedSmellSensitivity = false;
+  selectedVomiting = false;
+  selectedNausea = false;
 
   group: FormGroup;
 
@@ -135,7 +126,6 @@ export class NewAttackPage {
       intensitySmellSensitivity: new FormControl(''),
       intensityVomiting: new FormControl(''),
       intensityNausea: new FormControl(''),
-      intensityStress: new FormControl(''),
 
     })
     this.symptome = [];
@@ -147,7 +137,7 @@ export class NewAttackPage {
 
   ngAfterViewInit() {
     this.menge = 1;
-   
+
   }
 
   //-------------------------------------START ONCHANGE METHODS FOR "OTHER SELECTION"------------------------
@@ -155,7 +145,7 @@ export class NewAttackPage {
     this.selectedOther = this.symptome.find(val => val == "Andere") == null ? false : true
     this.selectedHeadache = this.symptome.find(value => value == "Kopfschmerzen") == null ? false : true
     this.selectedWateryEye = this.symptome.find(value => value == "Tränende Augen") == null ? false : true
-    this.selectedRedEye = this.symptome.find(value => value == "Rötliche Augen") == null ? false : true
+    this.selectedRedEye = this.symptome.find(value => value == "Gerötete Augen") == null ? false : true
     this.selectedNasenLaufen = this.symptome.find(value => value == "Nasenlaufen") == null ? false : true
     this.selectedNasenVerstopfung = this.symptome.find(value => value == "Nasenverstopfung") == null ? false : true
     this.selectedFlimmerSehen = this.symptome.find(value => value == "Flimmersehen") == null ? false : true
@@ -166,7 +156,6 @@ export class NewAttackPage {
     this.selectedSmellSensitivity = this.symptome.find(value => value == "Geruchsempfindlichkeit") == null ? false : true
     this.selectedVomiting = this.symptome.find(value => value == "Erbrechen") == null ? false : true
     this.selectedNausea = this.symptome.find(value => value == "Übelkeit") == null ? false : true
-    this.selectedStress = this.symptome.find(value => value == "Stress") == null ? false : true
   }
 
   onChangePainType() {
@@ -309,7 +298,7 @@ export class NewAttackPage {
     alert.present();
 
     // //========================= START JSON ADD SITUATION COMPONENTS===========================================
-    if (this.situation != null) {
+    if (this.situation.match("migräneanfall")) {
       let coding1 = {
         coding: [{
           system: 'http://snomed.info/sct',
@@ -330,16 +319,20 @@ export class NewAttackPage {
         _dateTime: new Date().toISOString()
       }, coding1, category1);
 
-      entry1.addComponent({
-        code: {
-          coding: [{
-            system: "http://snomed.info/sct",
-            code: "216299002",
-            display: "Attack"
-          }]
-        },
-        valueString: (this.situation.match("unwohlsein")) ? "No" : "yes"
-      })
+      entry1.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '216299002',
+          display: 'Attack'
+        }]
+      });
+
+      if(this.fromDateTime != null && this.untilDateTime != null) {
+      entry1.addProperty("effectivePeriod", {
+        start: this.fromDateTime,
+        end: this.untilDateTime
+      });
+    }
 
       let bundle1 = new Bundle("transaction");
       bundle1.addEntry("POST", entry1.resourceType, entry1);
@@ -371,90 +364,84 @@ export class NewAttackPage {
         _dateTime: new Date().toISOString()
       }, codingStuff, category);
 
+      if(this.fromDateTime != null && this.untilDateTime != null) {
+      entry.addProperty("effectivePeriod", {
+        start: this.fromDateTime,
+        end: this.untilDateTime
+      });
+    }
+
       if (this.painAreal != null) {
         if (this.painAreal.match("Kopf rechtsseitig")) {
-          entry.addComponent({
-            code: {
-              coding: [{
-                system: "http://snomed.info/sct",
-                code: "29624005",
-                display: "Right side of head"
-              }]
-            },
-          })
+          entry.addProperty("bodySite", {
+            coding: [{
+              system: 'http://snomed.info/sct',
+              code: '29624005',
+              display: 'Right side of head'
+            }]
+          });
         }
 
         if (this.painAreal.match("Kopf linksseitig")) {
-          entry.addComponent({
-            code: {
-              coding: [{
-                system: "http://snomed.info/sct",
-                code: "64237003",
-                display: "Left side of head"
-              }]
-            },
-          })
+          entry.addProperty("bodySite", {
+            coding: [{
+              system: 'http://snomed.info/sct',
+              code: '64237003',
+              display: 'Left side of head'
+            }]
+          });
         }
 
         if (this.painAreal.match("Kopf beidseitig")) {
-          entry.addComponent({
-            code: {
-              coding: [{
-                system: "http://snomed.info/sct",
-                code: "162301005",
-                display: "Bilateral headache"
-              }]
-            },
-          })
+          entry.addProperty("bodySite", {
+            coding: [{
+              system: 'http://snomed.info/sct',
+              code: '162301005',
+              display: 'Bilateral headache'
+            }]
+          });
         }
       }
 
       if (this.painType != null) {
         if (this.painType.match("Starker Schmerz")) {
-          entry.addComponent({
-            code: {
-              coding: [{
-                system: "http://snomed.info/sct",
-                code: "162307009",
-                display: "Aching headache"
-              }]
-            },
-          })
+          entry.addProperty("valueCodeableConcept", {
+            coding: [{
+              system: 'http://snomed.info/sct',
+              code: '162307009',
+              display: 'Aching headache'
+            }]
+          });
         }
 
         if (this.painType.match("Stechender Schmerz")) {
-          entry.addComponent({
-            code: {
-              coding: [{
-                system: "http://snomed.info/sct",
-                code: "162308004",
-                display: "Throbbing headache"
-              }]
-            },
-          })
+          entry.addProperty("valueCodeableConcept", {
+            coding: [{
+              system: 'http://snomed.info/sct',
+              code: '162308004',
+              display: 'Throbbing headache'
+            }]
+          });
         }
 
         if (this.painType.match("Dumpfer Schmerz")) {
-          entry.addComponent({
-            code: {
-              coding: [{
-                system: "http://snomed.info/sct",
-                code: "162309007",
-                display: "Shooting headache"
-              }]
-            },
-          })
+          entry.addProperty("valueCodeableConcept", {
+            coding: [{
+              system: 'http://snomed.info/sct',
+              code: '162309007',
+              display: 'Shooting headache'
+            }]
+          });
         }
 
         if (this.painType.match("Andere")) {
-          entry.addComponent({
-            code: {
-              coding: [{
-                display: "Other pain type"
-              }]
-            },
-            valueString: this.otherPainType
-          })
+          entry.addProperty("valueCodeableConcept", {
+            coding: [{
+              system: 'http://snomed.info/sct',
+              code: '74964007',
+              display: this.otherPainType
+            }]
+          });
         }
       }
 
@@ -479,7 +466,7 @@ export class NewAttackPage {
 
 
     //========================= START JSON FOR THE OBSERVATION ""Clinical finding present""================================
-    if (this.symptome.find(val => val == "Tränende Augen") != null || this.symptome.find(val => val == "Rötliche Augen") != null || this.symptome.find(val => val == "Nasenlaufen") != null || this.symptome.find(val => val == "Nasenverstopfung") != null || this.symptome.find(val => val == "Übelkeit") != null) {
+    if (this.symptome.find(val => val == "Tränende Augen") != null || this.symptome.find(val => val == "Gerötete Augen") != null || this.symptome.find(val => val == "Nasenlaufen") != null || this.symptome.find(val => val == "Nasenverstopfung") != null || this.symptome.find(val => val == "Übelkeit") != null) {
 
       let codingStuff4 = {
         coding: [{
@@ -525,7 +512,7 @@ export class NewAttackPage {
         })
       }
 
-      if (this.symptome.find(val => val == "Rötliche Augen") != null) {
+      if (this.symptome.find(val => val == "Gerötete Augen") != null) {
         entry4.addComponent({
           code: {
             coding: [{
@@ -1016,18 +1003,6 @@ export class NewAttackPage {
             }]
           },
         })
-        entry11.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "425401001",
-              display: "Pain intensity rating scale"
-            }]
-          },
-          valueQuantity: {
-            value: this.intensityStress
-          }
-        })
       }
 
       if (this.symptome.find(val => val == "Leseschwäche") != null) {
@@ -1128,47 +1103,47 @@ export class NewAttackPage {
 
     //========================= START JSON ADD PAIN PERIOD COMPONENTS===========================================
     if (this.fromDateTime != null && this.untilDateTime != null) {
-    let coding3 = {
-      coding: [{
-        system: 'http://midata.coop',
-        code: 'user-observation',
-        display: 'User Observation'
-      }]
-    }
-
-    let category3 = {
-      coding: [{
-        system: 'http://hl7.org/fhir/observation-category',
-        code: 'survey',
-        display: 'Survey'
-      }],
-    }
-
-    let entry3 = new Observation({
-      _dateTime: new Date().toISOString()
-    }, coding3, category3);
-
-    entry3.addComponent({
-      code: {
+      let coding3 = {
         coding: [{
-          display: "Start time of pain"
+          system: 'http://midata.coop',
+          code: 'user-observation',
+          display: 'User Observation'
         }]
-      },
-      valueDateTime: "" + this.fromDateTime
-    })
+      }
 
-    entry3.addComponent({
-      code: {
+      let category3 = {
         coding: [{
-          display: "End time of pain"
-        }]
-      },
-      valueDateTime: "" + this.untilDateTime
-    })
+          system: 'http://hl7.org/fhir/observation-category',
+          code: 'survey',
+          display: 'Survey'
+        }],
+      }
 
-    let bundle3 = new Bundle("transaction");
-    bundle3.addEntry("POST", entry3.resourceType, entry3);
-    this.midataService.save(bundle3);
+      let entry3 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, coding3, category3);
+
+      entry3.addComponent({
+        code: {
+          coding: [{
+            display: "Start time of pain"
+          }]
+        },
+        valueDateTime: "" + this.fromDateTime
+      })
+
+      entry3.addComponent({
+        code: {
+          coding: [{
+            display: "End time of pain"
+          }]
+        },
+        valueDateTime: "" + this.untilDateTime
+      })
+
+      let bundle3 = new Bundle("transaction");
+      bundle3.addEntry("POST", entry3.resourceType, entry3);
+      this.midataService.save(bundle3);
     }
     //========================= END JSON ADD PAIN PERIOD COMPONENTS===========================================
 
@@ -1224,34 +1199,33 @@ export class NewAttackPage {
       bundle2.addEntry("POST", medEntry.resourceType, medEntry);
       this.midataService.save(bundle2);
     }
-      //========================= END JSON PUT MEDICATION COMPONENTS IN BUNDLE2 AND SAVE===========================================
+    //========================= END JSON PUT MEDICATION COMPONENTS IN BUNDLE2 AND SAVE===========================================
 
-      //update the input fields 
-      this.situation = null;
-      this.symptome = null;
-      this.fromDateTime = null;
-      this.untilDateTime = null;
-      this.medicament = null;
-      this.menge = 1;
-      this.medEffect = null;
-      this.selectedHeadache = false; 
-      this.selectedOther = false; 
-      this.selectedOther3 = false; 
-      this.selectedOther4 = false; 
-      this.selectedWateryEye = false; 
-      this.selectedRedEye = false; 
-      this.selectedNasenLaufen = false; 
-      this.selectedNasenVerstopfung = false; 
-      this.selectedFlimmerSehen = false; 
-      this.selectedPhotophobia = false;
-      this.selectedPhonophobia = false;
-      this.selectedTouchSensation = false; 
-      this.selectedSpeechDisorder = false;  
-      this.selectedSmellSensitivity = false;  
-      this.selectedVomiting = false; 
-      this.selectedNausea = false; 
-      this.selectedStress = false; 
-    
+    //update the input fields 
+    this.situation = null;
+    this.symptome = null;
+    this.fromDateTime = null;
+    this.untilDateTime = null;
+    this.medicament = null;
+    this.menge = 1;
+    this.medEffect = null;
+    this.selectedHeadache = false;
+    this.selectedOther = false;
+    this.selectedOther3 = false;
+    this.selectedOther4 = false;
+    this.selectedWateryEye = false;
+    this.selectedRedEye = false;
+    this.selectedNasenLaufen = false;
+    this.selectedNasenVerstopfung = false;
+    this.selectedFlimmerSehen = false;
+    this.selectedPhotophobia = false;
+    this.selectedPhonophobia = false;
+    this.selectedTouchSensation = false;
+    this.selectedSpeechDisorder = false;
+    this.selectedSmellSensitivity = false;
+    this.selectedVomiting = false;
+    this.selectedNausea = false;
+
   }
   //-------------------------------- END PERSISTENCE IN MIDATA OF ALL THE INPUT FIELDS---------------------------------------------------------
 
