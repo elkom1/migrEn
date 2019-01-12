@@ -814,15 +814,20 @@ export class NewAttackPage {
         _dateTime: new Date().toISOString()
       }, codingStuff6, category6);
 
-      entry6.addComponent({
-        code: {
-          coding: [{
-            system: "http://snomed.info/sct",
-            code: "409668002",
-            display: "Photophobia"
-          }]
-        },
-      })
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry6.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
+      }
+
+      entry6.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '409668002',
+          display: "Photophobia"
+        }]
+      });
 
       entry6.addComponent({
         code: {
