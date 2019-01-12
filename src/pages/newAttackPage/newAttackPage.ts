@@ -1052,7 +1052,7 @@ export class NewAttackPage {
         coding: [{
           system: 'http://snomed.info/sct',
           code: '418138009',
-          display: 'Sense of smell' //"Sense of smell .. registrieren noch 
+          display: 'Sense of smell, function' //"Sense of smell .. registrieren noch 
         }]
       }
 
@@ -1068,15 +1068,20 @@ export class NewAttackPage {
         _dateTime: new Date().toISOString()
       }, codingStuff10, category10);
 
-      entry10.addComponent({
-        code: {
-          coding: [{
-            system: "http://snomed.info/sct",
-            code: "45846002",
-            display: "Sensitive to smells"
-          }]
-        },
-      })
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry10.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
+      }
+
+      entry10.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '45846002',
+          display: "Sensitive to smells"
+        }]
+      });
 
       entry10.addComponent({
         code: {
