@@ -327,12 +327,12 @@ export class NewAttackPage {
         }]
       });
 
-      if(this.fromDateTime != null && this.untilDateTime != null) {
-      entry1.addProperty("effectivePeriod", {
-        start: this.fromDateTime,
-        end: this.untilDateTime
-      });
-    }
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry1.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
+      }
 
       let bundle1 = new Bundle("transaction");
       bundle1.addEntry("POST", entry1.resourceType, entry1);
@@ -364,12 +364,12 @@ export class NewAttackPage {
         _dateTime: new Date().toISOString()
       }, codingStuff, category);
 
-      if(this.fromDateTime != null && this.untilDateTime != null) {
-      entry.addProperty("effectivePeriod", {
-        start: this.fromDateTime,
-        end: this.untilDateTime
-      });
-    }
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
+      }
 
       if (this.painAreal != null) {
         if (this.painAreal.match("Kopf rechtsseitig")) {
@@ -465,136 +465,200 @@ export class NewAttackPage {
     //========================= END JSON FOR THE OBSERVATION "Headache Character"================================
 
 
-    //========================= START JSON FOR THE OBSERVATION ""Clinical finding present""================================
-    if (this.symptome.find(val => val == "Tränende Augen") != null || this.symptome.find(val => val == "Gerötete Augen") != null || this.symptome.find(val => val == "Nasenlaufen") != null || this.symptome.find(val => val == "Nasenverstopfung") != null || this.symptome.find(val => val == "Übelkeit") != null) {
+    //========================= START JSON FOR THE OBSERVATIONS ""Clinical finding present""================================
+    let codingStuff4 = {
+      coding: [{
+        system: 'http://snomed.info/sct',
+        code: '418138009',
+        display: 'Clinical finding present' //"Clinical finding present" .. registrieren noch 
+      }]
+    }
 
-      let codingStuff4 = {
-        coding: [{
-          system: 'http://snomed.info/sct',
-          code: '418138009',
-          display: 'Clinical finding present' //"Clinical finding present" .. registrieren noch 
-        }]
-      }
+    let category4 = {
+      coding: [{
+        system: 'http://hl7.org/fhir/observation-category',
+        code: 'survey',
+        display: 'Survey'
+      }],
+    }
 
-      let category4 = {
-        coding: [{
-          system: 'http://hl7.org/fhir/observation-category',
-          code: 'survey',
-          display: 'Survey'
-        }],
-      }
-
+    //Observation1: Tränende Augen
+    if (this.symptome.find(val => val == "Tränende Augen") != null) {
       let entry4 = new Observation({
         _dateTime: new Date().toISOString()
       }, codingStuff4, category4);
 
-      if (this.symptome.find(val => val == "Tränende Augen") != null) {
-        entry4.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "420103007",
-              display: "Watery eye"
-            }]
-          },
-        })
-        entry4.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "425401001",
-              display: "Pain intensity rating scale"
-            }]
-          },
-          valueQuantity: {
-            value: this.intensityWateryEye
-          }
-        })
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry4.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
       }
 
-      if (this.symptome.find(val => val == "Gerötete Augen") != null) {
-        entry4.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "703630003",
-              display: "Red eye"
-            }]
-          },
-        })
-        entry4.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "425401001",
-              display: "Pain intensity rating scale"
-            }]
-          },
-          valueQuantity: {
-            value: this.intensityRedEye
-          }
-        })
+      entry4.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '267092007',
+          display: "Has eye discharge"
+        }]
+      });
+
+      entry4.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "425401001",
+            display: "Pain intensity rating scale"
+          }]
+        },
+        valueQuantity: {
+          value: this.intensityWateryEye
+        }
+      })
+
+      let bundle4 = new Bundle("transaction");
+      bundle4.addEntry("POST", entry4.resourceType, entry4);
+      this.midataService.save(bundle4);
+    }
+    //--------------------------------------------------------------------------------------
+    //Observation2: Gerötete Augen
+    if (this.symptome.find(val => val == "Gerötete Augen") != null) {
+      let entry4_1 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff4, category4);
+
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry4_1.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
       }
 
-      if (this.symptome.find(val => val == "Nasenlaufen") != null) {
-        entry4.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "703630003",
-              display: "Nasal discharge"
-            }]
-          },
-        })
-        entry4.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "425401001",
-              display: "Pain intensity rating scale"
-            }]
-          },
-          valueQuantity: {
-            value: this.intensityNasenLaufen
-          }
-        })
+      entry4_1.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '267093002',
+          display: "has red eye"
+        }]
+      });
+
+      entry4_1.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "425401001",
+            display: "Pain intensity rating scale"
+          }]
+        },
+        valueQuantity: {
+          value: this.intensityRedEye
+        }
+      })
+
+      let bundle4_1 = new Bundle("transaction");
+      bundle4_1.addEntry("POST", entry4_1.resourceType, entry4_1);
+      this.midataService.save(bundle4_1);
+    }
+    //-----------------------------------------------------------------------------------------
+    //Observation3: Nasenlaufen
+    if (this.symptome.find(val => val == "Nasenlaufen") != null) {
+      let entry4_2 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff4, category4);
+
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry4_2.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
       }
 
-      if (this.symptome.find(val => val == "Nasenverstopfung") != null) {
-        entry4.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "119711004",
-              display: "Nose closure"
-            }]
-          },
-        })
-        entry4.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "425401001",
-              display: "Pain intensity rating scale"
-            }]
-          },
-          valueQuantity: {
-            value: this.intensityNasenVerstopfung
-          }
-        })
+      entry4_2.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '267101005',
+          display: "Nasal discharge present"
+        }]
+      });
+
+      entry4_2.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "425401001",
+            display: "Pain intensity rating scale"
+          }]
+        },
+        valueQuantity: {
+          value: this.intensityNasenLaufen
+        }
+      })
+
+      let bundle4_2 = new Bundle("transaction");
+      bundle4_2.addEntry("POST", entry4_2.resourceType, entry4_2);
+      this.midataService.save(bundle4_2);
+    }
+    //--------------------------------------------------------------------------------------
+    //Observation4: Nasenverstopfung
+    if (this.symptome.find(val => val == "Nasenverstopfung") != null) {
+      let entry4_3 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff4, category4);
+
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry4_3.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
       }
 
-      if (this.symptome.find(val => val == "Übelkeit") != null) {
-        entry4.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "162057007",
-              display: "Nausea"
-            }]
-          },
-        })
-        entry4.addComponent({
+      entry4_3.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '267100006',
+          display: "Nasal obstruction present"
+        }]
+      });
+
+      entry4_3.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "425401001",
+            display: "Pain intensity rating scale"
+          }]
+        },
+        valueQuantity: {
+          value: this.intensityNasenVerstopfung
+        }
+      })
+
+      let bundle4_3 = new Bundle("transaction");
+      bundle4_3.addEntry("POST", entry4_3.resourceType, entry4_3);
+      this.midataService.save(bundle4_3);
+    }
+    //-----------------------------------------------------------------------------------------
+    //Observation5: Übelkeit
+    if (this.symptome.find(val => val == "Übelkeit") != null) {
+      let entry4_4 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff4, category4);
+
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry4_4.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
+
+        entry4_4.addProperty("valueCodeableConcept", {
+          coding: [{
+            system: 'http://snomed.info/sct',
+            code: '162057007',
+            display: "Nausea present"
+          }]
+        });
+
+        entry4_4.addComponent({
           code: {
             coding: [{
               system: "http://snomed.info/sct",
@@ -608,36 +672,67 @@ export class NewAttackPage {
         })
       }
 
-      if (this.symptome.find(val => val == "Erbrechen") != null) {
-        entry4.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "422400008",
-              display: "Vomiting"
-            }]
-          },
-        })
-        entry4.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "425401001",
-              display: "Pain intensity rating scale"
-            }]
-          },
-          valueQuantity: {
-            value: this.intensityVomiting
-          }
-        })
-      }
-
-      let bundle4 = new Bundle("transaction");
-      bundle4.addEntry("POST", entry4.resourceType, entry4);
-      this.midataService.save(bundle4);
+      let bundle4_4 = new Bundle("transaction");
+      bundle4_4.addEntry("POST", entry4_4.resourceType, entry4_4);
+      this.midataService.save(bundle4_4);
     }
     //========================= END JSON FOR THE OBSERVATION "Clinical finding present"================================
 
+    //========================= START JSON FOR THE OBSERVATION "Nausea and Vomiting Status"================================ 
+    if (this.symptome.find(val => val == "Erbrechen") != null) {
+      let codingStuff4_5 = {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '418138009',
+          display: 'Nausea and Vomiting Status' //noch registrieren auf MIDATA 
+        }]
+      }
+
+      let category4_5 = {
+        coding: [{
+          system: 'http://hl7.org/fhir/observation-category',
+          code: 'survey',
+          display: 'Survey'
+        }],
+      }
+
+      let entry4_5 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff4_5, category4_5);
+
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry4_5.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
+      }
+
+      entry4_5.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '422400008',
+          display: "Vomiting"
+        }]
+      });
+
+      entry4_5.addComponent({
+        code: {
+          coding: [{
+            system: "http://snomed.info/sct",
+            code: "425401001",
+            display: "Pain intensity rating scale"
+          }]
+        },
+        valueQuantity: {
+          value: this.intensityVomiting
+        }
+      })
+
+    let bundle4_5 = new Bundle("transaction");
+    bundle4_5.addEntry("POST", entry4_5.resourceType, entry4_5);
+    this.midataService.save(bundle4_5);
+    }
+    //========================= END JSON FOR THE OBSERVATION "Nausea and Vomiting Status"================================ 
 
     //========================= START JSON FOR THE OBSERVATION ""Visual function""================================
     if (this.symptome.find(val => val == "Flimmersehen") != null) {
@@ -1100,53 +1195,6 @@ export class NewAttackPage {
       this.midataService.save(bundle13);
     }
     //========================= END JSON FOR THE OBSERVATION ""Other Symptoms""================================
-
-    //========================= START JSON ADD PAIN PERIOD COMPONENTS===========================================
-    if (this.fromDateTime != null && this.untilDateTime != null) {
-      let coding3 = {
-        coding: [{
-          system: 'http://midata.coop',
-          code: 'user-observation',
-          display: 'User Observation'
-        }]
-      }
-
-      let category3 = {
-        coding: [{
-          system: 'http://hl7.org/fhir/observation-category',
-          code: 'survey',
-          display: 'Survey'
-        }],
-      }
-
-      let entry3 = new Observation({
-        _dateTime: new Date().toISOString()
-      }, coding3, category3);
-
-      entry3.addComponent({
-        code: {
-          coding: [{
-            display: "Start time of pain"
-          }]
-        },
-        valueDateTime: "" + this.fromDateTime
-      })
-
-      entry3.addComponent({
-        code: {
-          coding: [{
-            display: "End time of pain"
-          }]
-        },
-        valueDateTime: "" + this.untilDateTime
-      })
-
-      let bundle3 = new Bundle("transaction");
-      bundle3.addEntry("POST", entry3.resourceType, entry3);
-      this.midataService.save(bundle3);
-    }
-    //========================= END JSON ADD PAIN PERIOD COMPONENTS===========================================
-
 
     //========================= START JSON FOR THE MEDICATION STATEMENT================================
     if (this.medicament != null) {
