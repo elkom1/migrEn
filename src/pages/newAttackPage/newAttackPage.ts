@@ -757,15 +757,20 @@ export class NewAttackPage {
         _dateTime: new Date().toISOString()
       }, codingStuff5, category5);
 
-      entry5.addComponent({
-        code: {
-          coding: [{
-            system: "http://snomed.info/sct",
-            code: "73905001",
-            display: "Sees flickering lights"
-          }]
-        },
-      })
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry5.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
+      }
+
+      entry5.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '73905001',
+          display: "Sees flickering lights"
+        }]
+      });
 
       entry5.addComponent({
         code: {
@@ -785,7 +790,6 @@ export class NewAttackPage {
       this.midataService.save(bundle5);
     }
     //========================= END JSON FOR THE OBSERVATION ""Visual function""================================
-
 
     //========================= START JSON FOR THE OBSERVATION ""General reaction to light""================================
     if (this.symptome.find(val => val == "Lichtempfindlichkeit") != null) {
