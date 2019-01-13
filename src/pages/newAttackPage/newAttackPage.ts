@@ -136,8 +136,8 @@ export class NewAttackPage {
   //-------------------------------------END CONSTRUCTOR ----------------------------------------------------
 
   ngAfterViewInit() {
+    this.situation = "migräneanfall";
     this.menge = 1;
-
   }
 
   //-------------------------------------START ONCHANGE METHODS FOR "OTHER SELECTION"------------------------
@@ -1103,24 +1103,24 @@ export class NewAttackPage {
     //========================= END JSON FOR THE OBSERVATION ""Sense of smell""================================
 
     //========================= START JSON FOR THE OBSERVATION ""Mental state, behavior""================================
-      let codingStuff11 = {
-        coding: [{
-          system: 'http://snomed.info/sct',
-          code: '418138009',
-          display: 'Mental state, behavior' //"Mental state, behavior .. registrieren noch 
-        }]
-      }
+    let codingStuff11 = {
+      coding: [{
+        system: 'http://snomed.info/sct',
+        code: '418138009',
+        display: 'Mental state, behavior' //"Mental state, behavior .. registrieren noch 
+      }]
+    }
 
-      let category11 = {
-        coding: [{
-          system: 'http://hl7.org/fhir/observation-category',
-          code: 'survey',
-          display: 'Survey'
-        }],
-      }
+    let category11 = {
+      coding: [{
+        system: 'http://hl7.org/fhir/observation-category',
+        code: 'survey',
+        display: 'Survey'
+      }],
+    }
 
-      //Observation: Stress
-      if (this.symptome.find(val => val == "Stress") != null) {
+    //Observation: Stress
+    if (this.symptome.find(val => val == "Stress") != null) {
       let entry11 = new Observation({
         _dateTime: new Date().toISOString()
       }, codingStuff11, category11);
@@ -1143,34 +1143,34 @@ export class NewAttackPage {
       let bundle11 = new Bundle("transaction");
       bundle11.addEntry("POST", entry11.resourceType, entry11);
       this.midataService.save(bundle11);
-      }
-      //-----------------------------------------------------------------------------
-      //Observation: Leseschwäche
-      if (this.symptome.find(val => val == "Leseschwäche") != null) {
-        let entry11_1 = new Observation({
-          _dateTime: new Date().toISOString()
-        }, codingStuff11, category11);
+    }
+    //-----------------------------------------------------------------------------
+    //Observation: Leseschwäche
+    if (this.symptome.find(val => val == "Leseschwäche") != null) {
+      let entry11_1 = new Observation({
+        _dateTime: new Date().toISOString()
+      }, codingStuff11, category11);
 
-        if (this.fromDateTime != null && this.untilDateTime != null) {
-          entry11_1.addProperty("effectivePeriod", {
-            start: this.fromDateTime,
-            end: this.untilDateTime
-          });
-        }
-  
-        entry11_1.addProperty("valueCodeableConcept", {
-          coding: [{
-            system: 'http://snomed.info/sct',
-            code: '309253009',
-            display: "Difficulty reading"
-          }]
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry11_1.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
         });
+      }
+
+      entry11_1.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '309253009',
+          display: "Difficulty reading"
+        }]
+      });
 
       let bundle11_1 = new Bundle("transaction");
       bundle11_1.addEntry("POST", entry11_1.resourceType, entry11_1);
       this.midataService.save(bundle11_1);
-      }
-    
+    }
+
     //========================= END JSON FOR THE OBSERVATION ""Mental state, behavior""================================
 
     //========================= START JSON FOR THE OBSERVATION ""Female reproductive function""================================
@@ -1224,7 +1224,7 @@ export class NewAttackPage {
         coding: [{
           system: 'http://snomed.info/sct',
           code: '418138009',
-          display: 'Other Symptoms'
+          display: 'Other Symptom' // Muss noch registriert werden 
         }]
       }
 
@@ -1240,14 +1240,20 @@ export class NewAttackPage {
         _dateTime: new Date().toISOString()
       }, codingStuff13, category13);
 
-      entry13.addComponent({
-        code: {
-          coding: [{
-            display: "Other symptoms"
-          }]
-        },
-        valueString: (this.otherSymptom == null) ? "No other symptoms" : this.otherSymptom
-      })
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry13.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
+      }
+
+      entry13.addProperty("valueCodeableConcept", {
+        coding: [{
+          system: 'http://snomed.info/sct',
+          code: '74964007',
+          display: this.otherSymptom
+        }]
+      });
 
       let bundle13 = new Bundle("transaction");
       bundle13.addEntry("POST", entry13.resourceType, entry13);
@@ -1309,7 +1315,7 @@ export class NewAttackPage {
     //========================= END JSON PUT MEDICATION COMPONENTS IN BUNDLE2 AND SAVE===========================================
 
     //update the input fields 
-    this.situation = null;
+    this.situation = "migräneanfall";
     this.symptome = null;
     this.fromDateTime = null;
     this.untilDateTime = null;
