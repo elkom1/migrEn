@@ -319,6 +319,13 @@ export class NewAttackPage {
         _dateTime: new Date().toISOString()
       }, coding1, category1);
 
+      if (this.fromDateTime != null && this.untilDateTime != null) {
+        entry1.addProperty("effectivePeriod", {
+          start: this.fromDateTime,
+          end: this.untilDateTime
+        });
+      }
+
       entry1.addProperty("valueCodeableConcept", {
         coding: [{
           system: 'http://snomed.info/sct',
@@ -326,13 +333,6 @@ export class NewAttackPage {
           display: 'Attack'
         }]
       });
-
-      if (this.fromDateTime != null && this.untilDateTime != null) {
-        entry1.addProperty("effectivePeriod", {
-          start: this.fromDateTime,
-          end: this.untilDateTime
-        });
-      }
 
       let bundle1 = new Bundle("transaction");
       bundle1.addEntry("POST", entry1.resourceType, entry1);
