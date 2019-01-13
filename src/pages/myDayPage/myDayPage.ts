@@ -71,8 +71,7 @@ export class MyDayPage {
     alert.addInput({
       type: 'radio',
       label: 'Nein',
-      value: 'value1',
-      checked: true
+      value: 'value1'
     });
 
     alert.addInput({
@@ -92,13 +91,15 @@ export class MyDayPage {
       text: 'Okay',
       handler: data => {
         console.log('Checkbox data:', data);
+        if (data == "value1") {
+          this.navCtrl.push(HomePage)
+        } 
         if (data == "value2") {
-          this.navCtrl.push(NewAttackPage); //navigate the tab does not function
+         this.navCtrl.push(NewAttackPage) //navigate the tab does not function
         }
         if (data == "value3") {
           this.navCtrl.push(HomePage)
-        } else
-          this.navCtrl.push(HomePage); //navigate the tab does not function
+        } 
       }
     });
     alert.present();

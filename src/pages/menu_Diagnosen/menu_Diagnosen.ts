@@ -64,38 +64,83 @@ export class Diagnosen {
     if (this.diagnosen != null) {
 
       if (this.diagnosen.match("Migräne mit Aura")) {
-        entry2.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "4473006",
-              display: "Migraine with aura"
-            }]
-          },
-        })
+        entry2.addProperty("valueCodeableConcept", {
+          coding: [{
+            system: 'http://hl7.org/fhir/sid/icd-10',
+            code: 'G43.1',
+            display: "Migräne mit Aura"
+          }]
+        });
       }
 
       if (this.diagnosen.match("Migräne ohne Aura")) {
-        entry2.addComponent({
-          code: {
-            coding: [{
-              system: "http://snomed.info/sct",
-              code: "56097005",
-              display: "Migraine without aura"
-            }]
-          },
-        })
+        entry2.addProperty("valueCodeableConcept", {
+          coding: [{
+            system: 'http://hl7.org/fhir/sid/icd-10',
+            code: 'G43.0',
+            display: "Migräne ohne Aura"
+          }]
+        });
+      }
+
+      if (this.diagnosen.match("Typische Aura mit Migränekopfschmerz")) {
+        entry2.addProperty("valueCodeableConcept", {
+          coding: [{
+            system: 'http://hl7.org/fhir/sid/icd-10',
+            code: 'G43.10',
+            display: "Typische Aura mit Migränekopfschmerz"
+          }]
+        });
+      }
+
+      if (this.diagnosen.match("Typische Aura mit Kopfschmerzen, die nicht einer Migräne entsprechen")) {
+        entry2.addProperty("valueCodeableConcept", {
+          coding: [{
+            system: 'http://hl7.org/fhir/sid/icd-10',
+            code: 'G43.10',
+            display: "Typische Aura mit Kopfschmerzen, die nicht einer Migräne entsprechen"
+          }]
+        });
+      }
+
+      if (this.diagnosen.match("Typische Aura ohne Kopfschmerz")) {
+        entry2.addProperty("valueCodeableConcept", {
+          coding: [{
+            system: 'http://hl7.org/fhir/sid/icd-10',
+            code: 'G43.104',
+            display: "Typische Aura ohne Kopfschmerz"
+          }]
+        });
+      }
+
+      if (this.diagnosen.match("Familiäre hemiplegische Migräne")) {
+        entry2.addProperty("valueCodeableConcept", {
+          coding: [{
+            system: 'http://hl7.org/fhir/sid/icd-10',
+            code: 'G43.105',
+            display: "Familiäre hemiplegische Migräne"
+          }]
+        });
+      }
+
+      if (this.diagnosen.match("Sporadische hemiplegische Migräne")) {
+        entry2.addProperty("valueCodeableConcept", {
+          coding: [{
+            system: 'http://hl7.org/fhir/sid/icd-10',
+            code: 'G43.105',
+            display: "Sporadische hemiplegische Migräne"
+          }]
+        });
       }
 
       if(this.diagnosen.match("Andere")) {
-        entry2.addComponent({
-          code: {
-            coding: [{
-              display: "Other diagnosis"
-            }]
-          },
-          valueString: this.otherDiagnose
-        })
+        entry2.addProperty("valueCodeableConcept", {
+          coding: [{
+            system: 'http://snomed.info/sct',
+            code: '74964007',
+            display: this.otherDiagnose
+          }]
+        });
       }
 
       if (this.date != null) {
@@ -115,5 +160,10 @@ export class Diagnosen {
     }
     //========================= END JSON FOR THE OBSERVATION "Diagnosis"================================
 
+    //update fields
+    this.date = null; 
+    this.diagnosen = null; 
+    this.otherDiagnose = null; 
+    this.selectedOther = false; 
   }
 }
