@@ -404,7 +404,7 @@ export class NewAttackPage {
       }
 
       if (this.painType != null) {
-        if (this.painType.match("Starker Schmerz")) {
+        if (this.painType.match("Dumpf drückender Schmerz")) {
           entry.addProperty("valueCodeableConcept", {
             coding: [{
               system: 'http://snomed.info/sct',
@@ -414,7 +414,7 @@ export class NewAttackPage {
           });
         }
 
-        if (this.painType.match("Stechender Schmerz")) {
+        if (this.painType.match("Pochender Schmerz")) {
           entry.addProperty("valueCodeableConcept", {
             coding: [{
               system: 'http://snomed.info/sct',
@@ -424,7 +424,7 @@ export class NewAttackPage {
           });
         }
 
-        if (this.painType.match("Dumpfer Schmerz")) {
+        if (this.painType.match("Stechender Schmerz")) {
           entry.addProperty("valueCodeableConcept", {
             coding: [{
               system: 'http://snomed.info/sct',
