@@ -66,7 +66,7 @@ export class MyDayPage {
 
   showCheckbox() {
     let alert = this.alertCtrl.create();
-    alert.setTitle('Hattest du sonstige Beschwerden?');
+    alert.setTitle('Hattest du sonstige Beschwerden ?');
 
     alert.addInput({
       type: 'radio',
@@ -82,13 +82,13 @@ export class MyDayPage {
 
     alert.addInput({
       type: 'radio',
-      label: 'Habe keine Zeit dafür',
+      label: 'Dafür habe ich keine Zeit',
       value: 'value3'
     });
 
-    alert.addButton('Cancel');
+    alert.addButton('Abbrechen');
     alert.addButton({
-      text: 'Okay',
+      text: 'Bestätigen',
       handler: data => {
         console.log('Checkbox data:', data);
         if (data == "value1") {

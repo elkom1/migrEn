@@ -85,7 +85,7 @@ export class MenuPage {
       icon: 'medkit'
     },
     {
-      title: 'Reminder',
+      title: 'Erinnerung',
       pageName: 'Reminder',
       tabComponent: Reminder,
       icon: 'alarm'

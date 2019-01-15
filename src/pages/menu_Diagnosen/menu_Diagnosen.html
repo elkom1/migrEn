@@ -20,12 +20,12 @@
       </ion-card-header>
       <ion-item>
         <ion-label>Datum der Diagnose</ion-label>
-        <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="date"></ion-datetime>
+        <ion-datetime displayFormat="MMM DD, YYYY" doneText="Bestätigen" cancelText="Abbrechen" [(ngModel)]="date"></ion-datetime>
       </ion-item>
 
       <ion-item>
-        <ion-label>Definition</ion-label>
-        <ion-select okText="Ok" cancelText="Abbrechen" (ionChange)="onChangeDiagnoses()" [(ngModel)]="diagnosen">
+        <ion-label>Diagnose</ion-label>
+        <ion-select okText="Bestätigen" cancelText="Abbrechen" (ionChange)="onChangeDiagnoses()" [(ngModel)]="diagnosen">
           <ion-option>Migräne mit Aura</ion-option>
           <ion-option>Migräne ohne Aura</ion-option>
           <ion-option>Typische Aura mit Migränekopfschmerz</ion-option>
@@ -37,7 +37,7 @@
         </ion-select>
       </ion-item>
       <ion-item *ngIf="selectedOther" no-lines>
-        <ion-input placeholder="Andere Diganosen" [(ngModel)]="otherDiagnose"></ion-input>
+        <ion-input placeholder="Andere Diagnosen" [(ngModel)]="otherDiagnose"></ion-input>
       </ion-item>
     </ion-card>
 

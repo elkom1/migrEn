@@ -5,7 +5,7 @@
     </button>
     <ion-buttons end>
     </ion-buttons>
-    <ion-title>Reminder
+    <ion-title>Erinnerung
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -14,17 +14,17 @@
 
   <ion-card>
     <ion-card-header text center>
-      <h1 text-center style="font-weight: bold; color: white">Setze einen Reminder ein <br /> für die tägliche Erfassung</h1>
+      <h1 text-center style="font-weight: bold; color: white">Tägliche Erinnerung <br /> festlegen</h1>
     </ion-card-header>
 
     <ion-item no-lines>
-      <ion-label>Reminder</ion-label>
+      <ion-label>Erinnerung</ion-label>
       <ion-toggle [(ngModel)]="reminder"></ion-toggle>
     </ion-item>
 
     <ion-item no-lines>
       <ion-label>Zeit</ion-label>
-      <ion-datetime displayFormat="HH:mm" [(ngModel)]="myTime"></ion-datetime>
+      <ion-datetime displayFormat="HH:mm" doneText="Bestätigen" cancelText="Abbrechen" [(ngModel)]="myTime"></ion-datetime>
     </ion-item>
   </ion-card>
 
